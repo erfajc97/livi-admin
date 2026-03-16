@@ -1,0 +1,53 @@
+import { TrendingDown, Clock, CalendarClock } from 'lucide-react'
+
+interface FinanceMetricCardsProps {
+  expensesMonth: number
+  pendingTotal: number
+  upcomingCount: number
+}
+
+export default function FinanceMetricCards({
+  expensesMonth,
+  pendingTotal,
+  upcomingCount,
+}: FinanceMetricCardsProps) {
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="flex items-center gap-4 rounded-xl border border-border bg-surface p-5">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-500/20">
+          <TrendingDown size={20} className="text-red-500" />
+        </div>
+        <div>
+          <p className="text-xs text-text-muted">Egresos del mes</p>
+          <p className="text-lg font-bold text-text">
+            ${expensesMonth.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
+          </p>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-4 rounded-xl border border-border bg-surface p-5">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/20">
+          <Clock size={20} className="text-yellow-500" />
+        </div>
+        <div>
+          <p className="text-xs text-text-muted">Pendientes</p>
+          <p className="text-lg font-bold text-text">
+            ${pendingTotal.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
+          </p>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-4 rounded-xl border border-border bg-surface p-5">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/20">
+          <CalendarClock size={20} className="text-accent" />
+        </div>
+        <div>
+          <p className="text-xs text-text-muted">Pagos próximos 7 días</p>
+          <p className="text-lg font-bold text-text">
+            {upcomingCount} pago{upcomingCount !== 1 ? 's' : ''}
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}

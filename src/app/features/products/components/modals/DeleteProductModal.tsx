@@ -1,0 +1,42 @@
+import { Button } from '@heroui/react'
+import { CustomModalNextUI } from '@/app/components/UI/customModalNextUI/CustomModalNextUI'
+import type { Product } from '../../types'
+
+interface DeleteProductModalProps {
+  isOpen: boolean
+  onClose: () => void
+  product: Product | null
+  onConfirm: () => void
+  isDeleting: boolean
+}
+
+export default function DeleteProductModal({
+  isOpen,
+  onClose,
+  product,
+  onConfirm,
+  isDeleting,
+}: DeleteProductModalProps) {
+  return (
+    <CustomModalNextUI
+      isOpen={isOpen}
+      onOpenChange={(open) => !open && onClose()}
+      headerContent={<h3>Eliminar producto</h3>}
+    >
+      <div className="flex flex-col gap-4">
+        <p className="text-text-muted">
+          ¿Estás seguro de eliminar <strong className="text-text">{product?.name}</strong>?
+          Esta acción no se puede deshacer.
+        </p>
+        <div className="flex justify-end gap-3">
+          <Button variant="flat" onPress={onClose}>
+            Cancelar
+          </Button>
+          <Button color="danger" onPress={onConfirm} isLoading={isDeleting}>
+            Eliminar
+          </Button>
+        </div>
+      </div>
+    </CustomModalNextUI>
+  )
+}
