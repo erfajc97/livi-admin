@@ -1,45 +1,457 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+# NönDecants — Admin Dashboard
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+Panel de administración para gestión de productos, usuarios, órdenes, finanzas y reportes. Construido con **TanStack Start** (SSR) + **TanStack Router** (file-based) + **HeroUI** + **Tailwind CSS v4**.
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
-
----
-
-## Edit a file
-
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
-
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+**Puerto**: `3000` (desarrollo)
+**API Base**: `http://localhost:3030/api`
 
 ---
 
-## Create a file
+## 🚀 Features
 
-Next, you’ll add a new file to this repository.
-
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
-
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+- 🔐 **Auth Admin-only** — Login con email/password, JWT token
+- 👥 **Gestión Usuarios** — CRUD usuarios, roles (ADMIN/CLIENT), búsqueda
+- 📦 **CRUD Productos** — Crear, editar, eliminar productos con variantes
+- 🏷️ **Categorías** — Gestión de categorías y subcategorías
+- 📊 **Órdenes** — Listar, filtrar, cambiar estado, tracking Servientrega
+- 💰 **Finanzas** — Reportes de ventas, ingresos, comisiones
+- 📈 **Dashboard** — Estadísticas en tiempo real (ventas, usuarios activos)
+- 🎨 **Dark Luxury UI** — HeroUI v2, tema customizado (negro + dorado)
+- 📱 **Tablas Avanzadas** — CustomTableNextUi con sorting, filtering, pagination
+- 🔄 **Modales & Formularios** — CustomModalNextUI, formularios validados
+- 💾 **Estado Persistente** — Zustand + localStorage (localStorage estándar)
 
 ---
 
-## Clone a repository
+## 📦 Stack
 
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
+| Capa | Tecnología |
+|------|-----------|
+| Meta-framework | **TanStack Start** (SSR/streaming) |
+| Router | **TanStack Router** (file-based) |
+| UI | **HeroUI v2** + **Tailwind CSS v4** |
+| Estado global | **Zustand v5** |
+| Data fetching | **TanStack Query v5** |
+| HTTP | **Axios** (JWT interceptors) |
+| Formularios | **React Hook Form** + **Zod** |
+| Notificaciones | **HeroUI Toast** |
+| Animaciones | **Framer Motion** |
+| Lenguaje | **TypeScript** strict mode |
 
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
+---
 
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+## 🎨 Tema
+
+**Dark Luxury** — consistente con frontend
+
+```
+Primary:        #CCB377 (Dorado)
+Foreground:     #1B1919 (Negro Carbón)
+Surface:        #252222
+Text:           #FFFFFF
+Text Muted:     #A09A9A
+```
+
+Configurado en `src/hero.ts` (HeroUI plugin para Tailwind).
+
+---
+
+## 📐 Arquitectura & Carpetas
+
+```text
+src/
+├── routes/
+│   ├── __root.tsx                   # Root layout + HeroUIProvider + TanStackQueryProvider
+│   ├── login.tsx                    # Ruta de login (pública)
+│   ├── index.tsx                    # Dashboard home (protegido)
+│   ├── _authenticated.tsx           # Guard: redirige a /login si no autenticado
+│   └── _authenticated/
+│       ├── usuarios.tsx             # CRUD usuarios
+│       ├── productos.tsx            # CRUD productos
+│       ├── categorias.tsx           # CRUD categorías
+│       ├── ordenes.tsx              # Listado y gestión de órdenes
+│       ├── finanzas.tsx             # Reportes de ventas
+│       └── dashboard.tsx            # Estadísticas
+├── app/
+│   ├── api/
+│   │   └── endpoints.ts             # API_ENDPOINTS centralizados
+│   ├── config/
+│   │   └── axiosConfig.ts           # Instancia axios + JWT interceptor
+│   ├── features/                    # Screaming Architecture
+│   │   ├── auth/
+│   │   │   ├── components/          # LoginForm
+│   │   │   ├── hooks/               # useLoginHook
+│   │   │   ├── mutations/           # useLoginMutation
+│   │   │   ├── services/            # authService.ts
+│   │   │   ├── types.ts
+│   │   │   └── Login.tsx            # Componente principal
+│   │   ├── users/
+│   │   │   ├── components/          # UsersTable, UserModal, UserForm
+│   │   │   ├── hooks/               # useUsersHook, useUserForm
+│   │   │   ├── mutations/           # useCreateUserMutation, etc.
+│   │   │   ├── services/            # usersService.ts
+│   │   │   ├── types.ts
+│   │   │   └── Users.tsx
+│   │   ├── products/
+│   │   │   ├── components/          # ProductsTable, ProductModal, ProductForm
+│   │   │   ├── hooks/               # useProductsHook, useProductForm
+│   │   │   ├── mutations/           # useCreateProductMutation, etc.
+│   │   │   ├── services/            # productsService.ts
+│   │   │   ├── types.ts
+│   │   │   └── Products.tsx
+│   │   ├── categories/
+│   │   ├── orders/
+│   │   ├── finances/
+│   │   └── dashboard/
+│   ├── components/UI/
+│   │   ├── table-nextui/
+│   │   │   ├── CustomTableNextUi.tsx        # Tabla reutilizable
+│   │   │   └── CustomPagination.tsx         # Paginación
+│   │   ├── customModalNextUI/
+│   │   │   └── CustomModalNextUI.tsx        # Modal reutilizable
+│   │   └── buttons/
+│   ├── store/
+│   │   └── auth/
+│   │       └── authStore.ts         # Zustand (token, user, isLogged)
+│   ├── tanstack-queries/
+│   │   ├── usersQuery.ts
+│   │   ├── productsQuery.ts
+│   │   ├── ordersQuery.ts
+│   │   └── ...
+│   ├── helpers/
+│   └── types/
+│       └── global.types.ts
+├── integrations/tanstack-query/
+│   ├── root-provider.tsx            # QueryClientProvider
+│   └── devtools.tsx                 # TanStack Query Devtools
+├── hero.ts                          # HeroUI plugin (colores personalizados)
+└── styles.css                       # Tailwind v4 + @theme + @plugin hero.ts
+```
+
+---
+
+## 🚀 Quick Start
+
+### Instalación
+
+```bash
+# Clonar y entrar
+git clone <repo-url>
+cd nondecants-admin
+
+# Instalar dependencias
+npm install
+
+# Copiar .env
+cp .env.example .env
+```
+
+### Variables de Entorno
+
+```env
+# API
+VITE_API_BASE_URL=http://localhost:3030/api
+
+# JWT
+VITE_JWT_EXPIRATION=24h
+
+# App
+VITE_APP_NAME=NönDecants Admin
+NODE_ENV=development
+```
+
+### Desarrollo
+
+```bash
+npm run dev
+# 🌐 Acceder a http://localhost:3000
+# Login: admin@example.com / password123
+```
+
+### Build
+
+```bash
+npm run build      # Build SSR
+npm run preview    # Preview
+```
+
+---
+
+## 🔐 Autenticación
+
+**Solo Admin** — emails con rol `ADMIN` en BD
+
+```typescript
+// src/app/store/auth/authStore.ts
+const useAuthStore = create(
+  persist(
+    (set) => ({
+      token: null,
+      user: null,
+      setToken: (token, user) => { },
+      removeToken: () => { },
+      isLogged: () => Boolean(token),
+    }),
+    {
+      name: 'auth-store',
+      storage: localStorage, // localStorage estándar (sin encriptación)
+    }
+  )
+);
+```
+
+**Flujo:**
+1. Usuario ingresa email + password en `/login`
+2. Backend valida (solo ADMIN permitido)
+3. Responde con JWT token + user data
+4. Se guarda en Zustand + localStorage
+5. Guard `_authenticated.tsx` valida token antes de rutas protegidas
+
+---
+
+## 📊 Componentes UI Personalizados
+
+### CustomTableNextUi
+
+Tabla reutilizable con sorting, filtering, pagination:
+
+```typescript
+<CustomTableNextUi
+  columns={columns}
+  rows={data}
+  isLoading={isLoading}
+  pagination={{ page, pageSize, total }}
+  onPageChange={setPage}
+  onSort={handleSort}
+/>
+```
+
+### CustomModalNextUI
+
+Modal reutilizable para create/edit:
+
+```typescript
+<CustomModalNextUI
+  isOpen={isOpen}
+  onClose={onClose}
+  title="Crear Producto"
+  children={<ProductForm onSubmit={handleSubmit} />}
+/>
+```
+
+### CustomPagination
+
+Paginación customizada:
+
+```typescript
+<CustomPagination
+  page={currentPage}
+  pageSize={pageSize}
+  total={totalItems}
+  onChange={setCurrentPage}
+/>
+```
+
+---
+
+## 🎯 Features Principales
+
+### 1. Usuarios (`/usuarios`)
+
+- **Tabla**: Listar todos los usuarios (email, role, createdAt)
+- **Crear**: Modal con formulario (email, password, role)
+- **Editar**: Cambiar rol o email
+- **Eliminar**: Soft delete o hard delete
+- **Búsqueda**: Filtro por email, role
+
+**Archivo**: `src/app/features/users/`
+
+### 2. Productos (`/productos`)
+
+- **Tabla**: Listar productos (nombre, precio, categoría, stock)
+- **Crear**: Modal con formulario (nombre, descripción, precio, imágenes)
+- **Editar**: Cambiar datos de producto
+- **Eliminar**: Marcar como inactivo
+- **Variantes**: Gesionar variantes por ML (30ml, 50ml, etc.)
+
+**Archivo**: `src/app/features/products/`
+
+### 3. Categorías (`/categorias`)
+
+- **Tabla**: Listar categorías (nombre, slug, activo)
+- **Crear/Editar**: Formulario simple
+- **Subcategorías**: Agregar bajo categoría padre
+
+**Archivo**: `src/app/features/categories/`
+
+### 4. Órdenes (`/ordenes`)
+
+- **Tabla**: Listar órdenes (ID, cliente, monto, estado, fecha)
+- **Detalle**: Ver resumen completo, items, dirección de envío
+- **Cambiar estado**: De PENDING → PAID → SHIPPED → DELIVERED
+- **Tracking**: Ver datos Servientrega
+- **Filtros**: Por estado, por rango de fechas
+
+**Archivo**: `src/app/features/orders/`
+
+### 5. Finanzas (`/finanzas`)
+
+- **Gráficos**: Ventas por día/semana/mes (Recharts)
+- **Estadísticas**: Ingresos totales, comisiones, recargos
+- **Reportes**: Descargables en CSV
+- **Filtros**: Por rango de fechas, por categoría
+
+**Archivo**: `src/app/features/finances/`
+
+### 6. Dashboard (`/`)
+
+- **Cards**: Ventas hoy, usuarios activos, órdenes pendientes
+- **Gráfico**: Trending (últimos 30 días)
+- **Tabla**: Últimas órdenes
+- **Alertas**: Stocks bajos, órdenes sin confirmar
+
+**Archivo**: `src/app/features/dashboard/`
+
+---
+
+## 🔄 Queries & Mutations
+
+### Queries Compartidas
+
+```typescript
+// src/app/tanstack-queries/usersQuery.ts
+export const useUsersQuery = (filters) => {
+  return useQuery({
+    queryKey: ['users', filters],
+    queryFn: () => usersService.getAll(filters),
+    staleTime: 5 * 60 * 1000,
+  });
+};
+```
+
+### Mutations
+
+```typescript
+// src/app/features/users/mutations/useCreateUserMutation.ts
+export const useCreateUserMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (dto) => usersService.create(dto),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      addToast({ title: 'Usuario creado' });
+    },
+    onError: (error) => {
+      addToast({ title: error.message, color: 'danger' });
+    },
+  });
+};
+```
+
+---
+
+## 📝 Scripts
+
+| Script | Descripción |
+|--------|-----------|
+| `npm run dev` | Desarrollo (SSR + HMR) |
+| `npm run build` | Build SSR |
+| `npm run preview` | Preview del build |
+| `npm run test` | Tests con Vitest |
+| `npm run test:watch` | Tests en watch mode |
+| `npm run lint` | ESLint |
+| `npm run format` | Prettier |
+| `npm run check` | Prettier + ESLint + TypeScript |
+
+---
+
+## 🐳 Docker
+
+```bash
+# Build imagen
+docker build -t nondecants-admin .
+
+# Ejecutar
+docker run -p 3000:3000 \
+  -e VITE_API_BASE_URL=http://api:3030/api \
+  nondecants-admin
+```
+
+Ver `DOCKER.md` para detalles.
+
+---
+
+## 📚 Patrones de Código
+
+### Componente → Hook → Mutation/Query → Service
+
+```typescript
+// Componente (UI only)
+function UsersTable() {
+  const { users, isLoading, page } = useUsersHook();
+  return <CustomTableNextUi ... />;
+}
+
+// Hook (lógica)
+function useUsersHook(filters) {
+  const { data } = useUsersQuery(filters);
+  const { mutate: deleteUser } = useDeleteUserMutation();
+  return { users: data?.content, isLoading, ... };
+}
+
+// Query (data fetching)
+function useUsersQuery(filters) {
+  return useQuery({
+    queryKey: ['users', filters],
+    queryFn: () => usersService.getAll(filters),
+  });
+}
+
+// Service (axios)
+const usersService = {
+  getAll: (filters) => axiosInstance.get('/users', { params: filters }),
+  create: (dto) => axiosInstance.post('/users', dto),
+  update: (id, dto) => axiosInstance.patch(`/users/${id}`, dto),
+  delete: (id) => axiosInstance.delete(`/users/${id}`),
+};
+```
+
+### Componentes de formulario
+
+```typescript
+// Form con React Hook Form + Zod
+function UserForm({ onSubmit, defaultValues }) {
+  const form = useForm({ resolver: zodResolver(userSchema), defaultValues });
+
+  return (
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      <Input
+        label="Email"
+        {...form.register('email')}
+        errorMessage={form.formState.errors.email?.message}
+      />
+      <Button type="submit">Guardar</Button>
+    </form>
+  );
+}
+```
+
+---
+
+## 🌐 Integración Frontend
+
+Admin y Frontend **comparten**:
+- Backend API (mismo servidor 3030)
+- Zustand stores (auth store)
+- TanStack Query config
+- Tailwind theme
+
+---
+
+## 📞 Soporte
+
+- 📖 Docs: `common-skills/skills/front/`
+- 🏗️ Arquitectura: `common-skills/skills/front/arquitectura-front/`
+- 🔌 API: `common-skills/skills/front/logica-negocio-back/`
+- 🎨 HeroUI: https://heroui.com/docs
