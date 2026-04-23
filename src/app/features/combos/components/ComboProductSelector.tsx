@@ -1,4 +1,3 @@
-import { useState, useMemo } from 'react'
 import { Autocomplete, AutocompleteItem } from '@heroui/react'
 import { useProductsQuery } from '@/app/tanstack-queries/productsQuery'
 import type { Product } from '@/app/features/products/types'
