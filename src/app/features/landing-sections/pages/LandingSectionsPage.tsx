@@ -46,7 +46,7 @@ export default function LandingSectionsPage() {
       {/* Header */}
       <div className="mb-6 flex justify-between items-center">
         <div>
-          <h1 className="font-heading text-2xl font-bold text-text">Secciones de Landing</h1>
+          <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">Secciones de Landing</h1>
           <p className="text-sm text-text-muted mt-1">
             Gestiona las secciones editables de la página principal
           </p>

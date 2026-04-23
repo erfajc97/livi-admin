@@ -75,7 +75,7 @@ export function ManualSales() {
 
   return (
     <div className="flex flex-col gap-6 p-6">
-      <h2 className="text-xl font-semibold text-text">Registrar venta manual</h2>
+      <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">Registrar venta manual</h1>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="flex flex-col gap-5 lg:col-span-2">

@@ -41,11 +41,11 @@ export default function CashFlowChart({ data }: CashFlowChartProps) {
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} barGap={2}>
             <CartesianGrid strokeDasharray="3 3" stroke="#3A3636" />
-            <XAxis dataKey="label" tick={{ fill: '#A09A9A', fontSize: 11 }} axisLine={{ stroke: '#3A3636' }} />
-            <YAxis tick={{ fill: '#A09A9A', fontSize: 11 }} axisLine={{ stroke: '#3A3636' }} />
+            <XAxis dataKey="label" tick={{ fill: 'var(--color-text-muted)', fontSize: 11 }} axisLine={{ stroke: 'var(--color-border)' }} />
+            <YAxis tick={{ fill: 'var(--color-text-muted)', fontSize: 11 }} axisLine={{ stroke: 'var(--color-border)' }} />
             <Tooltip
-              contentStyle={{ backgroundColor: '#252222', border: '1px solid #3A3636', borderRadius: 8, color: '#fff' }}
-              labelStyle={{ color: '#A09A9A' }}
+              contentStyle={{ backgroundColor: 'var(--color-surface)', border: '1px solid #3A3636', borderRadius: 8, color: '#fff' }}
+              labelStyle={{ color: 'var(--color-text-muted)' }}
             />
             <Legend wrapperStyle={{ display: 'none' }} />
             <Bar dataKey="income" name="Ingresos" fill={CHART_COLORS.income} radius={[4, 4, 0, 0]} />

@@ -20,9 +20,9 @@ export default function FinanceReminders({
   return (
     <div className="flex flex-col gap-2">
       {overdueCount > 0 && showOverdue && (
-        <div className="flex items-center justify-between rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3">
+        <div className="flex items-center justify-between rounded-lg border border-error/30 bg-error/10 px-4 py-3">
           <div className="flex items-center gap-3">
-            <AlertCircle size={18} className="text-red-500" />
+            <AlertCircle size={18} className="text-error" />
             <span className="text-sm text-text">
               {overdueCount} Cuenta{overdueCount > 1 ? 's' : ''} Vencida{overdueCount > 1 ? 's' : ''} Total: ${overdueTotal.toFixed(2)}
             </span>
@@ -34,9 +34,9 @@ export default function FinanceReminders({
       )}
 
       {upcomingCount > 0 && showUpcoming && (
-        <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-3">
+        <div className="flex items-center justify-between rounded-lg border border-warning/30 bg-warning/10 px-4 py-3">
           <div className="flex items-center gap-3">
-            <AlertTriangle size={18} className="text-yellow-500" />
+            <AlertTriangle size={18} className="text-warning" />
             <span className="text-sm text-text">
               Tienes {upcomingCount} Cuenta{upcomingCount > 1 ? 's' : ''} Próxima{upcomingCount > 1 ? 's' : ''} a vencer
             </span>

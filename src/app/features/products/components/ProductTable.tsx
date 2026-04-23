@@ -15,12 +15,14 @@ export default function ProductTable({ products, onEdit, onDelete }: ProductTabl
   const renderCell = useCallback(
     (item: Product, columnKey: string) => {
       switch (columnKey) {
-        case 'imageUrl':
-          return item.imageUrl ? (
-            <img src={item.imageUrl} alt={item.name} className="h-10 w-10 rounded-lg object-cover" />
+        case 'imageUrl': {
+          const imgSrc = item.imageUrl || item.images?.[0]?.url
+          return imgSrc ? (
+            <img src={imgSrc} alt={item.name} className="h-10 w-10 rounded-lg object-cover" />
           ) : (
             <div className="h-10 w-10 rounded-lg bg-surface" />
           )
+        }
         case 'name':
           return (
             <div>

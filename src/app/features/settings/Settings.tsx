@@ -47,11 +47,11 @@ export const Settings = () => {
     <div className="flex flex-col gap-6 p-6">
       <div className="flex items-center gap-3">
         <SettingsIcon size={28} className="text-accent" />
-        <h1 className="text-2xl font-bold">Ajustes</h1>
+        <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">Ajustes</h1>
       </div>
 
       <div className="bg-content1 rounded-xl p-6 shadow-sm max-w-xl">
-        <h2 className="text-lg font-semibold mb-1">Días de entrega</h2>
+        <h2 className="font-heading text-lg font-semibold uppercase tracking-wide text-text mb-1">Días de entrega</h2>
         <p className="text-sm text-default-500 mb-5">
           Días adicionales para la entrega. Si pones 2, los clientes verán 4 días de entrega en vez
           de 2.

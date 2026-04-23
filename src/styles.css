@@ -20,7 +20,19 @@
   --color-border:         #3A3636;
   --color-border-accent:  #CCB377;
   --color-error:          #E05252;
+  --color-error-muted:    #E0525233;
   --color-success:        #4CAF50;
+  --color-success-muted:  #4CAF5033;
+  --color-warning:        #E8A838;
+  --color-warning-muted:  #E8A83833;
+  --color-info:           #5B9BD5;
+
+  /* ── Colores de charts ────────────────────────── */
+  --color-chart-1:        #CCB377;
+  --color-chart-2:        #5B9BD5;
+  --color-chart-3:        #E05252;
+  --color-chart-4:        #E8A838;
+  --color-chart-5:        #8B7EC8;
 
   /* ── Tokens semánticos de form/UI ──────────────── */
   --color-form-bg:         #252222;

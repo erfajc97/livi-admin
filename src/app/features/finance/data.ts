@@ -33,5 +33,5 @@ export const movimientosColumns: Column[] = [
 export const CHART_COLORS = {
   income: '#22c55e',
   expense: '#ef4444',
-  categories: ['#CCB377', '#3b82f6', '#ef4444', '#f59e0b', '#8b5cf6'],
+  categories: ['var(--color-chart-1)', 'var(--color-chart-2)', 'var(--color-chart-3)', 'var(--color-chart-4)', 'var(--color-chart-5)'],
 } as const

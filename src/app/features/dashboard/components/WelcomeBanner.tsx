@@ -17,11 +17,11 @@ export default function WelcomeBanner({ userName, subtitle, useBgImage }: Welcom
         />
         <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/40 to-transparent" />
         <div className="relative z-10 p-8">
-          <p className="text-lg text-white/70">Bienvenido de vuelta,</p>
-          <h1 className="mt-1 font-heading text-3xl font-bold uppercase tracking-wide text-white">
+          <p className="text-lg text-text-muted">Bienvenido de vuelta,</p>
+          <h1 className="mt-1 font-heading text-3xl font-bold uppercase tracking-wide text-text">
             {userName || 'Administrador'}
           </h1>
-          <p className="mt-2 text-sm text-white/60">{subtitle}</p>
+          <p className="mt-2 text-sm text-text-muted">{subtitle}</p>
         </div>
       </div>
     )
@@ -37,10 +37,10 @@ export default function WelcomeBanner({ userName, subtitle, useBgImage }: Welcom
       <div className="absolute inset-0 bg-black/50" />
       <div className="relative z-10 flex w-full items-center justify-between px-8 py-5">
         <div>
-          <h1 className="font-heading text-xl font-semibold text-white">
+          <h1 className="font-heading text-xl font-semibold text-text">
             Bienvenido al Dashboard {userName || 'Administrador'}!
           </h1>
-          <p className="mt-1 text-sm text-white/70">{subtitle}</p>
+          <p className="mt-1 text-sm text-text-muted">{subtitle}</p>
         </div>
         <img src={logo} alt="NönDecants" className="hidden h-10 sm:block" />
       </div>

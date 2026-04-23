@@ -63,14 +63,14 @@ export default function FinanceDashboardView({
       {/* Cuentas por Pagar — sección unificada */}
       <div className="rounded-xl border border-border bg-surface p-5">
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-base font-semibold text-text">Cuentas por Pagar</h3>
-          <Clock size={20} className="text-yellow-500" />
+          <h3 className="font-heading text-base font-semibold uppercase tracking-wide text-text">Cuentas por Pagar</h3>
+          <Clock size={20} className="text-warning" />
         </div>
 
         {/* Mini resumen horizontal */}
         <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
           <div className="flex items-center gap-3 rounded-lg border border-border bg-bg p-3">
-            <Clock size={18} className="text-yellow-500" />
+            <Clock size={18} className="text-warning" />
             <div>
               <p className="text-xs text-text-muted">Total pendiente</p>
               <p className="text-lg font-bold text-text">
@@ -79,21 +79,21 @@ export default function FinanceDashboardView({
               <p className="text-xs text-text-muted">{stats.bills.pendingCount} cuenta{stats.bills.pendingCount !== 1 ? 's' : ''}</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 rounded-lg border border-red-500/30 bg-red-500/5 p-3">
-            <AlertTriangle size={18} className="text-red-500" />
+          <div className="flex items-center gap-3 rounded-lg border border-error/30 bg-error/5 p-3">
+            <AlertTriangle size={18} className="text-error" />
             <div>
               <p className="text-xs text-text-muted">Vencidas</p>
-              <p className="text-lg font-bold text-red-400">
+              <p className="text-lg font-bold text-error">
                 ${overdueTotal.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
               </p>
               <p className="text-xs text-text-muted">{stats.bills.overdueCount} cuenta{stats.bills.overdueCount !== 1 ? 's' : ''}</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 rounded-lg border border-yellow-500/30 bg-yellow-500/5 p-3">
-            <CalendarClock size={18} className="text-yellow-500" />
+          <div className="flex items-center gap-3 rounded-lg border border-warning/30 bg-warning/5 p-3">
+            <CalendarClock size={18} className="text-warning" />
             <div>
               <p className="text-xs text-text-muted">Próximas a vencer</p>
-              <p className="text-lg font-bold text-yellow-400">
+              <p className="text-lg font-bold text-warning">
                 ${upcomingTotal.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
               </p>
               <p className="text-xs text-text-muted">{stats.bills.upcomingCount} cuenta{stats.bills.upcomingCount !== 1 ? 's' : ''}</p>
@@ -109,7 +109,7 @@ export default function FinanceDashboardView({
         <CashFlowChart data={stats.cashFlow} />
 
         <div className="rounded-xl border border-border bg-surface p-5">
-          <h3 className="mb-3 text-sm font-semibold text-text">Por Método de Pago</h3>
+          <h3 className="mb-3 font-heading text-sm font-semibold uppercase tracking-wide text-text">Por Método de Pago</h3>
           <div className="flex flex-col gap-2">
             {['Payphone', 'Transferencia', 'Efectivo', 'T. Crédito'].map((method) => {
               const total = stats.transactions
@@ -122,7 +122,7 @@ export default function FinanceDashboardView({
                 <div key={method} className="flex items-center gap-3">
                   <span className="w-28 text-xs text-text-muted">{method}</span>
                   <div className="h-5 flex-1 overflow-hidden rounded-sm bg-surface-raised">
-                    <div className="h-full rounded-sm bg-green-600" style={{ width: `${pct}%` }} />
+                    <div className="h-full rounded-sm bg-success" style={{ width: `${pct}%` }} />
                   </div>
                   <span className="w-16 text-right text-xs text-text-muted">
                     ${total.toFixed(0)}
