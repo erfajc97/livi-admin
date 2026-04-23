@@ -64,10 +64,10 @@ export function useOrdersPageHook() {
   }, [])
 
   const handleStatusConfirm = useCallback(
-    (status: OrderStatus) => {
+    (status: OrderStatus, note?: string) => {
       if (!selectedOrder) return
       updateMutation.mutate(
-        { id: selectedOrder.id, payload: { status } },
+        { id: selectedOrder.id, payload: { status, statusNote: note } },
         {
           onSuccess: () => {
             setShowStatusModal(false)

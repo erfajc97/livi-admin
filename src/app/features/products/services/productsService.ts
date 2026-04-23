@@ -2,6 +2,7 @@ import axiosInstance from '@/app/config/axiosConfig'
 import { API_ENDPOINTS } from '@/app/api/endpoints'
 import type {
   Product,
+  ProductImage,
   CreateProductPayload,
   UpdateProductPayload,
   PaginatedProducts,
@@ -62,5 +63,38 @@ export const productsService = {
     )
     const result = data.data
     return Array.isArray(result) ? result : result.data
+  },
+
+  uploadImages: async (productId: number, files: File[]): Promise<ProductImage[]> => {
+    const fd = new FormData()
+    files.forEach((file) => fd.append('files', file))
+    const { data } = await axiosInstance.post<CoreApiResponse<ProductImage[]>>(
+      `${API_ENDPOINTS.PRODUCTS}/${productId}/images`,
+      fd,
+    )
+    return data.data
+  },
+
+  listImages: async (productId: number): Promise<ProductImage[]> => {
+    const { data } = await axiosInstance.get<CoreApiResponse<ProductImage[]>>(
+      `${API_ENDPOINTS.PRODUCTS}/${productId}/images`,
+    )
+    return data.data
+  },
+
+  deleteImage: async (productId: number, imageId: number): Promise<void> => {
+    await axiosInstance.delete(
+      `${API_ENDPOINTS.PRODUCTS}/${productId}/images/${imageId}`,
+    )
+  },
+
+  uploadVariationImages: async (variationId: number, files: File[]): Promise<void> => {
+    const fd = new FormData()
+    files.forEach((file) => fd.append('files', file))
+    await axiosInstance.post(`/product-variations/${variationId}/images`, fd)
+  },
+
+  deleteVariationImage: async (variationId: number, imageId: number): Promise<void> => {
+    await axiosInstance.delete(`/product-variations/${variationId}/images/${imageId}`)
   },
 }

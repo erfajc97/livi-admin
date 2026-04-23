@@ -1,12 +1,25 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { addToast } from '@heroui/react'
 import { combosService } from '../services/combosService'
-import type { CreateComboPayload, UpdateComboPayload } from '../types'
+
+// Extended payload type to include image file
+interface CreateComboPayloadWithFile {
+  name: string
+  description?: string
+  imageUrl?: string
+  imageFile?: File | null
+  finalPrice: number
+  discount?: number
+  isActive?: boolean
+  products: { productId: number; productVariationId?: number; quantity: number }[]
+}
+
+interface UpdateComboPayloadWithFile extends Partial<CreateComboPayloadWithFile> {}
 
 export function useCreateComboMutation() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (payload: CreateComboPayload) => combosService.createCombo(payload),
+    mutationFn: (payload: CreateComboPayloadWithFile) => combosService.createCombo(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['combos'] })
       addToast({ title: 'Combo creado exitosamente', color: 'success' })
@@ -20,7 +33,7 @@ export function useCreateComboMutation() {
 export function useUpdateComboMutation() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UpdateComboPayload }) =>
+    mutationFn: ({ id, data }: { id: number; data: UpdateComboPayloadWithFile }) =>
       combosService.updateCombo(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['combos'] })

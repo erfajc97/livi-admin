@@ -3,7 +3,7 @@ import { Button, Chip } from '@heroui/react'
 import { Pencil, Trash2 } from 'lucide-react'
 import { CustomTableNextUi } from '@/app/components/UI/table-nextui/CustomTableNextUi'
 import { CustomPagination } from '@/app/components/UI/table-nextui/CustomPagination'
-import { orderColumns, STATUS_LABELS } from '../data'
+import { orderColumns, STATUS_LABELS, PAYMENT_STATUS_LABELS } from '../data'
 import type { Order } from '../types'
 
 interface OrdersTableProps {
@@ -14,6 +14,7 @@ interface OrdersTableProps {
   setPage: (page: number) => void
   onEditStatus: (order: Order) => void
   onDelete: (order: Order) => void
+  onRowClick?: (order: Order) => void
 }
 
 export default function OrdersTable({
@@ -24,16 +25,25 @@ export default function OrdersTable({
   setPage,
   onEditStatus,
   onDelete,
+  onRowClick,
 }: OrdersTableProps) {
   const renderCell = useCallback(
     (item: Order, columnKey: string) => {
       switch (columnKey) {
         case 'orderNumber':
           return <span className="font-medium text-accent">{item.orderNumber}</span>
-        case 'userName':
-          return <span className="text-text">{item.userName || 'Cliente'}</span>
+        case 'customerName':
+          return <span className="text-text">{item.customerName || item.userName || 'Cliente'}</span>
         case 'paymentMethod':
           return <span className="text-text-muted">{item.paymentMethod || 'N/A'}</span>
+        case 'paymentStatus': {
+          const ps = PAYMENT_STATUS_LABELS[item.paymentStatus || 'pending'] || { label: item.paymentStatus || 'N/A', color: 'default' as const }
+          return (
+            <Chip size="sm" variant="flat" color={ps.color}>
+              {ps.label}
+            </Chip>
+          )
+        }
         case 'status': {
           const info = STATUS_LABELS[item.status] || { label: item.status, color: 'default' as const }
           return (
@@ -79,6 +89,7 @@ export default function OrdersTable({
       items={orders.map((o) => ({ ...o, id: o.id }))}
       columns={orderColumns}
       renderCell={renderCell}
+      onRowClick={onRowClick ? (item) => onRowClick(item as unknown as Order) : undefined}
       isLoading={isLoading}
       emptyContent="No hay órdenes registradas"
       bottomContent={

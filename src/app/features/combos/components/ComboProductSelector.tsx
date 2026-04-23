@@ -1,41 +1,40 @@
 import { useState, useMemo } from 'react'
 import { Autocomplete, AutocompleteItem } from '@heroui/react'
 import { useProductsQuery } from '@/app/tanstack-queries/productsQuery'
+import type { Product } from '@/app/features/products/types'
 
 interface ComboProductSelectorProps {
   value: string
   onChange: (value: string) => void
+  onProductSelected?: (product: Product | null) => void
 }
 
-export default function ComboProductSelector({ value, onChange }: ComboProductSelectorProps) {
-  const { data: paginatedData } = useProductsQuery({ limit: 200 })
+export default function ComboProductSelector({
+  value,
+  onChange,
+  onProductSelected,
+}: ComboProductSelectorProps) {
+  const { data: paginatedData, isLoading } = useProductsQuery({ page: 1, limit: 100 })
   const allProducts = paginatedData?.data ?? []
-  const [searchTerm, setSearchTerm] = useState('')
-
-  const filteredProducts = useMemo(() => {
-    if (!searchTerm) return allProducts.slice(0, 50)
-    const lower = searchTerm.toLowerCase()
-    return allProducts
-      .filter((p) => p.name.toLowerCase().includes(lower) || p.brand.toLowerCase().includes(lower))
-      .slice(0, 50)
-  }, [allProducts, searchTerm])
 
   return (
     <Autocomplete
       label="Producto"
-      selectedKey={value}
-      inputValue={searchTerm}
-      onInputChange={setSearchTerm}
-      items={filteredProducts}
+      selectedKey={value || null}
+      items={allProducts}
+      isLoading={isLoading}
       onSelectionChange={(key) => {
         const id = key ? String(key) : ''
         onChange(id)
         if (key) {
           const product = allProducts.find((p) => String(p.id) === String(key))
-          if (product) setSearchTerm(product.name)
+          if (product) {
+            onProductSelected?.(product)
+          }
+        } else {
+          onProductSelected?.(null)
         }
       }}
-      defaultFilter={() => true}
       classNames={{
         base: 'flex-1',
       }}
@@ -47,6 +46,7 @@ export default function ComboProductSelector({ value, onChange }: ComboProductSe
       }}
       listboxProps={{
         className: 'bg-surface text-text max-h-64 overflow-y-auto',
+        emptyContent: isLoading ? "Cargando productos..." : "No se encontraron productos.",
       }}
       popoverProps={{
         classNames: {
@@ -57,7 +57,7 @@ export default function ComboProductSelector({ value, onChange }: ComboProductSe
       {(product) => (
         <AutocompleteItem
           key={String(product.id)}
-          textValue={`${product.name} ${product.brand}`}
+          textValue={product.name}
           classNames={{ base: 'text-text data-[hover=true]:bg-bg', title: '!text-text' }}
         >
           <div className="flex items-center gap-2">
@@ -67,7 +67,7 @@ export default function ComboProductSelector({ value, onChange }: ComboProductSe
             <div className="flex flex-col">
               <span className="text-sm text-text">{product.name}</span>
               <span className="text-xs text-text-muted">
-                {product.brand} — ${product.price}
+                ${product.price}
               </span>
             </div>
           </div>

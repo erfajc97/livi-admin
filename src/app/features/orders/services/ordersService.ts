@@ -16,6 +16,11 @@ export const ordersService = {
     return data.data
   },
 
+  getById: async (id: number): Promise<Order> => {
+    const { data } = await axiosInstance.get<CoreApiResponse<Order>>(`${API_ENDPOINTS.ORDERS}/${id}`)
+    return data.data
+  },
+
   update: async (id: number, payload: UpdateOrderPayload): Promise<Order> => {
     const { data } = await axiosInstance.patch<CoreApiResponse<Order>>(
       `${API_ENDPOINTS.ORDERS}/${id}`,

@@ -22,46 +22,34 @@ export function useManualSaleHook() {
     queryFn: () => manualSalesService.searchUsers(),
   })
 
-  const { data: paginatedProducts } = useProductsQuery({ limit: 200 })
+  const { data: paginatedProducts } = useProductsQuery({ limit: 100 })
   const allProducts = paginatedProducts?.data ?? []
 
   const addItem = useCallback(
-    (productId: number) => {
-      const product = allProducts.find((p) => p.id === productId)
-      if (!product) return
-
+    (newItem: Omit<ManualSaleItem, 'quantity'>) => {
       setItems((prev) => {
-        const existing = prev.find((i) => i.productId === productId)
+        const key = newItem.productVariationId || newItem.productId
+        const existing = prev.find((i) => (i.productVariationId || i.productId) === key)
         if (existing) {
           return prev.map((i) =>
-            i.productId === productId ? { ...i, quantity: i.quantity + 1 } : i
+            (i.productVariationId || i.productId) === key ? { ...i, quantity: i.quantity + 1 } : i
           )
         }
-        return [
-          ...prev,
-          {
-            productId: product.id,
-            productName: product.name,
-            brand: product.brand,
-            imageUrl: product.imageUrl,
-            price: product.price,
-            quantity: 1,
-          },
-        ]
+        return [...prev, { ...newItem, quantity: 1 }]
       })
     },
-    [allProducts]
+    []
   )
 
-  const updateItemQuantity = useCallback((productId: number, quantity: number) => {
+  const updateItemQuantity = useCallback((itemKey: number, quantity: number) => {
     if (quantity < 1) return
     setItems((prev) =>
-      prev.map((i) => (i.productId === productId ? { ...i, quantity } : i))
+      prev.map((i) => ((i.productVariationId || i.productId) === itemKey ? { ...i, quantity } : i))
     )
   }, [])
 
-  const removeItem = useCallback((productId: number) => {
-    setItems((prev) => prev.filter((i) => i.productId !== productId))
+  const removeItem = useCallback((itemKey: number) => {
+    setItems((prev) => prev.filter((i) => (i.productVariationId || i.productId) !== itemKey))
   }, [])
 
   const subtotal = useMemo(
@@ -94,10 +82,15 @@ export function useManualSaleHook() {
   const buildPayload = useCallback(() => {
     return {
       userId: client!.id,
-      items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
+      items: items.map((i) => ({
+        ...(i.productVariationId
+          ? { productVariationId: i.productVariationId }
+          : { productId: i.productId }),
+        quantity: i.quantity,
+      })),
       paymentMethod,
       discountAmount: discountAmount > 0 ? discountAmount : undefined,
-      notes: notes || undefined,
+      notes: notes ? `[Venta manual] ${notes}` : '[Venta manual]',
     }
   }, [client, items, paymentMethod, discountAmount, notes])
 

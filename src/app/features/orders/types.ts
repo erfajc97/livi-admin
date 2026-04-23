@@ -15,6 +15,10 @@ export interface OrderItem {
   price: number
   quantity: number
   subtotal: number
+  productName?: string
+  productImage?: string
+  mlSize?: number
+  isFullBottle?: boolean
 }
 
 export interface Order {
@@ -24,13 +28,28 @@ export interface Order {
   userName?: string
   items: OrderItem[]
   status: OrderStatus
+  subtotal: number
+  deliveryCost: number
+  payphoneSurcharge: number
+  couponDiscount: number
   total: number
+  customerName?: string
+  customerEmail?: string
+  customerPhone?: string
+  deliveryMethod?: string
   paymentMethod?: string
   paymentStatus?: string
   paymentReference?: string
   shippingAddress?: string
   shippingCity?: string
+  trackingCode?: string
+  transferReceiptUrl?: string
   notes?: string
+  receivedAt?: string
+  acceptedAt?: string
+  shippedAt?: string
+  deliveredAt?: string
+  cancelledAt?: string
   createdAt: string
   updatedAt: string
 }
@@ -40,5 +59,7 @@ export interface UpdateOrderPayload {
   paymentMethod?: string
   paymentStatus?: string
   paymentReference?: string
+  trackingCode?: string
+  statusNote?: string
   notes?: string
 }

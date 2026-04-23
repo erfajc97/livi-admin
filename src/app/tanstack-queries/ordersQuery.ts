@@ -7,3 +7,11 @@ export function useOrdersQuery() {
     queryFn: ordersService.getAll,
   })
 }
+
+export function useOrderByIdQuery(id: number, enabled = true) {
+  return useQuery({
+    queryKey: ['orders', id],
+    queryFn: () => ordersService.getById(id),
+    enabled: enabled && id > 0,
+  })
+}

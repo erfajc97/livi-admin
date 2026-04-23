@@ -15,13 +15,19 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedVentasManualesRouteImport } from './routes/_authenticated/ventas-manuales'
 import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated/usuarios'
+import { Route as AuthenticatedTiposProductoRouteImport } from './routes/_authenticated/tipos-producto'
 import { Route as AuthenticatedStockRouteImport } from './routes/_authenticated/stock'
+import { Route as AuthenticatedSeccionesLandingRouteImport } from './routes/_authenticated/secciones-landing'
 import { Route as AuthenticatedProductosRouteImport } from './routes/_authenticated/productos'
 import { Route as AuthenticatedOrdenesRouteImport } from './routes/_authenticated/ordenes'
 import { Route as AuthenticatedFinanzasRouteImport } from './routes/_authenticated/finanzas'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedCuponesRouteImport } from './routes/_authenticated/cupones'
 import { Route as AuthenticatedCombosRouteImport } from './routes/_authenticated/combos'
+import { Route as AuthenticatedCategoriasRouteImport } from './routes/_authenticated/categorias'
+import { Route as AuthenticatedBlogRouteImport } from './routes/_authenticated/blog'
 import { Route as AuthenticatedBannersRouteImport } from './routes/_authenticated/banners'
+import { Route as AuthenticatedAjustesRouteImport } from './routes/_authenticated/ajustes'
 
 const NotAuthorizedRoute = NotAuthorizedRouteImport.update({
   id: '/notAuthorized',
@@ -53,11 +59,23 @@ const AuthenticatedUsuariosRoute = AuthenticatedUsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedTiposProductoRoute =
+  AuthenticatedTiposProductoRouteImport.update({
+    id: '/tipos-producto',
+    path: '/tipos-producto',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedStockRoute = AuthenticatedStockRouteImport.update({
   id: '/stock',
   path: '/stock',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedSeccionesLandingRoute =
+  AuthenticatedSeccionesLandingRouteImport.update({
+    id: '/secciones-landing',
+    path: '/secciones-landing',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedProductosRoute = AuthenticatedProductosRouteImport.update({
   id: '/productos',
   path: '/productos',
@@ -78,9 +96,24 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedCuponesRoute = AuthenticatedCuponesRouteImport.update({
+  id: '/cupones',
+  path: '/cupones',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedCombosRoute = AuthenticatedCombosRouteImport.update({
   id: '/combos',
   path: '/combos',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedCategoriasRoute = AuthenticatedCategoriasRouteImport.update({
+  id: '/categorias',
+  path: '/categorias',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedBlogRoute = AuthenticatedBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedBannersRoute = AuthenticatedBannersRouteImport.update({
@@ -88,31 +121,48 @@ const AuthenticatedBannersRoute = AuthenticatedBannersRouteImport.update({
   path: '/banners',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAjustesRoute = AuthenticatedAjustesRouteImport.update({
+  id: '/ajustes',
+  path: '/ajustes',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginRoute
   '/notAuthorized': typeof NotAuthorizedRoute
+  '/ajustes': typeof AuthenticatedAjustesRoute
   '/banners': typeof AuthenticatedBannersRoute
+  '/blog': typeof AuthenticatedBlogRoute
+  '/categorias': typeof AuthenticatedCategoriasRoute
   '/combos': typeof AuthenticatedCombosRoute
+  '/cupones': typeof AuthenticatedCuponesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/finanzas': typeof AuthenticatedFinanzasRoute
   '/ordenes': typeof AuthenticatedOrdenesRoute
   '/productos': typeof AuthenticatedProductosRoute
+  '/secciones-landing': typeof AuthenticatedSeccionesLandingRoute
   '/stock': typeof AuthenticatedStockRoute
+  '/tipos-producto': typeof AuthenticatedTiposProductoRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
   '/ventas-manuales': typeof AuthenticatedVentasManualesRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/notAuthorized': typeof NotAuthorizedRoute
+  '/ajustes': typeof AuthenticatedAjustesRoute
   '/banners': typeof AuthenticatedBannersRoute
+  '/blog': typeof AuthenticatedBlogRoute
+  '/categorias': typeof AuthenticatedCategoriasRoute
   '/combos': typeof AuthenticatedCombosRoute
+  '/cupones': typeof AuthenticatedCuponesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/finanzas': typeof AuthenticatedFinanzasRoute
   '/ordenes': typeof AuthenticatedOrdenesRoute
   '/productos': typeof AuthenticatedProductosRoute
+  '/secciones-landing': typeof AuthenticatedSeccionesLandingRoute
   '/stock': typeof AuthenticatedStockRoute
+  '/tipos-producto': typeof AuthenticatedTiposProductoRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
   '/ventas-manuales': typeof AuthenticatedVentasManualesRoute
   '/': typeof AuthenticatedIndexRoute
@@ -122,13 +172,19 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/notAuthorized': typeof NotAuthorizedRoute
+  '/_authenticated/ajustes': typeof AuthenticatedAjustesRoute
   '/_authenticated/banners': typeof AuthenticatedBannersRoute
+  '/_authenticated/blog': typeof AuthenticatedBlogRoute
+  '/_authenticated/categorias': typeof AuthenticatedCategoriasRoute
   '/_authenticated/combos': typeof AuthenticatedCombosRoute
+  '/_authenticated/cupones': typeof AuthenticatedCuponesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/finanzas': typeof AuthenticatedFinanzasRoute
   '/_authenticated/ordenes': typeof AuthenticatedOrdenesRoute
   '/_authenticated/productos': typeof AuthenticatedProductosRoute
+  '/_authenticated/secciones-landing': typeof AuthenticatedSeccionesLandingRoute
   '/_authenticated/stock': typeof AuthenticatedStockRoute
+  '/_authenticated/tipos-producto': typeof AuthenticatedTiposProductoRoute
   '/_authenticated/usuarios': typeof AuthenticatedUsuariosRoute
   '/_authenticated/ventas-manuales': typeof AuthenticatedVentasManualesRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
@@ -139,26 +195,38 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/notAuthorized'
+    | '/ajustes'
     | '/banners'
+    | '/blog'
+    | '/categorias'
     | '/combos'
+    | '/cupones'
     | '/dashboard'
     | '/finanzas'
     | '/ordenes'
     | '/productos'
+    | '/secciones-landing'
     | '/stock'
+    | '/tipos-producto'
     | '/usuarios'
     | '/ventas-manuales'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
     | '/notAuthorized'
+    | '/ajustes'
     | '/banners'
+    | '/blog'
+    | '/categorias'
     | '/combos'
+    | '/cupones'
     | '/dashboard'
     | '/finanzas'
     | '/ordenes'
     | '/productos'
+    | '/secciones-landing'
     | '/stock'
+    | '/tipos-producto'
     | '/usuarios'
     | '/ventas-manuales'
     | '/'
@@ -167,13 +235,19 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/login'
     | '/notAuthorized'
+    | '/_authenticated/ajustes'
     | '/_authenticated/banners'
+    | '/_authenticated/blog'
+    | '/_authenticated/categorias'
     | '/_authenticated/combos'
+    | '/_authenticated/cupones'
     | '/_authenticated/dashboard'
     | '/_authenticated/finanzas'
     | '/_authenticated/ordenes'
     | '/_authenticated/productos'
+    | '/_authenticated/secciones-landing'
     | '/_authenticated/stock'
+    | '/_authenticated/tipos-producto'
     | '/_authenticated/usuarios'
     | '/_authenticated/ventas-manuales'
     | '/_authenticated/'
@@ -229,11 +303,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsuariosRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/tipos-producto': {
+      id: '/_authenticated/tipos-producto'
+      path: '/tipos-producto'
+      fullPath: '/tipos-producto'
+      preLoaderRoute: typeof AuthenticatedTiposProductoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/stock': {
       id: '/_authenticated/stock'
       path: '/stock'
       fullPath: '/stock'
       preLoaderRoute: typeof AuthenticatedStockRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/secciones-landing': {
+      id: '/_authenticated/secciones-landing'
+      path: '/secciones-landing'
+      fullPath: '/secciones-landing'
+      preLoaderRoute: typeof AuthenticatedSeccionesLandingRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/productos': {
@@ -264,11 +352,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/cupones': {
+      id: '/_authenticated/cupones'
+      path: '/cupones'
+      fullPath: '/cupones'
+      preLoaderRoute: typeof AuthenticatedCuponesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/combos': {
       id: '/_authenticated/combos'
       path: '/combos'
       fullPath: '/combos'
       preLoaderRoute: typeof AuthenticatedCombosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/categorias': {
+      id: '/_authenticated/categorias'
+      path: '/categorias'
+      fullPath: '/categorias'
+      preLoaderRoute: typeof AuthenticatedCategoriasRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/blog': {
+      id: '/_authenticated/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof AuthenticatedBlogRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/banners': {
@@ -278,30 +387,49 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBannersRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/ajustes': {
+      id: '/_authenticated/ajustes'
+      path: '/ajustes'
+      fullPath: '/ajustes'
+      preLoaderRoute: typeof AuthenticatedAjustesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAjustesRoute: typeof AuthenticatedAjustesRoute
   AuthenticatedBannersRoute: typeof AuthenticatedBannersRoute
+  AuthenticatedBlogRoute: typeof AuthenticatedBlogRoute
+  AuthenticatedCategoriasRoute: typeof AuthenticatedCategoriasRoute
   AuthenticatedCombosRoute: typeof AuthenticatedCombosRoute
+  AuthenticatedCuponesRoute: typeof AuthenticatedCuponesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedFinanzasRoute: typeof AuthenticatedFinanzasRoute
   AuthenticatedOrdenesRoute: typeof AuthenticatedOrdenesRoute
   AuthenticatedProductosRoute: typeof AuthenticatedProductosRoute
+  AuthenticatedSeccionesLandingRoute: typeof AuthenticatedSeccionesLandingRoute
   AuthenticatedStockRoute: typeof AuthenticatedStockRoute
+  AuthenticatedTiposProductoRoute: typeof AuthenticatedTiposProductoRoute
   AuthenticatedUsuariosRoute: typeof AuthenticatedUsuariosRoute
   AuthenticatedVentasManualesRoute: typeof AuthenticatedVentasManualesRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAjustesRoute: AuthenticatedAjustesRoute,
   AuthenticatedBannersRoute: AuthenticatedBannersRoute,
+  AuthenticatedBlogRoute: AuthenticatedBlogRoute,
+  AuthenticatedCategoriasRoute: AuthenticatedCategoriasRoute,
   AuthenticatedCombosRoute: AuthenticatedCombosRoute,
+  AuthenticatedCuponesRoute: AuthenticatedCuponesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedFinanzasRoute: AuthenticatedFinanzasRoute,
   AuthenticatedOrdenesRoute: AuthenticatedOrdenesRoute,
   AuthenticatedProductosRoute: AuthenticatedProductosRoute,
+  AuthenticatedSeccionesLandingRoute: AuthenticatedSeccionesLandingRoute,
   AuthenticatedStockRoute: AuthenticatedStockRoute,
+  AuthenticatedTiposProductoRoute: AuthenticatedTiposProductoRoute,
   AuthenticatedUsuariosRoute: AuthenticatedUsuariosRoute,
   AuthenticatedVentasManualesRoute: AuthenticatedVentasManualesRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,

@@ -1,5 +1,7 @@
 import { Button, Spinner } from '@heroui/react'
 import { PlusIcon } from 'lucide-react'
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useBannersPageHook } from './hooks/useBannersPageHook'
 import BannerCard from './components/BannerCard'
 import FormModal from './components/modals/FormModal'
@@ -20,7 +22,12 @@ export function Banners() {
     handleDeleteClick,
     handleConfirmDelete,
     handleFormModalOpenChange,
+    handleDragEnd,
   } = useBannersPageHook()
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+  )
 
   return (
     <div className="flex flex-col gap-6 p-6">
@@ -31,7 +38,7 @@ export function Banners() {
             Banners
           </h1>
           <p className="mt-1 text-sm text-text-muted">
-            Gestiona los banners promocionales de la tienda.
+            Gestiona los banners promocionales de la tienda. Arrastra para reordenar.
           </p>
         </div>
         <Button
@@ -62,16 +69,27 @@ export function Banners() {
           </Button>
         </div>
       ) : (
-        <div className="flex flex-col gap-3">
-          {banners.map((banner) => (
-            <BannerCard
-              key={banner.id}
-              banner={banner}
-              onEdit={handleEditClick}
-              onDelete={handleDeleteClick}
-            />
-          ))}
-        </div>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={banners.map((b) => b.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="flex flex-col gap-3">
+              {banners.map((banner) => (
+                <BannerCard
+                  key={banner.id}
+                  banner={banner}
+                  onEdit={handleEditClick}
+                  onDelete={handleDeleteClick}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       )}
 
       {/* Modals */}
@@ -81,7 +99,9 @@ export function Banners() {
         isThereId={formHook.isThereId}
         isSubmitting={formHook.isSubmitting}
         formData={formHook.formData}
+        imagePreview={formHook.imagePreview}
         onInputChange={formHook.onInputChange}
+        onImageChange={formHook.onImageChange}
         onSubmit={formHook.handleSubmit}
       />
       <DeleteModal

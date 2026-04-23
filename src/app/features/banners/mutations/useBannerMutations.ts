@@ -6,7 +6,8 @@ import type { CreateBannerPayload, UpdateBannerPayload } from '../types'
 export const useCreateBannerMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (data: CreateBannerPayload) => bannersService.createBanner(data),
+    mutationFn: ({ data, file }: { data: CreateBannerPayload; file?: File }) =>
+      bannersService.createBanner(data, file),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['banners'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
@@ -21,8 +22,8 @@ export const useCreateBannerMutation = () => {
 export const useUpdateBannerMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdateBannerPayload }) =>
-      bannersService.updateBanner(id, data),
+    mutationFn: ({ id, data, file }: { id: string; data: UpdateBannerPayload; file?: File }) =>
+      bannersService.updateBanner(id, data, file),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['banners'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
@@ -30,6 +31,38 @@ export const useUpdateBannerMutation = () => {
     },
     onError: (error: Error) => {
       addToast({ title: error.message ?? 'Error al actualizar el banner', color: 'danger' })
+    },
+  })
+}
+
+export const useToggleBannerVisibilityMutation = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, isVisible }: { id: string; isVisible: boolean }) =>
+      bannersService.updateBanner(id, { isVisible }),
+    onSuccess: (_, { isVisible }) => {
+      queryClient.invalidateQueries({ queryKey: ['banners'] })
+      addToast({
+        title: isVisible ? 'Banner activado' : 'Banner desactivado',
+        color: 'success',
+      })
+    },
+    onError: () => {
+      addToast({ title: 'Error al cambiar visibilidad', color: 'danger' })
+    },
+  })
+}
+
+export const useReorderBannersMutation = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (orderedIds: number[]) => bannersService.reorderBanners(orderedIds),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['banners'] })
+    },
+    onError: () => {
+      queryClient.invalidateQueries({ queryKey: ['banners'] })
+      addToast({ title: 'Error al reordenar banners', color: 'danger' })
     },
   })
 }

@@ -1,8 +1,15 @@
+import { useState } from 'react'
 import { useOrdersPageHook } from './hooks/useOrdersPageHook'
 import OrdersListView from './components/OrdersListView'
+import OrderDetailView from './components/OrderDetailView'
 
 export function Ordenes() {
   const hook = useOrdersPageHook()
+  const [detailOrderId, setDetailOrderId] = useState<number | null>(null)
+
+  if (detailOrderId) {
+    return <OrderDetailView orderId={detailOrderId} onBack={() => setDetailOrderId(null)} />
+  }
 
   return (
     <OrdersListView
@@ -24,6 +31,7 @@ export function Ordenes() {
       onDeleteClose={hook.handleDeleteClose}
       onStatusConfirm={hook.handleStatusConfirm}
       onStatusClose={hook.handleStatusClose}
+      onRowClick={(order) => setDetailOrderId(order.id)}
     />
   )
 }

@@ -21,8 +21,9 @@ interface OrdersListViewProps {
   onDelete: (order: Order) => void
   onDeleteConfirm: () => void
   onDeleteClose: () => void
-  onStatusConfirm: (status: OrderStatus) => void
+  onStatusConfirm: (status: OrderStatus, note?: string) => void
   onStatusClose: () => void
+  onRowClick?: (order: Order) => void
 }
 
 export default function OrdersListView({
@@ -44,6 +45,7 @@ export default function OrdersListView({
   onDeleteClose,
   onStatusConfirm,
   onStatusClose,
+  onRowClick,
 }: OrdersListViewProps) {
   return (
     <div className="flex flex-col gap-6 p-6">
@@ -57,6 +59,7 @@ export default function OrdersListView({
         setPage={setPage}
         onEditStatus={onEditStatus}
         onDelete={onDelete}
+        onRowClick={onRowClick}
       />
 
       <DeleteOrderModal

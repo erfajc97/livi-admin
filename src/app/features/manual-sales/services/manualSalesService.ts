@@ -18,7 +18,7 @@ export const manualSalesService = {
 
   createManualOrder: async (payload: {
     userId: number
-    items: Array<{ productId: number; quantity: number }>
+    items: Array<{ productId?: number; productVariationId?: number; quantity: number }>
     paymentMethod?: string
     discountAmount?: number
     notes?: string

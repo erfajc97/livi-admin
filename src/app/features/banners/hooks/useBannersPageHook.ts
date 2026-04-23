@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useDisclosure } from '@heroui/react'
+import { arrayMove } from '@dnd-kit/sortable'
+import type { DragEndEvent } from '@dnd-kit/core'
 import { useBannersQuery } from '@/app/tanstack-queries/bannersQuery'
 import { useBannerFormHook } from './useBannerFormHook'
-import { useDeleteBannerMutation } from '../mutations/useBannerMutations'
+import { useDeleteBannerMutation, useReorderBannersMutation } from '../mutations/useBannerMutations'
 import type { Banner } from '../types'
 
 export function useBannersPageHook() {
@@ -14,9 +16,13 @@ export function useBannersPageHook() {
     onOpenChange: onDeleteOpenChange,
   } = useDisclosure()
   const [deleteTarget, setDeleteTarget] = useState<Banner | null>(null)
+  const [localBanners, setLocalBanners] = useState<Banner[] | null>(null)
 
   const { data: banners = [], isLoading } = useBannersQuery()
   const deleteMutation = useDeleteBannerMutation()
+  const reorderMutation = useReorderBannersMutation()
+
+  const displayBanners = localBanners ?? banners
 
   const { handleToEditForm, resetForm, ...formHook } = useBannerFormHook({
     id,
@@ -43,7 +49,10 @@ export function useBannersPageHook() {
   const handleConfirmDelete = () => {
     if (deleteTarget) {
       deleteMutation.mutate(String(deleteTarget.id), {
-        onSuccess: () => onDeleteOpenChange(),
+        onSuccess: () => {
+          setLocalBanners(null)
+          onDeleteOpenChange()
+        },
       })
     }
   }
@@ -56,9 +65,26 @@ export function useBannersPageHook() {
     onOpenChange()
   }
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+
+    const currentList = displayBanners
+    const oldIndex = currentList.findIndex((b) => b.id === active.id)
+    const newIndex = currentList.findIndex((b) => b.id === over.id)
+    if (oldIndex === -1 || newIndex === -1) return
+
+    const reordered = arrayMove(currentList, oldIndex, newIndex)
+    setLocalBanners(reordered)
+    reorderMutation.mutate(
+      reordered.map((b) => Number(b.id)),
+      { onSettled: () => setLocalBanners(null) },
+    )
+  }
+
   return {
     id,
-    banners,
+    banners: displayBanners,
     isLoading,
     formHook,
     deleteTarget,
@@ -71,5 +97,6 @@ export function useBannersPageHook() {
     handleDeleteClick,
     handleConfirmDelete,
     handleFormModalOpenChange,
+    handleDragEnd,
   }
 }

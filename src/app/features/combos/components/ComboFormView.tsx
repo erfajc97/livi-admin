@@ -23,6 +23,7 @@ export default function ComboFormView({ combo, onBack }: ComboFormViewProps) {
     updateProductRow,
     removeProductRow,
     buildPayload,
+    handleImageChange,
   } = useComboFormHook()
 
   const createMutation = useCreateComboMutation()
@@ -40,10 +41,14 @@ export default function ComboFormView({ combo, onBack }: ComboFormViewProps) {
 
   const handleSubmit = () => {
     const payload = buildPayload()
+    const formDataPayload = {
+      ...payload,
+      imageFile: formData.imageFile,
+    }
     if (isEdit && combo) {
-      updateMutation.mutate({ id: combo.id, data: payload }, { onSuccess: onBack })
+      updateMutation.mutate({ id: combo.id, data: formDataPayload }, { onSuccess: onBack })
     } else {
-      createMutation.mutate(payload, { onSuccess: onBack })
+      createMutation.mutate(formDataPayload, { onSuccess: onBack })
     }
   }
 
@@ -63,6 +68,7 @@ export default function ComboFormView({ combo, onBack }: ComboFormViewProps) {
       addProductRow={addProductRow}
       updateProductRow={updateProductRow}
       removeProductRow={removeProductRow}
+      onImageChange={handleImageChange}
       onSubmit={handleSubmit}
       onBack={onBack}
       isSubmitting={createMutation.isPending || updateMutation.isPending}

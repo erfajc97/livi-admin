@@ -8,6 +8,14 @@ export interface User {
   role: UserRole
   isActive: boolean
   isEmailVerified?: boolean
+  phone?: string
+  cedula?: string
+  province?: string
+  city?: string
+  address?: string
+  reference?: string
+  preferredDeliveryMethod?: string
+  authProvider?: string
   createdAt: string
   updatedAt: string
 }
@@ -25,6 +33,13 @@ export interface UpdateUserPayload {
   lastName?: string
   role?: UserRole
   isActive?: boolean
+  phone?: string
+  cedula?: string
+  province?: string
+  city?: string
+  address?: string
+  reference?: string
+  preferredDeliveryMethod?: string
 }
 
 export interface UserFormProps {

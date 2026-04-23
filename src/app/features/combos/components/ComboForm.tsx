@@ -1,6 +1,6 @@
 import { Button, Input, Switch, Textarea } from '@heroui/react'
-import { ArrowLeft, Plus, Trash2 } from 'lucide-react'
-import ComboProductSelector from './ComboProductSelector'
+import { ArrowLeft, Plus, Upload } from 'lucide-react'
+import ComboProductRowVariations from './ComboProductRowVariations'
 import type { ComboFormData, ComboProductRow } from '../types'
 
 interface ComboFormProps {
@@ -10,6 +10,7 @@ interface ComboFormProps {
   addProductRow: () => void
   updateProductRow: (index: number, field: keyof ComboProductRow, value: string) => void
   removeProductRow: (index: number) => void
+  onImageChange: (file: File | null) => void
   onSubmit: () => void
   onBack: () => void
   isSubmitting: boolean
@@ -23,6 +24,7 @@ export default function ComboForm({
   addProductRow,
   updateProductRow,
   removeProductRow,
+  onImageChange,
   onSubmit,
   onBack,
   isSubmitting,
@@ -57,20 +59,42 @@ export default function ComboForm({
             classNames={{ label: '!text-text', input: '!text-text' }}
           />
 
-          <Input
-            label="URL de imagen"
-            value={formData.imageUrl}
-            onValueChange={(v) => updateField('imageUrl', v)}
-            classNames={{ label: '!text-text', input: '!text-text' }}
-          />
-
-          {formData.imageUrl && (
-            <img
-              src={formData.imageUrl}
-              alt="Preview"
-              className="h-32 w-32 rounded-lg object-cover"
-            />
-          )}
+          {/* Image Upload */}
+          <div className="flex flex-col gap-2">
+            <label className="text-sm text-text">Imagen del combo</label>
+            {(formData.imageUrl || formData.imageFile) && (
+              <img
+                src={formData.imageFile ? URL.createObjectURL(formData.imageFile) : formData.imageUrl}
+                alt="Preview"
+                className="h-32 w-32 rounded-lg object-cover"
+              />
+            )}
+            <div className="flex items-center gap-2">
+              <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-border bg-bg px-4 py-2 text-sm text-text hover:bg-surface">
+                <Upload size={16} />
+                <span>{formData.imageFile || formData.imageUrl ? 'Cambiar imagen' : 'Subir imagen'}</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => onImageChange(e.target.files?.[0] ?? null)}
+                />
+              </label>
+              {(formData.imageFile || formData.imageUrl) && (
+                <Button
+                  size="sm"
+                  variant="flat"
+                  color="danger"
+                  onPress={() => {
+                    updateField('imageFile', null)
+                    updateField('imageUrl', '')
+                  }}
+                >
+                  Eliminar
+                </Button>
+              )}
+            </div>
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <Input
@@ -81,10 +105,11 @@ export default function ComboForm({
               classNames={{ label: '!text-text', input: '!text-text' }}
             />
             <Input
-              label="Etiqueta de tamaño"
-              placeholder="ej: 5ml C/U"
-              value={formData.sizeLabel}
-              onValueChange={(v) => updateField('sizeLabel', v)}
+              label="Descuento ($)"
+              type="number"
+              placeholder="Opcional"
+              value={formData.discount}
+              onValueChange={(v) => updateField('discount', v)}
               classNames={{ label: '!text-text', input: '!text-text' }}
             />
           </div>
@@ -108,31 +133,14 @@ export default function ComboForm({
           </div>
 
           {productRows.map((row, index) => (
-            <div key={index} className="flex items-end gap-3">
-              <ComboProductSelector
-                value={row.productId}
-                onChange={(v) => updateProductRow(index, 'productId', v)}
-              />
-              <Input
-                label="Cant."
-                type="number"
-                value={row.quantity}
-                onValueChange={(v) => updateProductRow(index, 'quantity', v)}
-                classNames={{ label: '!text-text', input: '!text-text' }}
-                className="max-w-20"
-              />
-              {productRows.length > 1 && (
-                <Button
-                  isIconOnly
-                  size="sm"
-                  variant="flat"
-                  color="danger"
-                  onPress={() => removeProductRow(index)}
-                >
-                  <Trash2 size={16} />
-                </Button>
-              )}
-            </div>
+            <ComboProductRowVariations
+              key={index}
+              row={row}
+              index={index}
+              updateProductRow={updateProductRow}
+              removeProductRow={removeProductRow}
+              canRemove={productRows.length > 1}
+            />
           ))}
         </div>
       </div>

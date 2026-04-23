@@ -9,11 +9,16 @@ interface ComboCardProps {
 }
 
 export default function ComboCard({ combo, onEdit, onDelete }: ComboCardProps) {
+  // Calculate original price from products
   const totalOriginal = combo.comboProducts.reduce(
-    (sum, cp) => sum + (cp.product?.price ?? 0) * cp.quantity,
+    (sum, cp) => {
+      const unitPrice = cp.productVariation?.price ?? cp.product?.price ?? 0
+      return sum + unitPrice * cp.quantity
+    },
     0
   )
-  const savings = totalOriginal - combo.finalPrice
+  const calculatedSavings = totalOriginal - combo.finalPrice
+  const savings = Number(combo.discount) || (calculatedSavings > 0 ? calculatedSavings : 0)
 
   return (
     <div className="flex flex-col rounded-xl border border-border bg-surface p-4 gap-4">
@@ -32,9 +37,6 @@ export default function ComboCard({ combo, onEdit, onDelete }: ComboCardProps) {
           )}
           <div className="flex flex-col gap-1">
             <h3 className="text-lg font-semibold text-text">{combo.name}</h3>
-            {combo.sizeLabel && (
-              <span className="text-sm text-text-muted">{combo.sizeLabel}</span>
-            )}
             <Chip size="sm" color={combo.isActive ? 'success' : 'default'} variant="flat">
               {combo.isActive ? 'Activo' : 'Inactivo'}
             </Chip>
@@ -57,12 +59,17 @@ export default function ComboCard({ combo, onEdit, onDelete }: ComboCardProps) {
       <div className="flex flex-col gap-2">
         <span className="text-xs font-medium text-text-muted uppercase">Productos incluidos</span>
         <div className="flex flex-wrap gap-2">
-          {combo.comboProducts.map((cp) => (
-            <Chip key={cp.id} size="sm" variant="bordered">
-              {cp.product?.name ?? `Producto #${cp.productId}`}
-              {cp.quantity > 1 && ` x${cp.quantity}`}
-            </Chip>
-          ))}
+          {combo.comboProducts.map((cp) => {
+            const isDecant = cp.productVariation && !cp.productVariation.isFullBottle
+            return (
+              <Chip key={cp.id} size="sm" variant="bordered">
+                {cp.product?.name ?? `Producto #${cp.productId}`}
+                {isDecant && cp.productVariation?.mlSize && ` (${cp.productVariation.mlSize}ml)`}
+                {cp.productVariation?.isFullBottle && ' (Botella completa)'}
+                {cp.quantity > 1 && ` x${cp.quantity}`}
+              </Chip>
+            )
+          })}
         </div>
       </div>
 
@@ -76,9 +83,16 @@ export default function ComboCard({ combo, onEdit, onDelete }: ComboCardProps) {
           <span className="text-xl font-bold text-accent">${combo.finalPrice}</span>
         </div>
         {savings > 0 && (
-          <Chip size="sm" color="success" variant="flat">
-            Ahorro: ${savings.toFixed(2)}
-          </Chip>
+          <div className="flex flex-col items-end gap-1">
+            {Number(combo.discount) > 0 && (
+              <Chip size="sm" color="warning" variant="flat">
+                Descuento: ${Number(combo.discount).toFixed(2)}
+              </Chip>
+            )}
+            <Chip size="sm" color="success" variant="flat">
+              Ahorro total: ${savings.toFixed(2)}
+            </Chip>
+          </div>
         )}
       </div>
     </div>

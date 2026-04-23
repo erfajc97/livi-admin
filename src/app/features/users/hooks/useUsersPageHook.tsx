@@ -52,66 +52,50 @@ export function useUsersPageHook() {
     onOpenChange()
   }
 
+  const DELIVERY_LABELS: Record<string, string> = {
+    ENTREGA_PERSONAL: 'Plaza Tía',
+    RETIRO_PIWU: 'Piwu Market',
+    SERVIENTREGA_GYE: 'Servi GYE',
+    SERVIENTREGA_NACIONAL: 'Servi Nac.',
+  }
+
   const renderCell = useCallback((item: User, columnKey: string) => {
+    const txt = (v?: string) => <span className="text-xs text-text-muted">{v || '—'}</span>
+    const trunc = (v?: string) => <span className="text-xs text-text-muted max-w-[120px] truncate block">{v || '—'}</span>
+
     switch (columnKey) {
-      case 'email':
-        return <span className="text-sm text-text">{item.email}</span>
-
       case 'name':
-        return (
-          <span className="text-sm text-text">
-            {item.firstName} {item.lastName}
-          </span>
-        )
-
+        return <span className="text-sm font-medium text-text whitespace-nowrap">{item.firstName} {item.lastName}</span>
+      case 'email':
+        return <span className="text-xs text-text-muted">{item.email}</span>
+      case 'cedula':
+        return txt(item.cedula)
+      case 'phone':
+        return txt(item.phone)
+      case 'province':
+        return txt(item.province)
+      case 'city':
+        return txt(item.city)
+      case 'address':
+        return trunc(item.address)
+      case 'reference':
+        return trunc(item.reference)
+      case 'deliveryPref':
+        return txt(item.preferredDeliveryMethod ? DELIVERY_LABELS[item.preferredDeliveryMethod] || item.preferredDeliveryMethod : undefined)
       case 'role':
-        return (
-          <Chip size="sm" variant="flat" color={item.role === 'admin' ? 'danger' : 'primary'}>
-            {item.role === 'admin' ? 'Admin' : 'Cliente'}
-          </Chip>
-        )
-
+        return <Chip size="sm" variant="flat" color={item.role === 'admin' ? 'danger' : 'primary'}>{item.role === 'admin' ? 'Admin' : 'Cliente'}</Chip>
+      case 'authProvider':
+        return <Chip size="sm" variant="flat" color={item.authProvider === 'google' ? 'warning' : 'default'}>{item.authProvider === 'google' ? 'Google' : 'Local'}</Chip>
       case 'status':
-        return (
-          <Chip size="sm" variant="dot" color={item.isActive ? 'success' : 'default'}>
-            {item.isActive ? 'Activo' : 'Inactivo'}
-          </Chip>
-        )
-
+        return <Chip size="sm" variant="dot" color={item.isActive ? 'success' : 'default'}>{item.isActive ? 'Activo' : 'Inactivo'}</Chip>
+      case 'emailVerified':
+        return <Chip size="sm" variant="flat" color={item.isEmailVerified ? 'success' : 'warning'}>{item.isEmailVerified ? 'Sí' : 'No'}</Chip>
       case 'createdAt':
-        return (
-          <span className="text-sm text-text-muted">
-            {new Date(item.createdAt).toLocaleDateString('es-ES')}
-          </span>
-        )
-
+        return <span className="text-xs text-text-muted whitespace-nowrap">{new Date(item.createdAt).toLocaleDateString('es-EC', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
       case 'edit':
-        return (
-          <Button
-            isIconOnly
-            size="sm"
-            variant="light"
-            radius="full"
-            onPress={() => handleEditClick(item)}
-          >
-            <PencilIcon size={16} className="text-text-muted" />
-          </Button>
-        )
-
+        return <Button isIconOnly size="sm" variant="light" radius="full" onPress={() => handleEditClick(item)}><PencilIcon size={16} className="text-text-muted" /></Button>
       case 'delete':
-        return (
-          <Button
-            isIconOnly
-            size="sm"
-            variant="light"
-            color="danger"
-            radius="full"
-            onPress={() => handleDeleteClick(item)}
-          >
-            <TrashIcon size={16} />
-          </Button>
-        )
-
+        return <Button isIconOnly size="sm" variant="light" color="danger" radius="full" onPress={() => handleDeleteClick(item)}><TrashIcon size={16} /></Button>
       default:
         return null
     }

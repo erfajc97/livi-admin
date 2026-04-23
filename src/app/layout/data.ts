@@ -12,6 +12,11 @@ import {
   Users,
   Package,
   Wallet,
+  Layers,
+  Shapes,
+  FileText,
+  LayoutGrid,
+  Ticket,
 } from 'lucide-react'
 
 export interface NavItem {
@@ -26,15 +31,17 @@ export const NAV_ITEMS: Array<NavItem> = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
   { label: 'Ordenes', to: '/ordenes', icon: ClipboardList },
   { label: 'Productos', to: '/productos', icon: Package },
+  { label: 'Categorías', to: '/categorias', icon: Layers },
   { label: 'Combos', to: '/combos', icon: Gift },
+  { label: 'Cupones', to: '/cupones', icon: Ticket },
   { label: 'Ventas Manuales', to: '/ventas-manuales', icon: Receipt },
   { label: 'Finanzas', to: '/finanzas', icon: Wallet },
   { label: 'Usuarios', to: '/usuarios', icon: Users },
   { label: 'Banners', to: '/banners', icon: Image },
+  { label: 'Blog', to: '/blog', icon: FileText },
+  { label: 'Landing Sections', to: '/secciones-landing', icon: LayoutGrid },
 ]
 
 export const NAV_ITEMS_BOTTOM: Array<NavItem> = [
-  { label: 'Notificaciones', to: '/notificaciones', icon: Bell },
-  { label: 'Soporte', to: '/soporte', icon: Headset },
   { label: 'Ajustes', to: '/ajustes', icon: Settings },
 ]

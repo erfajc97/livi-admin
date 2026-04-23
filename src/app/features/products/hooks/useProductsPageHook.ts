@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react'
-import { useProductsQuery } from '@/app/tanstack-queries/productsQuery'
+import { useState, useCallback, useMemo } from 'react'
+import { useProductsQuery, useCategoriesQuery } from '@/app/tanstack-queries/productsQuery'
 import { useDeleteProductMutation } from '../mutations/useProductMutations'
 import type { Product, ProductFilters } from '../types'
 
@@ -11,9 +11,23 @@ export function useProductsPageHook() {
   const [view, setView] = useState<'list' | 'create' | 'edit'>('list')
 
   const { data: paginatedData, isLoading } = useProductsQuery(filters)
+  const { data: categories = [] } = useCategoriesQuery()
   const deleteMutation = useDeleteProductMutation()
 
-  const products = paginatedData?.data ?? []
+  // Join products with categories/marcas
+  const products = useMemo(() => {
+    if (!paginatedData?.data) return []
+    return paginatedData.data.map((product) => {
+      const category = categories.find((cat) => cat.id === product.categoryId)
+      const marca = category?.marcas.find((sub) => sub.id === product.marcaId)
+      return {
+        ...product,
+        category,
+        marca,
+      }
+    })
+  }, [paginatedData?.data, categories])
+
   const total = paginatedData?.total ?? 0
   const totalPages = Math.ceil(total / (filters.limit ?? 10))
 

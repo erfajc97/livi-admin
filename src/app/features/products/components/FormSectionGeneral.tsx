@@ -19,14 +19,6 @@ export default function FormSectionGeneral({ formData, updateField }: FormSectio
           classNames={{ label: '!text-text', input: '!text-text', inputWrapper: 'bg-background border-border' }}
           isRequired
         />
-        <Input
-          label="Marca"
-          placeholder="Ej: Dior"
-          value={formData.brand}
-          onValueChange={(v) => updateField('brand', v)}
-          classNames={{ label: '!text-text', input: '!text-text', inputWrapper: 'bg-background border-border' }}
-          isRequired
-        />
         <Textarea
           label="Descripción"
           placeholder="Descripción detallada del producto..."

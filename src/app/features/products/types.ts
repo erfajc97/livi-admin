@@ -1,10 +1,20 @@
 /* ── Enums ────────────────────────────────────────────── */
 
-export type ProductType = 'PERFUME'
+export type Gender = 'HOMBRE' | 'MUJER' | 'UNISEX'
 
-export type MeasureUnit = 'ML' | 'OZ' | 'G' | 'KG'
+export type TimeOfDay = 'DIA' | 'NOCHE'
 
-/* ── Category / Subcategory ──────────────────────────── */
+export type Concentration =
+  | 'EAU_DE_PARFUM'
+  | 'EAU_DE_TOILETTE'
+  | 'ELIXIR_DE_PARFUM'
+  | 'EAU_DE_COLOGNE'
+  | 'BODY_MIST'
+  | 'PARFUM_EXTRAIT'
+
+export type Projection = 'DISCRETA' | 'MODERADA' | 'ALTA'
+
+/* ── Category / Marca ──────────────────────────── */
 
 export interface Category {
   id: number
@@ -12,10 +22,10 @@ export interface Category {
   description?: string
   slug?: string
   isActive: boolean
-  subcategories: Subcategory[]
+  marcas: Marca[]
 }
 
-export interface Subcategory {
+export interface Marca {
   id: number
   name: string
   description?: string
@@ -59,7 +69,9 @@ export interface ProductVariation {
   id: number
   productId: number
   price?: number
-  stock: number
+  mlSize: number
+  isFullBottle: boolean
+  availableQuantity?: number
   sku?: string
   name?: string
   optionValues: OptionValue[]
@@ -75,19 +87,26 @@ export interface ProductVariation {
 export interface Product {
   id: number
   name: string
-  brand: string
   price: number
-  type: ProductType
   description?: string
   imageUrl?: string
   stock: number
+  totalMl: number
+  openBottleMlRemaining: number
+  availableMl: number
   isActive: boolean
-  measureValue?: number
-  measureUnit?: MeasureUnit
+  bajoPedido: boolean
+  gender?: Gender
+  timeOfDay?: TimeOfDay
+  concentration?: Concentration
+  projection?: Projection
+  discount?: number
+  detailDescription?: string
+  benefits?: string
   categoryId: number
-  subcategoryId: number
-  parentProductId?: number
-  decants?: Product[]
+  marcaId: number
+  category?: Category
+  marca?: Marca
   variations?: ProductVariation[]
   images?: ProductImage[]
   videos?: ProductVideo[]
@@ -99,18 +118,22 @@ export interface Product {
 
 export interface CreateProductPayload {
   name: string
-  brand: string
   price: number
-  type: ProductType
   description?: string
   imageUrl?: string
   stock?: number
-  measureValue?: number
-  measureUnit?: MeasureUnit
+  totalMl: number
   categoryId: number
-  subcategoryId: number
-  parentProductId?: number
+  marcaId: number
   isActive?: boolean
+  bajoPedido?: boolean
+  gender?: Gender
+  timeOfDay?: TimeOfDay
+  concentration?: Concentration
+  projection?: Projection
+  discount?: number
+  detailDescription?: string
+  benefits?: string
 }
 
 export interface UpdateProductPayload extends Partial<CreateProductPayload> {}
@@ -122,12 +145,11 @@ export interface ProductFilters {
   limit?: number
   search?: string
   categoryId?: number
-  subcategoryId?: number
-  brand?: string
+  marcaId?: number
   minPrice?: number
   maxPrice?: number
   isActive?: boolean
-  sortBy?: 'name' | 'price' | 'brand' | 'createdAt' | 'updatedAt'
+  sortBy?: 'name' | 'price' | 'createdAt' | 'updatedAt'
   sortOrder?: 'ASC' | 'DESC'
 }
 
@@ -144,24 +166,30 @@ export interface PaginatedProducts {
 
 export interface ProductFormData {
   name: string
-  brand: string
   price: string
-  type: ProductType
   description: string
   stock: string
-  measureValue: string
-  measureUnit: MeasureUnit
+  totalMl: string
   categoryId: string
-  subcategoryId: string
-  parentProductId: string
+  marcaId: string
   isActive: boolean
-  imageUrl: string
+  bajoPedido: boolean
+  gender: string
+  timeOfDay: string
+  concentration: string
+  projection: string
+  discount: string
+  detailDescription: string
+  benefits: string
 }
 
 export interface VariationRow {
   id?: number
   name: string
   price: string
-  stock: string
+  mlSize: string
+  isFullBottle: boolean
   sku: string
+  imageFiles?: File[]
+  existingImages?: ProductImage[]
 }

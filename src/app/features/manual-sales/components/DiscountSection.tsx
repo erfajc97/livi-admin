@@ -1,4 +1,4 @@
-import { Input, RadioGroup, Radio } from '@heroui/react'
+import { Input, Button } from '@heroui/react'
 import type { DiscountType } from '../types'
 
 interface DiscountSectionProps {
@@ -15,34 +15,35 @@ export default function DiscountSection({
   onValueChange,
 }: DiscountSectionProps) {
   return (
-    <div className="flex flex-col gap-4">
-      <h3 className="text-base font-semibold text-text">Descuento General</h3>
-
-      <RadioGroup
-        value={discountType}
-        onValueChange={(v) => onTypeChange(v as DiscountType)}
-        classNames={{ label: '!text-text' }}
-      >
-        <Radio value="percentage" classNames={{ label: '!text-text' }}>
-          % Porcentaje (%)
-        </Radio>
-        <Radio value="fixed" classNames={{ label: '!text-text' }}>
-          $ Monto fijo ($)
-        </Radio>
-        <Radio value="per_product" classNames={{ label: '!text-text' }}>
-          Fijo por Producto
-        </Radio>
-      </RadioGroup>
-
-      <div>
-        <label className="mb-1 block text-sm font-medium text-text">Monto a descontar</label>
-        <Input
-          type="number"
-          value={discountValue}
-          onValueChange={onValueChange}
-          classNames={{ label: '!text-text', input: '!text-text' }}
-        />
+    <div className="flex flex-col gap-3">
+      <h3 className="text-sm font-semibold text-text">Descuento (opcional)</h3>
+      <div className="flex gap-2">
+        <Button
+          size="sm"
+          variant={discountType === 'percentage' ? 'solid' : 'flat'}
+          color={discountType === 'percentage' ? 'warning' : 'default'}
+          onPress={() => onTypeChange('percentage')}
+        >
+          %
+        </Button>
+        <Button
+          size="sm"
+          variant={discountType === 'fixed' ? 'solid' : 'flat'}
+          color={discountType === 'fixed' ? 'warning' : 'default'}
+          onPress={() => onTypeChange('fixed')}
+        >
+          $
+        </Button>
       </div>
+      <Input
+        type="number"
+        placeholder={discountType === 'percentage' ? 'Ej: 10' : 'Ej: 5.00'}
+        value={discountValue}
+        onValueChange={onValueChange}
+        startContent={<span className="text-text-muted text-sm">{discountType === 'percentage' ? '%' : '$'}</span>}
+        classNames={{ input: '!text-text' }}
+        size="sm"
+      />
     </div>
   )
 }

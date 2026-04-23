@@ -25,23 +25,56 @@ export default function ProductTable({ products, onEdit, onDelete }: ProductTabl
           return (
             <div>
               <p className="font-medium text-text">{item.name}</p>
-              <p className="text-xs text-text-muted">{item.type}</p>
+              {item.category && <p className="text-xs text-text-muted">{item.category.name}</p>}
             </div>
           )
-        case 'price':
-          return <span className="font-semibold">${Number(item.price).toFixed(2)}</span>
+        case 'price': {
+          const hasDiscount = item.discount && item.discount > 0
+          const discountedPrice = hasDiscount ? Number(item.price) * (1 - Number(item.discount) / 100) : null
+          return (
+            <div>
+              {hasDiscount ? (
+                <>
+                  <span className="text-xs text-text-muted line-through">${Number(item.price).toFixed(2)}</span>
+                  <span className="ml-1 font-semibold text-success">${discountedPrice!.toFixed(2)}</span>
+                </>
+              ) : (
+                <span className="font-semibold">${Number(item.price).toFixed(2)}</span>
+              )}
+            </div>
+          )
+        }
         case 'stock':
           return (
             <Chip size="sm" variant="flat" color={item.stock > 10 ? 'success' : item.stock > 0 ? 'warning' : 'danger'}>
               {item.stock}
             </Chip>
           )
+        case 'totalMl':
+          return <span className="text-sm text-text">{item.totalMl} ml</span>
+        case 'availableMl':
+          return (
+            <Chip size="sm" variant="flat" color={item.availableMl > 0 ? 'success' : 'danger'}>
+              {item.availableMl} ml
+            </Chip>
+          )
         case 'category':
-          return <span className="text-text-muted">ID: {item.categoryId}</span>
+          return (
+            <div>
+              <p className="text-sm font-medium text-text">{item.category?.name ?? '—'}</p>
+              {item.marca && <p className="text-xs text-text-muted">{item.marca.name}</p>}
+            </div>
+          )
         case 'isActive':
           return (
             <Chip size="sm" variant="flat" color={item.isActive ? 'success' : 'default'}>
               {item.isActive ? 'Activo' : 'Inactivo'}
+            </Chip>
+          )
+        case 'bajoPedido':
+          return (
+            <Chip size="sm" variant="flat" color={item.bajoPedido ? 'warning' : 'default'}>
+              {item.bajoPedido ? 'Sí' : 'No'}
             </Chip>
           )
         case 'actions':

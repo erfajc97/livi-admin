@@ -4,13 +4,20 @@ export interface ComboProduct {
   id: number
   comboId: number
   productId: number
+  productVariationId?: number
   quantity: number
   product: {
     id: number
     name: string
-    brand: string
     price: number
     imageUrl?: string
+  }
+  productVariation?: {
+    id: number
+    name?: string
+    mlSize: number
+    isFullBottle: boolean
+    price?: number
   }
 }
 
@@ -22,7 +29,7 @@ export interface Combo {
   description?: string
   imageUrl?: string
   finalPrice: number
-  sizeLabel?: string
+  discount?: number
   isActive: boolean
   comboProducts: ComboProduct[]
   createdAt: string
@@ -33,6 +40,7 @@ export interface Combo {
 
 export interface ComboProductPayload {
   productId: number
+  productVariationId?: number
   quantity: number
 }
 
@@ -41,7 +49,7 @@ export interface CreateComboPayload {
   description?: string
   imageUrl?: string
   finalPrice: number
-  sizeLabel?: string
+  discount?: number
   isActive?: boolean
   products: ComboProductPayload[]
 }
@@ -53,13 +61,15 @@ export interface UpdateComboPayload extends Partial<CreateComboPayload> {}
 export interface ComboFormData {
   name: string
   description: string
+  imageFile: File | null
   imageUrl: string
   finalPrice: string
-  sizeLabel: string
+  discount: string
   isActive: boolean
 }
 
 export interface ComboProductRow {
   productId: string
+  productVariationId: string
   quantity: string
 }

@@ -27,10 +27,17 @@ export const STATUS_LABELS: Record<string, { label: string; color: 'warning' | '
   order_rejected: { label: 'Rechazado', color: 'danger' },
 }
 
+export const PAYMENT_STATUS_LABELS: Record<string, { label: string; color: 'warning' | 'success' | 'danger' | 'default' }> = {
+  pending: { label: 'Pendiente', color: 'warning' },
+  paid: { label: 'Pagado', color: 'success' },
+  failed: { label: 'Fallido', color: 'danger' },
+}
+
 export const orderColumns: Column[] = [
   { key: 'orderNumber', name: 'N. Orden' },
-  { key: 'userName', name: 'Cliente' },
-  { key: 'paymentMethod', name: 'Pago' },
+  { key: 'customerName', name: 'Cliente' },
+  { key: 'paymentMethod', name: 'Método' },
+  { key: 'paymentStatus', name: 'Pago' },
   { key: 'status', name: 'Estado' },
   { key: 'total', name: 'Total' },
   { key: 'createdAt', name: 'Fecha' },

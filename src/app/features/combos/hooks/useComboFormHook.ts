@@ -4,13 +4,14 @@ import type { Combo, ComboFormData, ComboProductRow, CreateComboPayload } from '
 const INITIAL_FORM: ComboFormData = {
   name: '',
   description: '',
+  imageFile: null,
   imageUrl: '',
   finalPrice: '',
-  sizeLabel: '',
+  discount: '',
   isActive: true,
 }
 
-const INITIAL_PRODUCT_ROW: ComboProductRow = { productId: '', quantity: '1' }
+const INITIAL_PRODUCT_ROW: ComboProductRow = { productId: '', productVariationId: '', quantity: '1' }
 
 export function useComboFormHook() {
   const [formData, setFormData] = useState<ComboFormData>(INITIAL_FORM)
@@ -25,18 +26,24 @@ export function useComboFormHook() {
     setProductRows([{ ...INITIAL_PRODUCT_ROW }])
   }, [])
 
+  const handleImageChange = useCallback((file: File | null) => {
+    setFormData((prev) => ({ ...prev, imageFile: file }))
+  }, [])
+
   const loadCombo = useCallback((combo: Combo) => {
     setFormData({
       name: combo.name,
       description: combo.description ?? '',
+      imageFile: null,
       imageUrl: combo.imageUrl ?? '',
       finalPrice: String(combo.finalPrice),
-      sizeLabel: combo.sizeLabel ?? '',
+      discount: String(combo.discount ?? ''),
       isActive: combo.isActive,
     })
     setProductRows(
       combo.comboProducts.map((cp) => ({
         productId: String(cp.productId),
+        productVariationId: cp.productVariationId ? String(cp.productVariationId) : '',
         quantity: String(cp.quantity),
       }))
     )
@@ -47,7 +54,14 @@ export function useComboFormHook() {
   }, [])
 
   const updateProductRow = useCallback((index: number, field: keyof ComboProductRow, value: string) => {
-    setProductRows((prev) => prev.map((row, i) => (i === index ? { ...row, [field]: value } : row)))
+    setProductRows((prev) =>
+      prev.map((row, i) => {
+        if (i !== index) return row
+        const updated = { ...row, [field]: value }
+        if (field === 'productId') updated.productVariationId = ''
+        return updated
+      })
+    )
   }, [])
 
   const removeProductRow = useCallback((index: number) => {
@@ -60,12 +74,13 @@ export function useComboFormHook() {
       description: formData.description || undefined,
       imageUrl: formData.imageUrl || undefined,
       finalPrice: parseFloat(formData.finalPrice) || 0,
-      sizeLabel: formData.sizeLabel || undefined,
+      discount: formData.discount ? parseFloat(formData.discount) : undefined,
       isActive: formData.isActive,
       products: productRows
         .filter((r) => r.productId)
         .map((r) => ({
           productId: parseInt(r.productId, 10),
+          ...(r.productVariationId ? { productVariationId: parseInt(r.productVariationId, 10) } : {}),
           quantity: parseInt(r.quantity, 10) || 1,
         })),
     }
@@ -81,5 +96,6 @@ export function useComboFormHook() {
     updateProductRow,
     removeProductRow,
     buildPayload,
+    handleImageChange,
   }
 }

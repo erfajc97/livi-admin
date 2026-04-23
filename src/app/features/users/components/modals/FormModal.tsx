@@ -14,6 +14,13 @@ interface FormModalProps {
     firstName: string
     lastName: string
     role: UserRole
+    phone: string
+    cedula: string
+    province: string
+    city: string
+    address: string
+    reference: string
+    preferredDeliveryMethod: string
   }
   isLoading: boolean
   onInputChange: (field: string, value: string | boolean) => void
@@ -34,8 +41,9 @@ export default function FormModal({
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       isDismissable={!isLoading}
-      size="xl"
+      size="2xl"
       placement="center"
+      scrollBehavior="inside"
       headerContent={
         <h3>{isThereId ? 'Editar usuario' : 'Crear nuevo usuario'}</h3>
       }
@@ -46,7 +54,7 @@ export default function FormModal({
         onInputChange={onInputChange}
       />
 
-      <div className="flex gap-2 ml-auto pt-2">
+      <div className="flex gap-2 ml-auto pt-2 pb-2">
         <Button
           color="danger"
           variant="flat"

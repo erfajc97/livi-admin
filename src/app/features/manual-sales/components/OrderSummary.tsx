@@ -4,7 +4,6 @@ interface OrderSummaryProps {
   subtotal: number
   discountAmount: number
   total: number
-  canSubmit: boolean
   isSubmitting: boolean
   onSubmit: () => void
 }
@@ -13,7 +12,6 @@ export default function OrderSummary({
   subtotal,
   discountAmount,
   total,
-  canSubmit,
   isSubmitting,
   onSubmit,
 }: OrderSummaryProps) {
@@ -47,7 +45,6 @@ export default function OrderSummary({
         size="lg"
         onPress={onSubmit}
         isLoading={isSubmitting}
-        isDisabled={!canSubmit}
         className="w-full"
       >
         Registrar Venta

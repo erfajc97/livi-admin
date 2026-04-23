@@ -11,6 +11,13 @@ type FormData = {
   firstName: string
   lastName: string
   role: UserRole
+  phone: string
+  cedula: string
+  province: string
+  city: string
+  address: string
+  reference: string
+  preferredDeliveryMethod: string
 }
 
 const EMPTY_FORM: FormData = {
@@ -19,6 +26,13 @@ const EMPTY_FORM: FormData = {
   firstName: '',
   lastName: '',
   role: 'client',
+  phone: '',
+  cedula: '',
+  province: '',
+  city: '',
+  address: '',
+  reference: '',
+  preferredDeliveryMethod: '',
 }
 
 interface UseUserFormHookProps {
@@ -42,6 +56,13 @@ const useUserFormHook = ({ onModalOpenChange }: UseUserFormHookProps = {}) => {
       lastName: user.lastName,
       password: '',
       role: user.role,
+      phone: user.phone ?? '',
+      cedula: user.cedula ?? '',
+      province: user.province ?? '',
+      city: user.city ?? '',
+      address: user.address ?? '',
+      reference: user.reference ?? '',
+      preferredDeliveryMethod: user.preferredDeliveryMethod ?? '',
     })
   }, [])
 
@@ -64,6 +85,13 @@ const useUserFormHook = ({ onModalOpenChange }: UseUserFormHookProps = {}) => {
             firstName: formData.firstName,
             lastName: formData.lastName,
             role: formData.role,
+            phone: formData.phone || undefined,
+            cedula: formData.cedula || undefined,
+            province: formData.province || undefined,
+            city: formData.city || undefined,
+            address: formData.address || undefined,
+            reference: formData.reference || undefined,
+            preferredDeliveryMethod: formData.preferredDeliveryMethod || undefined,
           },
         },
         options,

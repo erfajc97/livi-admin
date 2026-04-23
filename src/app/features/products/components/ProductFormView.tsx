@@ -1,8 +1,7 @@
-import { useEffect } from 'react'
-import { Spinner } from '@heroui/react'
+import { Spinner, addToast } from '@heroui/react'
 import { useProductFormHook } from '../hooks/useProductFormHook'
 import { useCreateProductMutation, useUpdateProductMutation } from '../mutations/useProductMutations'
-import { useProductByIdQuery } from '@/app/tanstack-queries/productsQuery'
+import { productsService } from '../services/productsService'
 import ProductForm from './ProductForm'
 import type { Product } from '../types'
 
@@ -12,42 +11,76 @@ interface ProductFormViewProps {
 }
 
 export default function ProductFormView({ product, onBack }: ProductFormViewProps) {
-  const isEdit = !!product
-  const {
-    formData,
-    variations,
-    updateField,
-    resetForm,
-    loadProduct,
-    addVariation,
-    updateVariation,
-    removeVariation,
-    buildPayload,
-  } = useProductFormHook()
+  const formHook = useProductFormHook({ productId: product?.id ?? null })
 
   const createMutation = useCreateProductMutation()
   const updateMutation = useUpdateProductMutation()
 
-  const { data: fullProduct, isLoading } = useProductByIdQuery(product?.id ?? 0, isEdit)
+  const uploadImages = async (productId: number) => {
+    if (formHook.imageFiles.length > 0) {
+      try {
+        await productsService.uploadImages(productId, formHook.imageFiles)
+      } catch {
+        addToast({ title: 'Error al subir algunas imágenes', color: 'warning' })
+      }
+    }
 
-  useEffect(() => {
-    if (fullProduct) loadProduct(fullProduct)
-  }, [fullProduct, loadProduct])
+    if (formHook.isEdit && formHook.fullProduct?.images) {
+      const removedImages = formHook.fullProduct.images.filter(
+        (img) => !formHook.existingImages.some((e) => e.id === img.id)
+      )
+      for (const img of removedImages) {
+        try {
+          await productsService.deleteImage(productId, img.id)
+        } catch { /* ignore */ }
+      }
+    }
 
-  useEffect(() => {
-    if (!isEdit) resetForm()
-  }, [isEdit, resetForm])
-
-  const handleSubmit = () => {
-    const payload = buildPayload()
-    if (isEdit && product) {
-      updateMutation.mutate({ id: product.id, data: payload }, { onSuccess: onBack })
-    } else {
-      createMutation.mutate(payload, { onSuccess: onBack })
+    for (const variation of formHook.variations) {
+      if (variation.id && variation.imageFiles && variation.imageFiles.length > 0) {
+        try {
+          await productsService.uploadVariationImages(variation.id, variation.imageFiles)
+        } catch { /* ignore */ }
+      }
+      if (variation.id && formHook.isEdit) {
+        const original = formHook.fullProduct?.variations?.find((v) => v.id === variation.id)
+        if (original?.images) {
+          const removedVarImages = original.images.filter(
+            (img) => !(variation.existingImages ?? []).some((e) => e.id === img.id)
+          )
+          for (const img of removedVarImages) {
+            try {
+              await productsService.deleteVariationImage(variation.id, img.id)
+            } catch { /* ignore */ }
+          }
+        }
+      }
     }
   }
 
-  if (isEdit && isLoading) {
+  const handleSubmit = () => {
+    const payload = formHook.buildPayload()
+    if (formHook.isEdit && product) {
+      updateMutation.mutate(
+        { id: product.id, data: payload },
+        {
+          onSuccess: async () => {
+            await uploadImages(product.id)
+            onBack()
+          },
+        },
+      )
+    } else {
+      createMutation.mutate(payload, {
+        onSuccess: async (createdProduct) => {
+          await uploadImages(createdProduct.id)
+          onBack()
+        },
+      })
+    }
+  }
+
+  if (formHook.isEdit && formHook.isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
         <Spinner size="lg" color="warning" />
@@ -57,16 +90,25 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
 
   return (
     <ProductForm
-      formData={formData}
-      variations={variations}
-      updateField={updateField}
-      addVariation={addVariation}
-      updateVariation={updateVariation}
-      removeVariation={removeVariation}
+      formData={formHook.formData}
+      variations={formHook.variations}
+      imagePreviews={formHook.imagePreviews}
+      existingImages={formHook.existingImages}
+      updateField={formHook.updateField}
+      addImageFiles={formHook.addImageFiles}
+      removeNewImage={formHook.removeNewImage}
+      removeExistingImage={formHook.removeExistingImage}
+      addVariation={formHook.addVariation}
+      updateVariation={formHook.updateVariation}
+      removeVariation={formHook.removeVariation}
+      addVariationImages={formHook.addVariationImages}
+      removeVariationNewImage={formHook.removeVariationNewImage}
+      removeVariationExistingImage={formHook.removeVariationExistingImage}
       onSubmit={handleSubmit}
       onBack={onBack}
       isSubmitting={createMutation.isPending || updateMutation.isPending}
-      isEdit={isEdit}
+      isEdit={formHook.isEdit}
+      fullProduct={formHook.fullProduct}
     />
   )
 }

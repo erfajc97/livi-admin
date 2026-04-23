@@ -1,14 +1,26 @@
-import { Input, Switch } from '@heroui/react'
-import type { BannerFormData } from '../types'
+import { Input, Select, SelectItem } from '@heroui/react'
+import type { BannerFormData, BannerType } from '../types'
 
 const inputClasses = { label: '!text-text' }
+const selectClasses = {
+  label: '!text-text',
+  popoverContent: 'bg-surface border border-border',
+  listbox: 'text-text',
+}
+
+const typeOptions: { value: BannerType; label: string }[] = [
+  { value: 'hero', label: 'Hero (Home)' },
+  { value: 'category', label: 'Categoría' },
+]
 
 interface BannerFormProps {
   formData: BannerFormData
+  imagePreview: string | null
   onInputChange: (field: keyof BannerFormData, value: string | boolean) => void
+  onImageChange: (file: File | null) => void
 }
 
-export default function BannerForm({ formData, onInputChange }: BannerFormProps) {
+export default function BannerForm({ formData, imagePreview, onInputChange, onImageChange }: BannerFormProps) {
   return (
     <div className="flex flex-col gap-4">
       <Input
@@ -30,15 +42,20 @@ export default function BannerForm({ formData, onInputChange }: BannerFormProps)
         classNames={inputClasses}
         autoComplete="off"
       />
-      <Input
-        label="URL de imagen"
-        labelPlacement="outside"
-        placeholder="Ej: /banners/promo.jpg"
-        value={formData.imageUrl}
-        onValueChange={(v) => onInputChange('imageUrl', v)}
-        classNames={inputClasses}
-        autoComplete="off"
-      />
+
+      <div>
+        <label className="mb-2 block text-sm text-text">Imagen del banner</label>
+        {imagePreview && (
+          <img src={imagePreview} alt="Preview" className="mb-2 h-28 w-auto rounded-lg object-cover" />
+        )}
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => onImageChange(e.target.files?.[0] ?? null)}
+          className="text-sm text-text-muted file:mr-4 file:rounded-lg file:border-0 file:bg-accent/10 file:px-4 file:py-2 file:text-sm file:font-medium file:text-accent hover:file:bg-accent/20"
+        />
+      </div>
+
       <Input
         label="Link / Acción"
         labelPlacement="outside"
@@ -48,14 +65,31 @@ export default function BannerForm({ formData, onInputChange }: BannerFormProps)
         classNames={inputClasses}
         autoComplete="off"
       />
-      <div className="flex items-center gap-3">
-        <Switch
-          isSelected={formData.isVisible}
-          onValueChange={(v) => onInputChange('isVisible', v)}
-          size="sm"
-        />
-        <span className="text-sm text-text">Visible</span>
-      </div>
+      <Input
+        label="Texto del botón"
+        labelPlacement="outside"
+        placeholder="Ej: Ver Catálogo"
+        value={formData.buttonText}
+        onValueChange={(v) => onInputChange('buttonText', v)}
+        classNames={inputClasses}
+        autoComplete="off"
+      />
+
+      <Select
+        label="Tipo de banner"
+        labelPlacement="outside"
+        selectedKeys={[formData.type]}
+        onSelectionChange={(keys) => {
+          const val = Array.from(keys)[0] as string
+          if (val) onInputChange('type', val)
+        }}
+        classNames={selectClasses}
+      >
+        {typeOptions.map((o) => (
+          <SelectItem key={o.value}>{o.label}</SelectItem>
+        ))}
+      </Select>
+
     </div>
   )
 }

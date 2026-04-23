@@ -8,10 +8,13 @@ export type PaymentMethod = 'Efectivo' | 'Transferencia' | 'Tarjeta'
 
 export interface ManualSaleItem {
   productId: number
+  productVariationId: number
+  comboId?: number
   productName: string
-  brand: string
+  variationLabel: string
   imageUrl?: string
   price: number
+  originalPrice?: number
   quantity: number
 }
 

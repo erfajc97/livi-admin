@@ -9,7 +9,9 @@ interface FormModalProps {
   isThereId: boolean
   isSubmitting: boolean
   formData: BannerFormData
+  imagePreview: string | null
   onInputChange: (field: keyof BannerFormData, value: string | boolean) => void
+  onImageChange: (file: File | null) => void
   onSubmit: () => void
 }
 
@@ -19,14 +21,16 @@ export default function FormModal({
   isThereId,
   isSubmitting,
   formData,
+  imagePreview,
   onInputChange,
+  onImageChange,
   onSubmit,
 }: FormModalProps) {
   return (
     <CustomModalNextUI
       isOpen={isOpen}
       onOpenChange={onOpenChange}
-      size="xl"
+      size="2xl"
       headerContent={
         <h3 className="text-lg font-semibold text-text">
           {isThereId ? 'Editar' : 'Crear nuevo'} banner
@@ -48,7 +52,12 @@ export default function FormModal({
         </div>
       }
     >
-      <BannerForm formData={formData} onInputChange={onInputChange} />
+      <BannerForm
+        formData={formData}
+        imagePreview={imagePreview}
+        onInputChange={onInputChange}
+        onImageChange={onImageChange}
+      />
     </CustomModalNextUI>
   )
 }
