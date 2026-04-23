@@ -1,4 +1,5 @@
 import { Spinner, addToast } from '@heroui/react'
+import { useQueryClient } from '@tanstack/react-query'
 import { useProductFormHook } from '../hooks/useProductFormHook'
 import { useCreateProductMutation, useUpdateProductMutation } from '../mutations/useProductMutations'
 import { productsService } from '../services/productsService'
@@ -12,22 +13,25 @@ interface ProductFormViewProps {
 
 export default function ProductFormView({ product, onBack }: ProductFormViewProps) {
   const formHook = useProductFormHook({ productId: product?.id ?? null })
+  const queryClient = useQueryClient()
 
   const createMutation = useCreateProductMutation()
   const updateMutation = useUpdateProductMutation()
 
-  const uploadImages = async (productId: number) => {
+  const uploadAndSyncImages = async (productId: number) => {
+    // Upload new images
     if (formHook.imageFiles.length > 0) {
       try {
         await productsService.uploadImages(productId, formHook.imageFiles)
-      } catch {
-        addToast({ title: 'Error al subir algunas imágenes', color: 'warning' })
+      } catch (err: any) {
+        addToast({ title: err?.response?.data?.message || 'Error al subir imágenes', color: 'danger' })
       }
     }
 
+    // Delete removed images
     if (formHook.isEdit && formHook.fullProduct?.images) {
       const removedImages = formHook.fullProduct.images.filter(
-        (img) => !formHook.existingImages.some((e) => e.id === img.id)
+        (img) => !formHook.existingImages.some((e) => String(e.id) === String(img.id))
       )
       for (const img of removedImages) {
         try {
@@ -36,6 +40,7 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
       }
     }
 
+    // Variation images
     for (const variation of formHook.variations) {
       if (variation.id && variation.imageFiles && variation.imageFiles.length > 0) {
         try {
@@ -46,7 +51,7 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
         const original = formHook.fullProduct?.variations?.find((v) => v.id === variation.id)
         if (original?.images) {
           const removedVarImages = original.images.filter(
-            (img) => !(variation.existingImages ?? []).some((e) => e.id === img.id)
+            (img) => !(variation.existingImages ?? []).some((e) => String(e.id) === String(img.id))
           )
           for (const img of removedVarImages) {
             try {
@@ -60,12 +65,15 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
 
   const handleSubmit = () => {
     const payload = formHook.buildPayload()
+
     if (formHook.isEdit && product) {
       updateMutation.mutate(
         { id: product.id, data: payload },
         {
           onSuccess: async () => {
-            await uploadImages(product.id)
+            await uploadAndSyncImages(product.id)
+            await queryClient.invalidateQueries({ queryKey: ['products'] })
+            addToast({ title: 'Producto actualizado exitosamente', color: 'success' })
             onBack()
           },
         },
@@ -73,7 +81,11 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
     } else {
       createMutation.mutate(payload, {
         onSuccess: async (createdProduct) => {
-          await uploadImages(createdProduct.id)
+          if (createdProduct?.id) {
+            await uploadAndSyncImages(createdProduct.id)
+          }
+          await queryClient.invalidateQueries({ queryKey: ['products'] })
+          addToast({ title: 'Producto creado exitosamente', color: 'success' })
           onBack()
         },
       })

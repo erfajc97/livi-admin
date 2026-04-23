@@ -82,7 +82,7 @@ export const productsService = {
     return data.data
   },
 
-  deleteImage: async (productId: number, imageId: number): Promise<void> => {
+  deleteImage: async (productId: number | string, imageId: number | string): Promise<void> => {
     await axiosInstance.delete(
       `${API_ENDPOINTS.PRODUCTS}/${productId}/images/${imageId}`,
     )
@@ -94,7 +94,7 @@ export const productsService = {
     await axiosInstance.post(`/product-variations/${variationId}/images`, fd)
   },
 
-  deleteVariationImage: async (variationId: number, imageId: number): Promise<void> => {
+  deleteVariationImage: async (variationId: number | string, imageId: number | string): Promise<void> => {
     await axiosInstance.delete(`/product-variations/${variationId}/images/${imageId}`)
   },
 }

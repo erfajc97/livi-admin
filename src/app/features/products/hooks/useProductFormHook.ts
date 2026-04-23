@@ -89,8 +89,8 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
     })
   }, [])
 
-  const removeExistingImage = useCallback((imageId: number) => {
-    setExistingImages((prev) => prev.filter((img) => img.id !== imageId))
+  const removeExistingImage = useCallback((imageId: number | string) => {
+    setExistingImages((prev) => prev.filter((img) => String(img.id) !== String(imageId)))
   }, [])
 
   const addVariation = useCallback(() => {

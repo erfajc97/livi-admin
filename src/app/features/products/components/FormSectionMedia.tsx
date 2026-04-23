@@ -8,7 +8,7 @@ interface FormSectionMediaProps {
   existingImages: ProductImage[]
   onAddFiles: (files: File[]) => void
   onRemoveNew: (index: number) => void
-  onRemoveExisting: (imageId: number) => void
+  onRemoveExisting: (imageId: number | string) => void
 }
 
 export default function FormSectionMedia({
@@ -42,18 +42,19 @@ export default function FormSectionMedia({
       {existingImages.length > 0 && (
         <div className="mb-4 grid grid-cols-4 gap-3">
           {existingImages.map((img) => (
-            <div key={img.id} className="group relative">
+            <div key={img.id} className="group/img relative">
               <img
                 src={img.url}
                 alt={img.alt ?? 'Imagen del producto'}
-                className="h-28 w-full rounded-lg object-cover"
+                className="h-28 w-full rounded-lg object-cover bg-bg"
+                onError={(e) => { (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23333" width="100" height="100"/><text x="50" y="55" text-anchor="middle" fill="%23666" font-size="12">Sin imagen</text></svg>' }}
               />
               <Button
                 isIconOnly
                 size="sm"
                 color="danger"
                 variant="solid"
-                className="absolute right-1 top-1 opacity-0 transition group-hover:opacity-100"
+                className="absolute right-1 top-1 opacity-0 transition group-hover/img:opacity-100"
                 onPress={() => onRemoveExisting(img.id)}
               >
                 <X size={12} />

@@ -1,11 +1,9 @@
 export interface DashboardStats {
   products: {
     total: number
-    decants: number
   }
   stock: {
     available: number
-    capacity: number
     lowStock: number
   }
   users: {
@@ -14,7 +12,10 @@ export interface DashboardStats {
   }
   orders: {
     total: number
-    revenue: number
+    totalRevenue: number
+    totalPaidOrders: number
+    todayRevenue: number
+    todayOrders: number
     byStatus: {
       pending: number
       paid: number
@@ -33,6 +34,10 @@ export interface DashboardStats {
   banners: {
     total: number
     visible: number
+  }
+  combos: {
+    total: number
+    active: number
   }
 }
 

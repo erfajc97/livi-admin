@@ -8,6 +8,7 @@ import {
   CheckCircle,
   Truck,
   PackageCheck,
+  TrendingUp,
 } from 'lucide-react'
 import { useCallback, useState, useMemo } from 'react'
 import { useAuthStore } from '@/app/store/auth/authStore'
@@ -67,10 +68,16 @@ export function DashboardMetrics() {
       {/* Top metric cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard
-          title="Ventas del día"
-          value={`$${stats.orders.revenue.toFixed(2)}`}
-          subtitle={`${stats.orders.total} Ordenes`}
+          title="Ventas de hoy"
+          value={`$${(stats.orders.todayRevenue ?? 0).toFixed(2)}`}
+          subtitle={`${stats.orders.todayOrders ?? 0} ${(stats.orders.todayOrders ?? 0) === 1 ? 'orden' : 'órdenes'} hoy`}
           icon={DollarSign}
+        />
+        <MetricCard
+          title="Ventas totales"
+          value={`$${(stats.orders.totalRevenue ?? 0).toFixed(2)}`}
+          subtitle={`${stats.orders.totalPaidOrders ?? 0} órdenes pagadas`}
+          icon={TrendingUp}
         />
         <MetricCard
           title="Pedidos pendientes"
@@ -79,15 +86,9 @@ export function DashboardMetrics() {
           icon={Clock}
         />
         <MetricCard
-          title="Listos para entrega"
-          value={stats.orders.byStatus.accepted}
-          subtitle="Listos para enviar"
-          icon={Package}
-        />
-        <MetricCard
           title="Stock crítico"
           value={stats.stock.lowStock}
-          subtitle="Listos para enviarse"
+          subtitle={`${stats.stock.available} unidades disponibles`}
           icon={AlertTriangle}
         />
       </div>
@@ -112,11 +113,13 @@ export function DashboardMetrics() {
           renderCell={renderCell}
           emptyContent="No hay órdenes recientes"
           bottomContent={
-            <CustomPagination
-              page={orderPage}
-              pages={totalOrderPages}
-              setPage={setOrderPage}
-            />
+            totalOrderPages > 1 ? (
+              <CustomPagination
+                page={orderPage}
+                pages={totalOrderPages}
+                setPage={setOrderPage}
+              />
+            ) : undefined
           }
         />
       </div>

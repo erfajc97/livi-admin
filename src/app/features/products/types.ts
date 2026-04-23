@@ -37,7 +37,7 @@ export interface Marca {
 /* ── Product Image / Video ───────────────────────────── */
 
 export interface ProductImage {
-  id: number
+  id: number | string
   productId: number
   url: string
   key: string

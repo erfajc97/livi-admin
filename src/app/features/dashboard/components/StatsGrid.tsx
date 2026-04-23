@@ -11,25 +11,25 @@ export default function StatsGrid({ stats }: StatsGridProps) {
       <StatCard
         title="Productos"
         value={stats.products.total}
-        subtitle={`${stats.products.decants} decants`}
+        subtitle={`${stats.categories.total} categorías`}
         bgImage="/products-home.png"
       />
       <StatCard
-        title="Combos Disponibles"
-        value={stats.products.decants}
-        subtitle="Variantes activas"
+        title="Combos"
+        value={stats.combos?.total ?? 0}
+        subtitle={`${stats.combos?.active ?? 0} activos`}
         bgImage="/combos-home.png"
       />
       <StatCard
-        title="Stock Productos"
-        value={`${stats.stock.available}`}
-        subtitle={`Disponible: ${stats.stock.available}/${stats.stock.capacity}`}
+        title="Stock"
+        value={stats.stock.available}
+        subtitle={`${stats.stock.lowStock} con stock bajo`}
         bgImage="/stock.png"
       />
       <StatCard
-        title="Banners Promocionales"
+        title="Banners"
         value={stats.banners.total}
-        subtitle={`${stats.banners.visible} visibles actualmente`}
+        subtitle={`${stats.banners.visible} visibles`}
         bgImage="/banner-promotions-home.png"
       />
       <StatCard
@@ -41,7 +41,7 @@ export default function StatsGrid({ stats }: StatsGridProps) {
       <StatCard
         title="Órdenes"
         value={stats.orders.total}
-        subtitle={`${stats.categories.total} categorías`}
+        subtitle={`$${(stats.orders.totalRevenue ?? 0).toFixed(2)} en ventas`}
         bgImage="/combos-home.png"
       />
     </div>
