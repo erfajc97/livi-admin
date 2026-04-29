@@ -18,6 +18,9 @@ export function Ordenes() {
       isLoading={hook.isLoading}
       page={hook.page}
       totalPages={hook.totalPages}
+      filteredCount={hook.filteredCount}
+      dateFilter={hook.dateFilter}
+      statusFilter={hook.statusFilter}
       selectedOrder={hook.selectedOrder}
       showDeleteModal={hook.showDeleteModal}
       showStatusModal={hook.showStatusModal}
@@ -25,6 +28,8 @@ export function Ordenes() {
       isUpdating={hook.updateMutation.isPending}
       onSearch={hook.handleSearch}
       setPage={hook.setPage}
+      onDateFilter={hook.handleDateFilter}
+      onStatusFilter={hook.handleStatusFilter}
       onEditStatus={hook.handleStatusClick}
       onDelete={hook.handleDeleteClick}
       onDeleteConfirm={hook.handleDeleteConfirm}

@@ -3,6 +3,7 @@ import OrdersTable from './OrdersTable'
 import DeleteOrderModal from './modals/DeleteOrderModal'
 import EditOrderStatusModal from './modals/EditOrderStatusModal'
 import type { Order, OrderStatus } from '../types'
+import type { DateFilter } from '../hooks/useOrdersPageHook'
 
 interface OrdersListViewProps {
   search: string
@@ -10,6 +11,9 @@ interface OrdersListViewProps {
   isLoading: boolean
   page: number
   totalPages: number
+  filteredCount: number
+  dateFilter: DateFilter
+  statusFilter: string
   selectedOrder: Order | null
   showDeleteModal: boolean
   showStatusModal: boolean
@@ -17,6 +21,8 @@ interface OrdersListViewProps {
   isUpdating: boolean
   onSearch: (value: string) => void
   setPage: (page: number) => void
+  onDateFilter: (value: DateFilter) => void
+  onStatusFilter: (value: string) => void
   onEditStatus: (order: Order) => void
   onDelete: (order: Order) => void
   onDeleteConfirm: () => void
@@ -32,6 +38,9 @@ export default function OrdersListView({
   isLoading,
   page,
   totalPages,
+  filteredCount,
+  dateFilter,
+  statusFilter,
   selectedOrder,
   showDeleteModal,
   showStatusModal,
@@ -39,6 +48,8 @@ export default function OrdersListView({
   isUpdating,
   onSearch,
   setPage,
+  onDateFilter,
+  onStatusFilter,
   onEditStatus,
   onDelete,
   onDeleteConfirm,
@@ -49,7 +60,15 @@ export default function OrdersListView({
 }: OrdersListViewProps) {
   return (
     <div className="flex flex-col gap-6 p-6">
-      <OrdersListHeader search={search} onSearch={onSearch} />
+      <OrdersListHeader
+        search={search}
+        onSearch={onSearch}
+        dateFilter={dateFilter}
+        onDateFilter={onDateFilter}
+        statusFilter={statusFilter}
+        onStatusFilter={onStatusFilter}
+        filteredCount={filteredCount}
+      />
 
       <OrdersTable
         orders={orders}
