@@ -67,4 +67,9 @@ export const API_ENDPOINTS = {
 
   // Settings
   SETTINGS: '/settings',
+
+  // Newsletter
+  NEWSLETTER_SUBSCRIBERS: '/newsletter/subscribers',
+  NEWSLETTER_SUBSCRIBERS_STATS: '/newsletter/subscribers/stats',
+  NEWSLETTER_CAMPAIGNS: '/newsletter/campaigns',
 } as const

@@ -5,6 +5,8 @@ export function useOrdersQuery() {
   return useQuery({
     queryKey: ['orders'],
     queryFn: ordersService.getAll,
+    refetchInterval: 15_000, // Auto-refresh every 15s to catch new orders
+    staleTime: 5_000,
   })
 }
 
