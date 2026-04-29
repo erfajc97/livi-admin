@@ -1,17 +1,7 @@
-import { Input, Select, SelectItem } from '@heroui/react'
-import type { BannerFormData, BannerType } from '../types'
+import { Input } from '@heroui/react'
+import type { BannerFormData } from '../types'
 
 const inputClasses = { label: '!text-text' }
-const selectClasses = {
-  label: '!text-text',
-  popoverContent: 'bg-surface border border-border',
-  listbox: 'text-text',
-}
-
-const typeOptions: { value: BannerType; label: string }[] = [
-  { value: 'hero', label: 'Hero (Home)' },
-  { value: 'category', label: 'Categoría' },
-]
 
 interface BannerFormProps {
   formData: BannerFormData
@@ -74,21 +64,6 @@ export default function BannerForm({ formData, imagePreview, onInputChange, onIm
         classNames={inputClasses}
         autoComplete="off"
       />
-
-      <Select
-        label="Tipo de banner"
-        labelPlacement="outside"
-        selectedKeys={[formData.type]}
-        onSelectionChange={(keys) => {
-          const val = Array.from(keys)[0] as string
-          if (val) onInputChange('type', val)
-        }}
-        classNames={selectClasses}
-      >
-        {typeOptions.map((o) => (
-          <SelectItem key={o.value}>{o.label}</SelectItem>
-        ))}
-      </Select>
 
     </div>
   )

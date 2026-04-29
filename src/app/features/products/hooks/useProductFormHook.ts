@@ -55,7 +55,6 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
         name: v.name ?? '',
         price: v.price ? String(v.price) : '',
         mlSize: v.mlSize ? String(v.mlSize) : '',
-        isFullBottle: v.isFullBottle ?? false,
         sku: v.sku ?? '',
         existingImages: v.images,
       }))
@@ -94,7 +93,7 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
   }, [])
 
   const addVariation = useCallback(() => {
-    setVariations((prev) => [...prev, { name: '', price: '', mlSize: '', isFullBottle: false, sku: '' }])
+    setVariations((prev) => [...prev, { name: '', price: '', mlSize: '', sku: '' }])
   }, [])
 
   const updateVariation = useCallback((index: number, field: keyof VariationRow, value: string | boolean) => {

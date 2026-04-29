@@ -97,4 +97,58 @@ export const productsService = {
   deleteVariationImage: async (variationId: number | string, imageId: number | string): Promise<void> => {
     await axiosInstance.delete(`/product-variations/${variationId}/images/${imageId}`)
   },
+
+  createVariation: async (payload: {
+    productId: number
+    name?: string
+    price?: number
+    mlSize: number
+    isFullBottle?: boolean
+    sku?: string
+  }): Promise<{ id: number }> => {
+    const { data } = await axiosInstance.post<CoreApiResponse<{ id: number }>>(
+      '/product-variations',
+      payload
+    )
+    return data.data
+  },
+
+  updateVariation: async (id: number, payload: {
+    name?: string
+    price?: number
+    mlSize?: number
+    isFullBottle?: boolean
+    sku?: string
+  }): Promise<void> => {
+    await axiosInstance.patch(`/product-variations/${id}`, payload)
+  },
+
+  deleteVariation: async (id: number): Promise<void> => {
+    await axiosInstance.delete(`/product-variations/${id}`)
+  },
+
+  // ── Inventory / Stock ─────────────────────────────
+
+  openBottle: async (productId: number, payload?: { mlRemaining?: number; note?: string }): Promise<Product> => {
+    const { data } = await axiosInstance.post<CoreApiResponse<Product>>(
+      `${API_ENDPOINTS.PRODUCTS}/${productId}/open-bottle`,
+      payload ?? {},
+    )
+    return data.data
+  },
+
+  adjustMl: async (productId: number, payload: { newOpenMl: number; note?: string }): Promise<Product> => {
+    const { data } = await axiosInstance.patch<CoreApiResponse<Product>>(
+      `${API_ENDPOINTS.PRODUCTS}/${productId}/adjust-ml`,
+      payload,
+    )
+    return data.data
+  },
+
+  getInventory: async (productId: number): Promise<any> => {
+    const { data } = await axiosInstance.get<CoreApiResponse<any>>(
+      `${API_ENDPOINTS.PRODUCTS}/${productId}/inventory`,
+    )
+    return data.data
+  },
 }

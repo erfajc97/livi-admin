@@ -1,4 +1,4 @@
-import { Button, Input } from '@heroui/react'
+import { Button } from '@heroui/react'
 import { Trash2 } from 'lucide-react'
 import ComboProductSelector from './ComboProductSelector'
 import ComboVariationSelector from './ComboVariationSelector'
@@ -35,14 +35,6 @@ export default function ComboProductRowVariations({
           value={row.productId}
           onChange={(v) => updateProductRow(index, 'productId', v)}
         />
-        <Input
-          label="Cant."
-          type="number"
-          value={row.quantity}
-          onValueChange={(v) => updateProductRow(index, 'quantity', v)}
-          classNames={{ label: '!text-text', input: '!text-text' }}
-          className="max-w-20"
-        />
         {canRemove && (
           <Button
             isIconOnly
@@ -59,6 +51,7 @@ export default function ComboProductRowVariations({
       {row.productId && (
         <ComboVariationSelector
           variations={variations}
+          product={product}
           value={row.productVariationId}
           onChange={(v) => updateProductRow(index, 'productVariationId', v)}
           isLoading={isLoadingProduct}

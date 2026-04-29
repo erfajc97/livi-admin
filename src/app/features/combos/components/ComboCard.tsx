@@ -9,16 +9,7 @@ interface ComboCardProps {
 }
 
 export default function ComboCard({ combo, onEdit, onDelete }: ComboCardProps) {
-  // Calculate original price from products
-  const totalOriginal = combo.comboProducts.reduce(
-    (sum, cp) => {
-      const unitPrice = cp.productVariation?.price ?? cp.product?.price ?? 0
-      return sum + unitPrice * cp.quantity
-    },
-    0
-  )
-  const calculatedSavings = totalOriginal - combo.finalPrice
-  const savings = Number(combo.discount) || (calculatedSavings > 0 ? calculatedSavings : 0)
+  const discount = Number(combo.discount) || 0
 
   return (
     <div className="flex flex-col rounded-xl border border-border bg-surface p-4 gap-4">
@@ -75,24 +66,19 @@ export default function ComboCard({ combo, onEdit, onDelete }: ComboCardProps) {
 
       <div className="flex items-center justify-between border-t border-border pt-3">
         <div className="flex flex-col">
-          {savings > 0 && (
+          {discount > 0 && (
             <span className="text-xs text-text-muted line-through">
-              ${totalOriginal.toFixed(2)}
+              ${Number(combo.finalPrice).toFixed(2)}
             </span>
           )}
-          <span className="text-xl font-bold text-accent">${combo.finalPrice}</span>
+          <span className="text-xl font-bold text-accent">
+            ${(Number(combo.finalPrice) - discount).toFixed(2)}
+          </span>
         </div>
-        {savings > 0 && (
-          <div className="flex flex-col items-end gap-1">
-            {Number(combo.discount) > 0 && (
-              <Chip size="sm" color="warning" variant="flat">
-                Descuento: ${Number(combo.discount).toFixed(2)}
-              </Chip>
-            )}
-            <Chip size="sm" color="success" variant="flat">
-              Ahorro total: ${savings.toFixed(2)}
-            </Chip>
-          </div>
+        {discount > 0 && (
+          <Chip size="sm" color="warning" variant="flat">
+            Descuento: ${discount.toFixed(2)}
+          </Chip>
         )}
       </div>
     </div>

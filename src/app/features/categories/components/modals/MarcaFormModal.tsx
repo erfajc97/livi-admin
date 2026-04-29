@@ -29,6 +29,8 @@ export default function MarcaFormModal({
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       size="lg"
+      isDismissable={!isSubmitting}
+      hideCloseButton={isSubmitting}
       headerContent={
         <h3 className="text-lg font-semibold text-text">
           {isEditing ? 'Editar' : 'Crear nueva'} marca
@@ -36,7 +38,7 @@ export default function MarcaFormModal({
       }
       footerContent={
         <div className="flex gap-2">
-          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)}>
+          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)} isDisabled={isSubmitting}>
             Cancelar
           </Button>
           <Button

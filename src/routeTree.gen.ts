@@ -20,6 +20,7 @@ import { Route as AuthenticatedStockRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSeccionesLandingRouteImport } from './routes/_authenticated/secciones-landing'
 import { Route as AuthenticatedProductosRouteImport } from './routes/_authenticated/productos'
 import { Route as AuthenticatedOrdenesRouteImport } from './routes/_authenticated/ordenes'
+import { Route as AuthenticatedNewsletterRouteImport } from './routes/_authenticated/newsletter'
 import { Route as AuthenticatedFinanzasRouteImport } from './routes/_authenticated/finanzas'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCuponesRouteImport } from './routes/_authenticated/cupones'
@@ -86,6 +87,11 @@ const AuthenticatedOrdenesRoute = AuthenticatedOrdenesRouteImport.update({
   path: '/ordenes',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedNewsletterRoute = AuthenticatedNewsletterRouteImport.update({
+  id: '/newsletter',
+  path: '/newsletter',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedFinanzasRoute = AuthenticatedFinanzasRouteImport.update({
   id: '/finanzas',
   path: '/finanzas',
@@ -139,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/cupones': typeof AuthenticatedCuponesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/finanzas': typeof AuthenticatedFinanzasRoute
+  '/newsletter': typeof AuthenticatedNewsletterRoute
   '/ordenes': typeof AuthenticatedOrdenesRoute
   '/productos': typeof AuthenticatedProductosRoute
   '/secciones-landing': typeof AuthenticatedSeccionesLandingRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/cupones': typeof AuthenticatedCuponesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/finanzas': typeof AuthenticatedFinanzasRoute
+  '/newsletter': typeof AuthenticatedNewsletterRoute
   '/ordenes': typeof AuthenticatedOrdenesRoute
   '/productos': typeof AuthenticatedProductosRoute
   '/secciones-landing': typeof AuthenticatedSeccionesLandingRoute
@@ -180,6 +188,7 @@ export interface FileRoutesById {
   '/_authenticated/cupones': typeof AuthenticatedCuponesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/finanzas': typeof AuthenticatedFinanzasRoute
+  '/_authenticated/newsletter': typeof AuthenticatedNewsletterRoute
   '/_authenticated/ordenes': typeof AuthenticatedOrdenesRoute
   '/_authenticated/productos': typeof AuthenticatedProductosRoute
   '/_authenticated/secciones-landing': typeof AuthenticatedSeccionesLandingRoute
@@ -203,6 +212,7 @@ export interface FileRouteTypes {
     | '/cupones'
     | '/dashboard'
     | '/finanzas'
+    | '/newsletter'
     | '/ordenes'
     | '/productos'
     | '/secciones-landing'
@@ -222,6 +232,7 @@ export interface FileRouteTypes {
     | '/cupones'
     | '/dashboard'
     | '/finanzas'
+    | '/newsletter'
     | '/ordenes'
     | '/productos'
     | '/secciones-landing'
@@ -243,6 +254,7 @@ export interface FileRouteTypes {
     | '/_authenticated/cupones'
     | '/_authenticated/dashboard'
     | '/_authenticated/finanzas'
+    | '/_authenticated/newsletter'
     | '/_authenticated/ordenes'
     | '/_authenticated/productos'
     | '/_authenticated/secciones-landing'
@@ -338,6 +350,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrdenesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/newsletter': {
+      id: '/_authenticated/newsletter'
+      path: '/newsletter'
+      fullPath: '/newsletter'
+      preLoaderRoute: typeof AuthenticatedNewsletterRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/finanzas': {
       id: '/_authenticated/finanzas'
       path: '/finanzas'
@@ -406,6 +425,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedCuponesRoute: typeof AuthenticatedCuponesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedFinanzasRoute: typeof AuthenticatedFinanzasRoute
+  AuthenticatedNewsletterRoute: typeof AuthenticatedNewsletterRoute
   AuthenticatedOrdenesRoute: typeof AuthenticatedOrdenesRoute
   AuthenticatedProductosRoute: typeof AuthenticatedProductosRoute
   AuthenticatedSeccionesLandingRoute: typeof AuthenticatedSeccionesLandingRoute
@@ -425,6 +445,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedCuponesRoute: AuthenticatedCuponesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedFinanzasRoute: AuthenticatedFinanzasRoute,
+  AuthenticatedNewsletterRoute: AuthenticatedNewsletterRoute,
   AuthenticatedOrdenesRoute: AuthenticatedOrdenesRoute,
   AuthenticatedProductosRoute: AuthenticatedProductosRoute,
   AuthenticatedSeccionesLandingRoute: AuthenticatedSeccionesLandingRoute,

@@ -80,8 +80,10 @@ export function useComboFormHook() {
         .filter((r) => r.productId)
         .map((r) => ({
           productId: parseInt(r.productId, 10),
-          ...(r.productVariationId ? { productVariationId: parseInt(r.productVariationId, 10) } : {}),
-          quantity: parseInt(r.quantity, 10) || 1,
+          ...(r.productVariationId && r.productVariationId !== 'full-bottle'
+            ? { productVariationId: parseInt(r.productVariationId, 10) }
+            : {}),
+          quantity: 1,
         })),
     }
   }, [formData, productRows])

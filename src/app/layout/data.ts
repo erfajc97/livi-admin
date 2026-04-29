@@ -17,6 +17,7 @@ import {
   FileText,
   LayoutGrid,
   Ticket,
+  Warehouse,
 } from 'lucide-react'
 
 export interface NavItem {
@@ -31,6 +32,7 @@ export const NAV_ITEMS: Array<NavItem> = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
   { label: 'Ordenes', to: '/ordenes', icon: ClipboardList },
   { label: 'Productos', to: '/productos', icon: Package },
+  { label: 'Inventario', to: '/stock', icon: Warehouse },
   { label: 'Categorías', to: '/categorias', icon: Layers },
   { label: 'Combos', to: '/combos', icon: Gift },
   { label: 'Cupones', to: '/cupones', icon: Ticket },

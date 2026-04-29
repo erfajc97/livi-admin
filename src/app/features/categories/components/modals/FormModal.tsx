@@ -31,6 +31,8 @@ export default function FormModal({
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       size="2xl"
+      isDismissable={!isSubmitting}
+      hideCloseButton={isSubmitting}
       headerContent={
         <h3 className="text-lg font-semibold text-text">
           {isThereId ? 'Editar' : 'Crear nueva'} categoría
@@ -38,7 +40,7 @@ export default function FormModal({
       }
       footerContent={
         <div className="flex gap-2">
-          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)}>
+          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)} isDisabled={isSubmitting}>
             Cancelar
           </Button>
           <Button

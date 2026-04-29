@@ -1,4 +1,4 @@
-import { Button } from '@heroui/react'
+import { Button, Spinner } from '@heroui/react'
 import { ArrowLeft, Save } from 'lucide-react'
 import FormSectionGeneral from './FormSectionGeneral'
 import FormSectionMedia from './FormSectionMedia'
@@ -54,10 +54,21 @@ export default function ProductForm({
   fullProduct,
 }: ProductFormProps) {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 relative">
+      {/* Saving overlay */}
+      {isSubmitting && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center gap-4">
+          <Spinner size="lg" color="warning" />
+          <p className="text-white font-heading text-lg tracking-wide">
+            Guardando producto y subiendo imágenes...
+          </p>
+          <p className="text-white/60 text-sm">No cierres esta página</p>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Button isIconOnly variant="light" onPress={onBack}>
+        <Button isIconOnly variant="light" onPress={onBack} isDisabled={isSubmitting}>
           <ArrowLeft size={20} className="text-text" />
         </Button>
         <h2 className="text-xl font-semibold text-text">
@@ -80,6 +91,8 @@ export default function ProductForm({
           <FormSectionDetail formData={formData} updateField={updateField} />
           <FormSectionVariations
             variations={variations}
+            totalMl={Number(formData.totalMl) || 0}
+            productName={formData.name}
             onAdd={addVariation}
             onUpdate={updateVariation}
             onRemove={removeVariation}
@@ -94,13 +107,13 @@ export default function ProductForm({
           <FormSectionCategory formData={formData} updateField={updateField} />
           <FormSectionPricing formData={formData} updateField={updateField} />
           <FormSectionFragrance formData={formData} updateField={updateField} />
-          <FormSectionInventory formData={formData} updateField={updateField} product={fullProduct} />
+          <FormSectionInventory formData={formData} updateField={updateField} product={fullProduct} variations={variations} />
         </div>
       </div>
 
       {/* Submit */}
       <div className="flex justify-end gap-3">
-        <Button variant="flat" onPress={onBack}>
+        <Button variant="flat" onPress={onBack} isDisabled={isSubmitting}>
           Cancelar
         </Button>
         <Button

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Spinner, addToast } from '@heroui/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useProductFormHook } from '../hooks/useProductFormHook'
@@ -14,6 +15,7 @@ interface ProductFormViewProps {
 export default function ProductFormView({ product, onBack }: ProductFormViewProps) {
   const formHook = useProductFormHook({ productId: product?.id ?? null })
   const queryClient = useQueryClient()
+  const [isSaving, setIsSaving] = useState(false)
 
   const createMutation = useCreateProductMutation()
   const updateMutation = useUpdateProductMutation()
@@ -40,7 +42,10 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
       }
     }
 
-    // Variation images
+    // Sync variations: create new, update existing, delete removed
+    await syncVariations(productId)
+
+    // Variation images (after variations are created/synced)
     for (const variation of formHook.variations) {
       if (variation.id && variation.imageFiles && variation.imageFiles.length > 0) {
         try {
@@ -63,31 +68,111 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
     }
   }
 
+  const syncVariations = async (productId: number) => {
+    const currentVariations = formHook.variations
+    const originalVariations = formHook.fullProduct?.variations ?? []
+
+    // Delete removed variations
+    for (const orig of originalVariations) {
+      const stillExists = currentVariations.some((v) => v.id === orig.id)
+      if (!stillExists) {
+        try {
+          await productsService.deleteVariation(orig.id)
+        } catch { /* ignore */ }
+      }
+    }
+
+    // Create new / update existing variations
+    const productName = formHook.formData.name || 'producto'
+    for (let i = 0; i < currentVariations.length; i++) {
+      const v = currentVariations[i]
+      const mlSize = Number(v.mlSize) || 0
+      if (mlSize <= 0) continue // skip empty rows
+
+      // Auto-generate name and SKU if not provided
+      const autoName = `${productName} - ${mlSize}ml`
+      const autoSku = `${productName.replace(/\s+/g, '-').toLowerCase()}-${mlSize}ml-${productId}`
+      const name = v.name || autoName
+      const sku = v.sku || autoSku
+
+      if (v.id) {
+        // Update existing
+        try {
+          await productsService.updateVariation(v.id, {
+            name,
+            price: v.price ? Number(v.price) : undefined,
+            mlSize,
+            isFullBottle: false,
+            sku,
+          })
+        } catch { /* ignore */ }
+      } else {
+        // Create new
+        try {
+          const created = await productsService.createVariation({
+            productId,
+            name,
+            price: v.price ? Number(v.price) : undefined,
+            mlSize,
+            isFullBottle: false,
+            sku,
+          })
+          // Update the local variation with the new id for image uploads
+          formHook.variations[i] = { ...v, id: created.id }
+        } catch (err: any) {
+          addToast({ title: `Error creando variante: ${err?.response?.data?.message || 'Error'}`, color: 'danger' })
+        }
+      }
+    }
+  }
+
   const handleSubmit = () => {
+    // Validate ML don't exceed totalMl
+    const totalMl = Number(formHook.formData.totalMl) || 0
+    const totalVariationMl = formHook.variations.reduce((sum, v) => sum + (Number(v.mlSize) || 0), 0)
+    if (totalMl > 0 && totalVariationMl > totalMl) {
+      addToast({
+        title: `Las variantes suman ${totalVariationMl}ml pero la botella es de ${totalMl}ml. Reduce los ML de las variantes.`,
+        color: 'danger',
+      })
+      return
+    }
+
     const payload = formHook.buildPayload()
+    setIsSaving(true)
 
     if (formHook.isEdit && product) {
       updateMutation.mutate(
         { id: product.id, data: payload },
         {
           onSuccess: async () => {
-            await uploadAndSyncImages(product.id)
-            await queryClient.invalidateQueries({ queryKey: ['products'] })
-            addToast({ title: 'Producto actualizado exitosamente', color: 'success' })
-            onBack()
+            try {
+              await uploadAndSyncImages(product.id)
+              await queryClient.invalidateQueries({ queryKey: ['products'] })
+              addToast({ title: 'Producto actualizado exitosamente', color: 'success' })
+              onBack()
+            } finally {
+              setIsSaving(false)
+            }
           },
+          onError: () => setIsSaving(false),
         },
       )
     } else {
       createMutation.mutate(payload, {
         onSuccess: async (createdProduct) => {
-          if (createdProduct?.id) {
-            await uploadAndSyncImages(createdProduct.id)
+          try {
+            if (createdProduct?.id) {
+              await uploadAndSyncImages(createdProduct.id)
+            }
+            await queryClient.invalidateQueries({ queryKey: ['products'] })
+            addToast({ title: 'Producto creado exitosamente', color: 'success' })
+            onBack()
+          } finally {
+            setIsSaving(false)
           }
-          await queryClient.invalidateQueries({ queryKey: ['products'] })
-          addToast({ title: 'Producto creado exitosamente', color: 'success' })
-          onBack()
         },
+        onError: () => setIsSaving(false),
       })
     }
   }
@@ -118,7 +203,7 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
       removeVariationExistingImage={formHook.removeVariationExistingImage}
       onSubmit={handleSubmit}
       onBack={onBack}
-      isSubmitting={createMutation.isPending || updateMutation.isPending}
+      isSubmitting={isSaving}
       isEdit={formHook.isEdit}
       fullProduct={formHook.fullProduct}
     />

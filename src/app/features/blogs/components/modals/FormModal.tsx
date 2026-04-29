@@ -32,6 +32,8 @@ export default function FormModal({
       onOpenChange={onOpenChange}
       size="3xl"
       scrollBehavior="inside"
+      isDismissable={!isSubmitting}
+      hideCloseButton={isSubmitting}
       headerContent={
         <h3 className="text-lg font-semibold text-text">
           {isThereId ? 'Editar' : 'Crear nuevo'} blog post
@@ -39,7 +41,7 @@ export default function FormModal({
       }
       footerContent={
         <div className="flex gap-2">
-          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)}>
+          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)} isDisabled={isSubmitting}>
             Cancelar
           </Button>
           <Button

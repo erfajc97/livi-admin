@@ -188,7 +188,6 @@ export interface VariationRow {
   name: string
   price: string
   mlSize: string
-  isFullBottle: boolean
   sku: string
   imageFiles?: File[]
   existingImages?: ProductImage[]

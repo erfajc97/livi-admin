@@ -89,7 +89,14 @@ export function CustomTableNextUi<T extends { id: string | number }>({
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
-                <TableCell onClick={() => onRowClick?.(item)}>
+                <TableCell
+                  onClick={() => {
+                    if (String(columnKey) !== 'actions' && onRowClick) {
+                      onRowClick(item)
+                    }
+                  }}
+                  className={onRowClick && String(columnKey) !== 'actions' ? 'cursor-pointer' : ''}
+                >
                   {renderCell(item, String(columnKey))}
                 </TableCell>
               )}
