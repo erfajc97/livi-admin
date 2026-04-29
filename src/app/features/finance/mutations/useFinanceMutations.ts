@@ -67,3 +67,19 @@ export function useUpdateBillMutation() {
     },
   })
 }
+
+export function useDeleteBillMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (id: number) => financeService.deleteBill(id),
+    onSuccess: () => {
+      addToast({ title: 'Cuenta eliminada', color: 'success' })
+      void queryClient.invalidateQueries({ queryKey: ['finance-stats'] })
+      void queryClient.invalidateQueries({ queryKey: ['finance-bills'] })
+    },
+    onError: () => {
+      addToast({ title: 'Error', description: 'No se pudo eliminar.', color: 'danger' })
+    },
+  })
+}

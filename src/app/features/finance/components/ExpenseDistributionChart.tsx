@@ -6,8 +6,9 @@ interface ExpenseDistributionChartProps {
 }
 
 export default function ExpenseDistributionChart({ expensesByCategory }: ExpenseDistributionChartProps) {
-  const total = Object.values(expensesByCategory).reduce((s, v) => s + v, 0)
-  const data = Object.entries(expensesByCategory)
+  const cats = expensesByCategory ?? {}
+  const total = Object.values(cats).reduce((s, v) => s + v, 0)
+  const data = Object.entries(cats)
     .map(([name, value]) => ({ name, value, percent: total > 0 ? Math.round((value / total) * 100) : 0 }))
     .sort((a, b) => b.value - a.value)
 

@@ -15,13 +15,22 @@ export interface Transaction {
   updatedAt: string
 }
 
+export interface BillItem {
+  description: string
+  amount: number
+}
+
 export interface Bill {
   id: number
   name: string
+  description?: string
   bank?: string
+  paymentMethod?: string
   dueDate: string
   amount: number
+  items?: BillItem[]
   status: string
+  paidAt?: string
   createdAt: string
   updatedAt: string
 }
@@ -42,9 +51,12 @@ export interface UpdateTransactionPayload extends Partial<CreateTransactionPaylo
 
 export interface CreateBillPayload {
   name: string
+  description?: string
   bank?: string
+  paymentMethod?: string
   dueDate: string
   amount: number
+  items?: { description: string; amount: number }[]
   status?: string
 }
 
@@ -61,8 +73,18 @@ export interface FinanceStats {
   totalExpenses: number
   grossProfit: number
   profitMargin: number
+  // Income breakdown
+  salesIncome?: number
+  onlineSalesCount?: number
+  onlineSalesTotal?: number
+  manualSalesCount?: number
+  manualSalesTotal?: number
+  manualIncome?: number
+  // Expense breakdown
   expensesByCategory: Record<string, number>
+  // Cash flow
   cashFlow: CashFlowEntry[]
+  // Bills
   bills: {
     all: Bill[]
     pending: Bill[]
@@ -73,7 +95,7 @@ export interface FinanceStats {
     upcomingCount: number
     pendingCount: number
   }
-  expensesMonth: number
+  // Raw data
   transactions: Transaction[]
 }
 
