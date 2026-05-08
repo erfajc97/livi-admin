@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Button, Input, Select, SelectItem, Textarea, Chip } from '@heroui/react'
+import { useMemo, useState } from 'react'
+import { Button, Input, Select, SelectItem, Textarea, Chip, Progress } from '@heroui/react'
 import { Plus, Trash2, Check, AlertTriangle, Clock, X } from 'lucide-react'
 import { CustomModalNextUI } from '@/app/components/UI/customModalNextUI/CustomModalNextUI'
 import { useCreateBillMutation, useUpdateBillMutation, useDeleteBillMutation } from '../mutations/useFinanceMutations'
@@ -76,6 +76,21 @@ export default function FinanceCuentasTab({ stats, onMarkPaid }: FinanceCuentasT
     setItems((prev) => prev.map((item, i) => (i === idx ? { ...item, [field]: value } : item)))
   }
 
+  const filledItems = useMemo(
+    () => items.filter((i) => i.description.trim() && Number(i.amount) > 0),
+    [items],
+  )
+  const itemsTotal = useMemo(
+    () => filledItems.reduce((sum, i) => sum + Number(i.amount || 0), 0),
+    [filledItems],
+  )
+  const totalAmount = Number(amount) || 0
+  const itemsMatch = filledItems.length === 0 || Math.abs(itemsTotal - totalAmount) < 0.01
+  const itemsRemaining = totalAmount - itemsTotal
+  const itemsProgress = totalAmount > 0 ? Math.min(100, (itemsTotal / totalAmount) * 100) : 0
+  const itemsOverflow = itemsTotal > totalAmount + 0.01
+  const submitDisabled = !name || !amount || !dueDate || !itemsMatch
+
   const selectedBill = selectedBillId ? bills.find((b) => Number(b.id) === selectedBillId) : null
 
   return (
@@ -129,11 +144,51 @@ export default function FinanceCuentasTab({ stats, onMarkPaid }: FinanceCuentasT
                 </div>
               ))}
             </div>
+
+            {/* Progress + balance feedback (only when items have data) */}
+            {filledItems.length > 0 && (
+              <div className="mt-3 rounded-lg border border-border bg-background/40 p-3">
+                <div className="flex items-center justify-between mb-1.5 text-xs">
+                  <span className="text-text-muted">
+                    Suma de ítems: <strong className="text-text">${itemsTotal.toFixed(2)}</strong>
+                    {' / '}
+                    <span className="text-text-muted">${totalAmount.toFixed(2)}</span>
+                  </span>
+                  {itemsMatch ? (
+                    <Chip size="sm" color="success" variant="flat" startContent={<Check size={10} />}>
+                      Cuadrado
+                    </Chip>
+                  ) : itemsOverflow ? (
+                    <Chip size="sm" color="danger" variant="flat" startContent={<AlertTriangle size={10} />}>
+                      Excede ${Math.abs(itemsRemaining).toFixed(2)}
+                    </Chip>
+                  ) : (
+                    <Chip size="sm" color="warning" variant="flat" startContent={<Clock size={10} />}>
+                      Faltan ${itemsRemaining.toFixed(2)}
+                    </Chip>
+                  )}
+                </div>
+                <Progress
+                  size="sm"
+                  value={itemsProgress}
+                  color={itemsMatch ? 'success' : itemsOverflow ? 'danger' : 'warning'}
+                  aria-label="Progreso del desglose de ítems"
+                  classNames={{ track: 'bg-border' }}
+                />
+                {!itemsMatch && (
+                  <p className="mt-2 text-xs text-text-muted">
+                    {itemsOverflow
+                      ? 'La suma de los ítems supera el monto total. Ajusta los montos para poder guardar.'
+                      : 'La suma de los ítems debe coincidir con el monto total para poder guardar.'}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="flex gap-2 mt-4">
             <Button variant="flat" onPress={resetForm}>Cancelar</Button>
-            <Button color="warning" onPress={handleCreate} isLoading={createMutation.isPending} isDisabled={!name || !amount || !dueDate}>
+            <Button color="warning" onPress={handleCreate} isLoading={createMutation.isPending} isDisabled={submitDisabled}>
               Crear cuenta
             </Button>
           </div>

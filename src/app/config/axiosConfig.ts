@@ -28,21 +28,31 @@ axiosInstance.interceptors.request.use((config) => {
   return config
 })
 
+const isAuthEndpoint = (url?: string) =>
+  !!url && (url.includes(API_ENDPOINTS.LOGIN) || url.includes(API_ENDPOINTS.RENEW_TOKEN))
+
+const isOnLoginPage = () =>
+  typeof window !== 'undefined' && window.location.pathname.startsWith('/login')
+
 // Interceptor de respuesta: renueva el token en 401 si hay refreshToken
 axiosInstance.interceptors.response.use(
   (response) => response,
-  async (error: { config: { _retry?: boolean; headers?: Record<string, string> }; response?: { status: number } }) => {
+  async (error: {
+    config: { _retry?: boolean; headers?: Record<string, string>; url?: string }
+    response?: { status: number }
+  }) => {
     const originalRequest = error.config
     const { refreshToken } = useAuthStore.getState()
     const hasRetried = originalRequest._retry
+    const fromAuthEndpoint = isAuthEndpoint(originalRequest?.url)
 
-    if (error.response?.status === 502) {
+    if (error.response?.status === 502 && !fromAuthEndpoint && !isOnLoginPage()) {
       useAuthStore.getState().removeToken()
       window.location.href = '/login'
       return Promise.reject(error)
     }
 
-    if (error.response?.status === 401 && refreshToken && !hasRetried) {
+    if (error.response?.status === 401 && refreshToken && !hasRetried && !fromAuthEndpoint) {
       originalRequest._retry = true
       try {
         const { data } = await axiosInstance.post<{
@@ -63,12 +73,12 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest)
       } catch {
         useAuthStore.getState().removeToken()
-        window.location.href = '/login'
+        if (!isOnLoginPage()) window.location.href = '/login'
         return Promise.reject(error)
       }
     }
 
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !fromAuthEndpoint && !isOnLoginPage()) {
       useAuthStore.getState().removeToken()
       window.location.href = '/login'
     }

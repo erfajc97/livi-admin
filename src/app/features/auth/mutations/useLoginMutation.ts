@@ -34,12 +34,10 @@ export const useLoginMutation = () => {
       sonnerResponse('Inicio de sesión exitoso', 'success')
       navigate({ to: '/' })
     },
-    onError: (error) => {
-      const message =
-        error instanceof Error
-          ? error.message
-          : 'Error desconocido al iniciar sesión'
-      sonnerResponse(message, 'error')
+    onError: (error: unknown) => {
+      const axiosMsg = (error as { response?: { data?: { message?: string } } })?.response?.data?.message
+      const fallback = error instanceof Error ? error.message : 'Error desconocido al iniciar sesión'
+      sonnerResponse(axiosMsg || fallback, 'error')
     },
   })
 }
