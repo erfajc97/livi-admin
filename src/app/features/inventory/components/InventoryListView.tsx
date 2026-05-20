@@ -22,7 +22,7 @@ export default function InventoryListView({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">
+          <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent sm:text-3xl">
             Inventario
           </h1>
           <p className="mt-1 text-sm text-text-muted">Control de stock y botellas por producto</p>
@@ -61,7 +61,7 @@ export default function InventoryListView({
             return (
               <div
                 key={product.id}
-                className="group flex items-center gap-4 rounded-xl border border-border bg-surface p-4 hover:border-accent/50 transition-colors cursor-pointer"
+                className="group flex flex-wrap items-center gap-3 sm:gap-4 rounded-xl border border-border bg-surface p-3 sm:p-4 hover:border-accent/50 transition-colors cursor-pointer"
                 onClick={() => onViewDetail(product.id)}
               >
                 {/* Image */}
@@ -76,46 +76,45 @@ export default function InventoryListView({
                 </div>
 
                 {/* Info */}
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0 basis-[calc(100%-72px)] sm:basis-auto">
                   <p className="text-sm font-bold text-text truncate">{product.name}</p>
-                  <p className="text-xs text-text-muted">
+                  <p className="text-xs text-text-muted truncate">
                     {product.category?.name} — {product.marca?.name}
                   </p>
                 </div>
 
                 {/* Stock info */}
-                <div className="flex items-center gap-6 shrink-0">
+                <div className="flex w-full items-center justify-between gap-3 sm:w-auto sm:gap-6 shrink-0">
                   <div className="text-center">
                     <div className="flex items-center gap-1 text-text-muted">
                       <Package size={12} />
-                      <span className="text-lg font-bold text-text">{product.stock}</span>
+                      <span className="text-base sm:text-lg font-bold text-text">{product.stock}</span>
                     </div>
                     <p className="text-xs text-text-muted">Selladas</p>
                   </div>
                   <div className="text-center">
                     <div className="flex items-center gap-1 text-text-muted">
                       <Droplets size={12} />
-                      <span className="text-lg font-bold text-text">{openMl}ml</span>
+                      <span className="text-base sm:text-lg font-bold text-text">{openMl}ml</span>
                     </div>
                     <p className="text-xs text-text-muted">Abierta</p>
                   </div>
                   <div className="text-center">
-                    <span className="text-lg font-bold text-accent">{availableMl}ml</span>
+                    <span className="text-base sm:text-lg font-bold text-accent">{availableMl}ml</span>
                     <p className="text-xs text-text-muted">Total</p>
                   </div>
+                  {/* Action */}
+                  <Button
+                    size="sm"
+                    variant="flat"
+                    color="warning"
+                    startContent={<Eye size={14} />}
+                    onPress={() => onViewDetail(product.id)}
+                    className="h-10 shrink-0"
+                  >
+                    Ver
+                  </Button>
                 </div>
-
-                {/* Action */}
-                <Button
-                  size="sm"
-                  variant="flat"
-                  color="warning"
-                  startContent={<Eye size={14} />}
-                  onPress={() => onViewDetail(product.id)}
-                  className="shrink-0"
-                >
-                  Ver
-                </Button>
               </div>
             )
           })}

@@ -18,7 +18,7 @@ export default function ProductListHeader({ search, onSearchChange, onCreate }: 
         classNames={{ inputWrapper: 'bg-surface border-border' }}
         className="max-w-xs"
       />
-      <Button color="primary" startContent={<Plus size={16} />} onPress={onCreate}>
+      <Button color="primary" startContent={<Plus size={16} />} onPress={onCreate} className="h-10 self-start sm:self-auto">
         Nuevo Producto
       </Button>
     </div>

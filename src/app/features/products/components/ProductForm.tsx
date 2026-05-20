@@ -67,11 +67,11 @@ export default function ProductForm({
       )}
 
       {/* Header */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4">
         <Button isIconOnly variant="light" onPress={onBack} isDisabled={isSubmitting}>
           <ArrowLeft size={20} className="text-text" />
         </Button>
-        <h2 className="text-xl font-semibold text-text">
+        <h2 className="text-lg sm:text-xl font-semibold text-text truncate">
           {isEdit ? 'Editar Producto' : 'Nuevo Producto'}
         </h2>
       </div>
@@ -112,8 +112,8 @@ export default function ProductForm({
       </div>
 
       {/* Submit */}
-      <div className="flex justify-end gap-3">
-        <Button variant="flat" onPress={onBack} isDisabled={isSubmitting}>
+      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3">
+        <Button variant="flat" onPress={onBack} isDisabled={isSubmitting} className="h-10">
           Cancelar
         </Button>
         <Button
@@ -121,6 +121,7 @@ export default function ProductForm({
           startContent={<Save size={16} />}
           onPress={onSubmit}
           isLoading={isSubmitting}
+          className="h-10"
         >
           {isEdit ? 'Guardar cambios' : 'Crear producto'}
         </Button>

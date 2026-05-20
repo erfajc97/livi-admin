@@ -68,19 +68,19 @@ export default function FinanceEgresosTab({ stats, formData, isSubmitting, onUpd
   return (
     <div className="flex flex-col gap-6">
       {/* Header + Add button */}
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
           <h2 className="text-lg font-heading font-bold text-text">Registro de Egresos</h2>
           <p className="text-xs text-text-muted">Total filtrado: <strong className="text-red-400">${filteredTotal.toFixed(2)}</strong></p>
         </div>
-        <Button color="warning" size="sm" startContent={<Plus size={14} />} onPress={() => setShowForm(!showForm)}>
+        <Button color="warning" size="sm" startContent={<Plus size={14} />} onPress={() => setShowForm(!showForm)} className="w-full sm:w-auto">
           Nuevo Egreso
         </Button>
       </div>
 
       {/* New expense form */}
       {showForm && (
-        <div className="rounded-xl border border-accent/30 bg-surface p-5">
+        <div className="rounded-xl border border-accent/30 bg-surface p-4 sm:p-5">
           <h3 className="text-sm font-bold text-accent mb-4">Registrar gasto</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <Input label="Descripción" value={formData.description} onValueChange={(v) => onUpdateField('description', v)} classNames={inputClasses} isRequired />
@@ -92,10 +92,10 @@ export default function FinanceEgresosTab({ stats, formData, isSubmitting, onUpd
             <Select label="Método de pago" selectedKeys={formData.paymentMethod ? [formData.paymentMethod] : []} onSelectionChange={(k) => onUpdateField('paymentMethod', String(Array.from(k)[0] || ''))} classNames={selectClasses}>
               {PAYMENT_METHODS.map((m) => <SelectItem key={m}>{m}</SelectItem>)}
             </Select>
-            <div className="sm:col-span-2">
+            <div className="sm:col-span-2 lg:col-span-2">
               <Textarea label="Notas (opcional)" value={formData.notes} onValueChange={(v) => onUpdateField('notes', v)} classNames={{ label: '!text-text', input: '!text-text' }} minRows={1} />
             </div>
-            <div className="flex items-end">
+            <div className="flex items-end sm:col-span-2 lg:col-span-1">
               <Button color="warning" onPress={handleSubmit} isLoading={isSubmitting} className="w-full">Guardar</Button>
             </div>
           </div>
@@ -103,7 +103,7 @@ export default function FinanceEgresosTab({ stats, formData, isSubmitting, onUpd
       )}
 
       {/* Date filters */}
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <Calendar size={14} className="text-text-muted" />
         {DATE_FILTERS.map((f) => (
           <Button key={f.value} size="sm" variant={dateFilter === f.value ? 'solid' : 'flat'} color={dateFilter === f.value ? 'warning' : 'default'} onPress={() => setDateFilter(f.value)} className="min-w-0 px-3 text-xs">
@@ -114,14 +114,14 @@ export default function FinanceEgresosTab({ stats, formData, isSubmitting, onUpd
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Expense list */}
-        <div className="rounded-xl border border-border bg-surface p-5">
+        <div className="min-w-0 rounded-xl border border-border bg-surface p-4 sm:p-5">
           <h3 className="text-sm font-heading font-bold text-text uppercase tracking-wider mb-3">Listado de egresos</h3>
           {expenses.length === 0 ? (
             <p className="text-sm text-text-muted text-center py-6">No hay egresos en este período.</p>
           ) : (
             <div className="flex flex-col divide-y divide-border max-h-96 overflow-y-auto">
               {expenses.map((t) => (
-                <div key={t.id} className="flex items-center justify-between py-3 px-1">
+                <div key={t.id} className="flex items-center justify-between gap-3 py-3 px-1">
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-text truncate">{t.description || t.category}</p>
                     <p className="text-xs text-text-muted">{t.category} · {t.date} · {t.paymentMethod || '—'}</p>
@@ -139,7 +139,9 @@ export default function FinanceEgresosTab({ stats, formData, isSubmitting, onUpd
         </div>
 
         {/* Pie chart */}
-        <ExpenseDistributionChart expensesByCategory={filteredByCategory} />
+        <div className="min-w-0">
+          <ExpenseDistributionChart expensesByCategory={filteredByCategory} />
+        </div>
       </div>
     </div>
   )

@@ -49,10 +49,10 @@ export default function MarcaList({
           {marcas.map((marca) => (
             <div
               key={marca.id}
-              className="flex items-center justify-between rounded-lg border border-border/50 bg-bg px-3 py-2"
+              className="flex items-center justify-between gap-2 rounded-lg border border-border/50 bg-bg px-3 py-2"
             >
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-text">{marca.name}</span>
+              <div className="flex min-w-0 flex-wrap items-center gap-2">
+                <span className="truncate text-sm text-text">{marca.name}</span>
                 <Chip
                   size="sm"
                   variant="flat"
@@ -62,7 +62,7 @@ export default function MarcaList({
                   {marca.isActive ? 'Activa' : 'Inactiva'}
                 </Chip>
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex shrink-0 items-center gap-1">
                 <Button
                   isIconOnly
                   size="sm"

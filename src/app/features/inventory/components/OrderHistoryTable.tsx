@@ -5,12 +5,14 @@ interface OrderHistoryTableProps {
 }
 
 const STATUS_LABELS: Record<string, { label: string; class: string }> = {
-  order_created: { label: 'Creado', class: 'bg-amber-100 text-amber-700' },
-  order_received: { label: 'Recibido', class: 'bg-blue-100 text-blue-700' },
-  order_accepted: { label: 'Aceptado', class: 'bg-blue-100 text-blue-700' },
+  order_created: { label: 'Pendiente', class: 'bg-amber-100 text-amber-700' },
+  order_received: { label: 'Pagado', class: 'bg-blue-100 text-blue-700' },
+  order_accepted: { label: 'Pagado', class: 'bg-blue-100 text-blue-700' },
   order_shipped: { label: 'Enviado', class: 'bg-indigo-100 text-indigo-700' },
   order_delivered: { label: 'Entregado', class: 'bg-green-100 text-green-700' },
   order_cancelled: { label: 'Cancelado', class: 'bg-red-100 text-red-700' },
+  order_delayed: { label: 'Retrasado', class: 'bg-amber-100 text-amber-700' },
+  order_rejected: { label: 'Rechazado', class: 'bg-red-100 text-red-700' },
 }
 
 export default function OrderHistoryTable({ orders }: OrderHistoryTableProps) {
@@ -32,10 +34,9 @@ export default function OrderHistoryTable({ orders }: OrderHistoryTableProps) {
             <tr className="border-b border-border text-left">
               <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase">Orden</th>
               <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase">Estado</th>
-              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase">Variante</th>
+              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase">Tipo</th>
               <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase text-right">Cant.</th>
-              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase text-right">ML ded.</th>
-              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase text-right">Botellas</th>
+              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase text-right">Stock afectado</th>
               <th className="py-2 text-xs text-text-muted font-bold uppercase">Fecha</th>
             </tr>
           </thead>
@@ -43,6 +44,13 @@ export default function OrderHistoryTable({ orders }: OrderHistoryTableProps) {
             {orders.map((item, i) => {
               const status = STATUS_LABELS[item.orderStatus] ?? { label: item.orderStatus, class: 'bg-gray-100 text-gray-600' }
               const date = new Date(item.orderCreatedAt)
+
+              // Coherent stock summary: full bottle = N botellas, decant = N×ml = total ml
+              const stockSummary = item.isFullBottle
+                ? `${item.quantity} ${item.quantity === 1 ? 'botella' : 'botellas'}`
+                : item.mlDeducted > 0
+                  ? `${item.mlDeducted}ml${item.bottlesOpened > 0 ? ` · abrió ${item.bottlesOpened}` : ''}`
+                  : '—'
 
               return (
                 <tr key={`${item.orderId}-${i}`} className="border-b border-border/50 hover:bg-surface-raised/50 transition-colors">
@@ -53,11 +61,12 @@ export default function OrderHistoryTable({ orders }: OrderHistoryTableProps) {
                     </span>
                   </td>
                   <td className="py-3 pr-3 text-text-muted">
-                    {item.isFullBottle ? 'Botella completa' : `${item.mlSize}ml${item.variationName ? ` (${item.variationName})` : ''}`}
+                    {item.isFullBottle
+                      ? `Botella completa${item.mlSize ? ` (${item.mlSize}ml)` : ''}`
+                      : `Decant ${item.mlSize}ml${item.variationName ? ` · ${item.variationName}` : ''}`}
                   </td>
                   <td className="py-3 pr-3 text-right text-text font-bold">{item.quantity}</td>
-                  <td className="py-3 pr-3 text-right text-text-muted">{item.mlDeducted > 0 ? `${item.mlDeducted}ml` : '—'}</td>
-                  <td className="py-3 pr-3 text-right text-text-muted">{item.bottlesOpened > 0 ? item.bottlesOpened : '—'}</td>
+                  <td className="py-3 pr-3 text-right text-text-muted">{stockSummary}</td>
                   <td className="py-3 text-text-muted text-xs">
                     {date.toLocaleDateString('es-EC', { day: '2-digit', month: 'short' })}
                   </td>

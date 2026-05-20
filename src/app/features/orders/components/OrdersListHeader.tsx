@@ -1,7 +1,8 @@
 import { Button, Input } from '@heroui/react'
-import { Search, Calendar, Filter } from 'lucide-react'
+import { Search, Calendar, Filter, RefreshCw } from 'lucide-react'
 import type { DateFilter } from '../hooks/useOrdersPageHook'
 import { ORDER_STATUS_OPTIONS } from '../data'
+import { useReconcilePayphoneMutation } from '../mutations/useOrderMutations'
 
 interface OrdersListHeaderProps {
   search: string
@@ -29,6 +30,8 @@ export default function OrdersListHeader({
   onStatusFilter,
   filteredCount,
 }: OrdersListHeaderProps) {
+  const reconcileMutation = useReconcilePayphoneMutation()
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -39,17 +42,30 @@ export default function OrdersListHeader({
           <p className="text-xs text-text-muted mt-0.5">{filteredCount} ordenes</p>
         </div>
 
-        <Input
-          placeholder="Buscar por N. orden o cliente..."
-          value={search}
-          onValueChange={onSearch}
-          startContent={<Search size={16} className="text-text-muted" />}
-          classNames={{
-            base: 'max-w-xs',
-            inputWrapper: 'bg-surface-raised border border-border',
-            input: 'text-text placeholder:text-text-muted',
-          }}
-        />
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <Button
+            size="sm"
+            variant="flat"
+            color="warning"
+            startContent={<RefreshCw size={14} className={reconcileMutation.isPending ? 'animate-spin' : ''} />}
+            isLoading={reconcileMutation.isPending}
+            onPress={() => reconcileMutation.mutate()}
+          >
+            Reconciliar PayPhone
+          </Button>
+
+          <Input
+            placeholder="Buscar por N. orden o cliente..."
+            value={search}
+            onValueChange={onSearch}
+            startContent={<Search size={16} className="text-text-muted" />}
+            classNames={{
+              base: 'max-w-xs',
+              inputWrapper: 'bg-surface-raised border border-border',
+              input: 'text-text placeholder:text-text-muted',
+            }}
+          />
+        </div>
       </div>
 
       {/* Filters row */}

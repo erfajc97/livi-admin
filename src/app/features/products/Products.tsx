@@ -28,14 +28,14 @@ export function Products() {
 
   if (view === 'create' || view === 'edit') {
     return (
-      <div className="flex flex-col gap-6 p-6">
+      <div className="flex flex-col gap-6">
         <ProductFormView product={selectedProduct} onBack={handleBackToList} />
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col gap-6 p-6">
+    <div className="flex flex-col gap-6">
       <WelcomeBanner userName={userName} subtitle="Gestión de productos NönDecants" />
 
       <ProductListView

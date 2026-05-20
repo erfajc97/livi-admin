@@ -26,34 +26,36 @@ export default function InventoryDetailView({ detail, isLoading, onBack }: Inven
     )
   }
 
-  const { product, inventory, bottleEvents, orderHistory } = detail
+  const { product, inventory, variations, bottleEvents, orderHistory } = detail
   const hasOpenBottle = inventory.openBottleMlRemaining > 0
   const canOpenBottle = inventory.stock >= 1 && !hasOpenBottle
 
-  // Get unique ml sizes from order history for the open bottle modal
+  // Get unique decant ml sizes from configured variations (skip the auto-managed full bottle)
   const variationMlSizes = [...new Set(
-    orderHistory.filter((o) => !o.isFullBottle && o.mlSize > 0).map((o) => o.mlSize)
+    (variations ?? [])
+      .filter((v) => v.isActive && !v.isFullBottle && v.mlSize > 0)
+      .map((v) => v.mlSize),
   )].sort((a, b) => a - b)
 
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
-      <div className="flex items-center gap-4">
-        <Button isIconOnly variant="light" onPress={onBack}>
-          <ArrowLeft size={20} className="text-text" />
-        </Button>
-        <div className="flex items-center gap-3 flex-1">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+          <Button isIconOnly variant="light" onPress={onBack}>
+            <ArrowLeft size={20} className="text-text" />
+          </Button>
           {product.imageUrl && (
-            <img src={product.imageUrl} alt="" className="w-12 h-12 rounded-lg object-cover" />
+            <img src={product.imageUrl} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0" />
           )}
-          <div>
-            <h2 className="text-xl font-heading font-bold text-text">{product.name}</h2>
-            <p className="text-xs text-text-muted">
+          <div className="min-w-0">
+            <h2 className="text-lg sm:text-xl font-heading font-bold text-text truncate">{product.name}</h2>
+            <p className="text-xs text-text-muted truncate">
               {product.category?.name} — {product.marca?.name}
             </p>
           </div>
         </div>
-        <div>
+        <div className="self-start sm:self-auto sm:shrink-0">
           {hasOpenBottle ? (
             <p className="text-xs text-blue-400 px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20">
               Botella abierta: {inventory.openBottleMlRemaining}ml restantes
@@ -66,6 +68,7 @@ export default function InventoryDetailView({ detail, isLoading, onBack }: Inven
               startContent={<Scissors size={14} />}
               onPress={() => setOpenBottleModal(true)}
               isDisabled={!canOpenBottle}
+              className="h-10"
             >
               Abrir botella
             </Button>

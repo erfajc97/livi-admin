@@ -1,7 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { addToast } from '@heroui/react'
 import { financeService } from '../services/financeService'
-import type { CreateTransactionPayload, CreateBillPayload, UpdateBillPayload } from '../types'
+import type {
+  CreateTransactionPayload,
+  CreateBillPayload,
+  UpdateBillPayload,
+  CreatePaymentMethodPayload,
+  UpdatePaymentMethodPayload,
+} from '../types'
 
 export function useCreateTransactionMutation() {
   const queryClient = useQueryClient()
@@ -81,5 +87,42 @@ export function useDeleteBillMutation() {
     onError: () => {
       addToast({ title: 'Error', description: 'No se pudo eliminar.', color: 'danger' })
     },
+  })
+}
+
+export function useCreatePaymentMethodMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload: CreatePaymentMethodPayload) => financeService.createPaymentMethod(payload),
+    onSuccess: () => {
+      addToast({ title: 'Método de pago creado', color: 'success' })
+      void queryClient.invalidateQueries({ queryKey: ['finance-payment-methods'] })
+    },
+    onError: () => addToast({ title: 'Error', description: 'No se pudo crear el método de pago.', color: 'danger' }),
+  })
+}
+
+export function useUpdatePaymentMethodMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: number; payload: UpdatePaymentMethodPayload }) =>
+      financeService.updatePaymentMethod(id, payload),
+    onSuccess: () => {
+      addToast({ title: 'Método de pago actualizado', color: 'success' })
+      void queryClient.invalidateQueries({ queryKey: ['finance-payment-methods'] })
+    },
+    onError: () => addToast({ title: 'Error', description: 'No se pudo actualizar.', color: 'danger' }),
+  })
+}
+
+export function useDeletePaymentMethodMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: number) => financeService.deletePaymentMethod(id),
+    onSuccess: () => {
+      addToast({ title: 'Método de pago eliminado', color: 'success' })
+      void queryClient.invalidateQueries({ queryKey: ['finance-payment-methods'] })
+    },
+    onError: () => addToast({ title: 'Error', description: 'No se pudo eliminar.', color: 'danger' }),
   })
 }

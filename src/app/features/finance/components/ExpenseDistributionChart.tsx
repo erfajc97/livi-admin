@@ -14,7 +14,7 @@ export default function ExpenseDistributionChart({ expensesByCategory }: Expense
 
   if (data.length === 0) {
     return (
-      <div className="rounded-xl border border-border bg-surface p-5">
+      <div className="min-w-0 rounded-xl border border-border bg-surface p-4 sm:p-5">
         <h3 className="mb-3 text-sm font-semibold text-text">Distribución de Egresos</h3>
         <p className="text-sm text-text-muted">Sin datos de egresos.</p>
       </div>
@@ -22,11 +22,11 @@ export default function ExpenseDistributionChart({ expensesByCategory }: Expense
   }
 
   return (
-    <div className="rounded-xl border border-border bg-surface p-5">
+    <div className="min-w-0 rounded-xl border border-border bg-surface p-4 sm:p-5">
       <h3 className="mb-3 text-sm font-semibold text-text">Distribución de Egresos</h3>
 
-      <div className="flex items-center gap-6">
-        <div className="h-44 w-44 shrink-0">
+      <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:gap-6">
+        <div className="h-40 w-40 shrink-0 sm:h-44 sm:w-44">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -49,15 +49,15 @@ export default function ExpenseDistributionChart({ expensesByCategory }: Expense
           </ResponsiveContainer>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex w-full min-w-0 flex-col gap-2">
           {data.map((entry, index) => (
-            <div key={entry.name} className="flex items-center gap-3">
+            <div key={entry.name} className="flex min-w-0 items-center gap-3">
               <div
                 className="h-3 w-3 shrink-0 rounded-full"
                 style={{ backgroundColor: CHART_COLORS.categories[index % CHART_COLORS.categories.length] }}
               />
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-text-muted">{entry.name}</span>
+              <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5">
+                <span className="truncate text-xs text-text-muted">{entry.name}</span>
                 <span className="text-xs text-text-muted">${entry.value.toLocaleString('es-EC')}</span>
                 <span className="text-sm font-semibold text-text">{entry.percent}%</span>
               </div>

@@ -1,6 +1,8 @@
 import type { Column } from '@/app/components/UI/table-nextui/CustomTableNextUi'
 import type { OrderStatus } from './types'
 
+// Simplified flow: Pendiente → Pagado → Enviado → Entregado
+// (Aceptado collapsed into Pagado — admin only flips paymentStatus pending/paid)
 export const ORDER_STATUS_OPTIONS: Array<{
   value: OrderStatus
   label: string
@@ -8,8 +10,7 @@ export const ORDER_STATUS_OPTIONS: Array<{
 }> = [
   { value: 'order_created', label: 'Pendiente de pago', color: 'warning' },
   { value: 'order_received', label: 'Pagado', color: 'primary' },
-  { value: 'order_accepted', label: 'Aceptado', color: 'primary' },
-  { value: 'order_shipped', label: 'Despachado', color: 'default' },
+  { value: 'order_shipped', label: 'Enviado', color: 'default' },
   { value: 'order_delivered', label: 'Entregado', color: 'success' },
   { value: 'order_delayed', label: 'Retrasado', color: 'warning' },
   { value: 'order_rejected', label: 'Rechazado', color: 'danger' },
@@ -19,8 +20,9 @@ export const ORDER_STATUS_OPTIONS: Array<{
 export const STATUS_LABELS: Record<string, { label: string; color: 'warning' | 'success' | 'primary' | 'danger' | 'default' }> = {
   order_created: { label: 'Pendiente de pago', color: 'warning' },
   order_received: { label: 'Pagado', color: 'primary' },
-  order_accepted: { label: 'Aceptado', color: 'primary' },
-  order_shipped: { label: 'Despachado', color: 'default' },
+  // Legacy orders may still have order_accepted — surface as Pagado for coherence
+  order_accepted: { label: 'Pagado', color: 'primary' },
+  order_shipped: { label: 'Enviado', color: 'default' },
   order_delivered: { label: 'Entregado', color: 'success' },
   order_cancelled: { label: 'Cancelado', color: 'danger' },
   order_delayed: { label: 'Retrasado', color: 'warning' },

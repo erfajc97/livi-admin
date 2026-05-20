@@ -26,7 +26,7 @@ export default function FormModal({
     <CustomModalNextUI
       isOpen={isOpen}
       onOpenChange={onOpenChange}
-      size="lg"
+      size="2xl"
       scrollBehavior="inside"
       headerContent={
         <h3 className="text-lg font-semibold text-text">

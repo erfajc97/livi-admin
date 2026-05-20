@@ -25,31 +25,31 @@ export function useManualSaleHook() {
   const { data: paginatedProducts } = useProductsQuery({ limit: 100 })
   const allProducts = paginatedProducts?.data ?? []
 
+  // Stable key: combos identified by comboId, products by variationId, base products by productId
+  const itemKey = (i: { comboId?: number; productVariationId?: number; productId?: number }) =>
+    i.comboId ? `combo-${i.comboId}` : i.productVariationId ? `var-${i.productVariationId}` : `prod-${i.productId}`
+
   const addItem = useCallback(
     (newItem: Omit<ManualSaleItem, 'quantity'>) => {
       setItems((prev) => {
-        const key = newItem.productVariationId || newItem.productId
-        const existing = prev.find((i) => (i.productVariationId || i.productId) === key)
+        const key = itemKey(newItem)
+        const existing = prev.find((i) => itemKey(i) === key)
         if (existing) {
-          return prev.map((i) =>
-            (i.productVariationId || i.productId) === key ? { ...i, quantity: i.quantity + 1 } : i
-          )
+          return prev.map((i) => (itemKey(i) === key ? { ...i, quantity: i.quantity + 1 } : i))
         }
         return [...prev, { ...newItem, quantity: 1 }]
       })
     },
-    []
+    [],
   )
 
-  const updateItemQuantity = useCallback((itemKey: number, quantity: number) => {
+  const updateItemQuantity = useCallback((key: string, quantity: number) => {
     if (quantity < 1) return
-    setItems((prev) =>
-      prev.map((i) => ((i.productVariationId || i.productId) === itemKey ? { ...i, quantity } : i))
-    )
+    setItems((prev) => prev.map((i) => (itemKey(i) === key ? { ...i, quantity } : i)))
   }, [])
 
-  const removeItem = useCallback((itemKey: number) => {
-    setItems((prev) => prev.filter((i) => (i.productVariationId || i.productId) !== itemKey))
+  const removeItem = useCallback((key: string) => {
+    setItems((prev) => prev.filter((i) => itemKey(i) !== key))
   }, [])
 
   const subtotal = useMemo(
@@ -80,14 +80,29 @@ export function useManualSaleHook() {
   }, [])
 
   const buildPayload = useCallback(() => {
+    // Expand combos into individual order items; regular items pass through
+    const expandedItems = items.flatMap((i) => {
+      if (i.comboId && i.comboProducts && i.comboProducts.length > 0) {
+        return i.comboProducts.map((cp) => ({
+          ...(cp.productVariationId
+            ? { productVariationId: cp.productVariationId }
+            : { productId: cp.productId }),
+          quantity: cp.quantity * i.quantity,
+        }))
+      }
+      return [
+        {
+          ...(i.productVariationId
+            ? { productVariationId: i.productVariationId }
+            : { productId: i.productId }),
+          quantity: i.quantity,
+        },
+      ]
+    })
+
     return {
       userId: client!.id,
-      items: items.map((i) => ({
-        ...(i.productVariationId
-          ? { productVariationId: i.productVariationId }
-          : { productId: i.productId }),
-        quantity: i.quantity,
-      })),
+      items: expandedItems,
       paymentMethod,
       discountAmount: discountAmount > 0 ? discountAmount : undefined,
       notes: notes ? `[Venta manual] ${notes}` : '[Venta manual]',

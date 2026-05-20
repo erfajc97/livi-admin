@@ -33,5 +33,6 @@ export const movimientosColumns: Column[] = [
 export const CHART_COLORS = {
   income: '#22c55e',
   expense: '#ef4444',
-  categories: ['var(--color-chart-1)', 'var(--color-chart-2)', 'var(--color-chart-3)', 'var(--color-chart-4)', 'var(--color-chart-5)'],
+  // Direct hex — CSS vars don't always resolve in SVG `fill` attributes across browsers
+  categories: ['#CCB377', '#5B9BD5', '#E05252', '#E8A838', '#8B7EC8'],
 } as const

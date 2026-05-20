@@ -57,7 +57,7 @@ export default function MovimientosTable({ transactions }: MovimientosTableProps
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-lg font-semibold text-text">Movimientos</h2>
         <Input
           placeholder="Buscar movimiento..."
@@ -65,22 +65,24 @@ export default function MovimientosTable({ transactions }: MovimientosTableProps
           onValueChange={handleSearch}
           startContent={<Search size={16} className="text-text-muted" />}
           classNames={{
-            base: 'max-w-xs',
+            base: 'w-full sm:max-w-xs',
             inputWrapper: 'bg-surface-raised border border-border',
             input: 'text-text placeholder:text-text-muted',
           }}
         />
       </div>
 
-      <CustomTableNextUi<Transaction & { id: string | number }>
-        items={paginated.map((t) => ({ ...t, id: t.id }))}
-        columns={movimientosColumns}
-        renderCell={renderCell}
-        emptyContent="No hay movimientos registrados"
-        bottomContent={
-          <CustomPagination page={page} pages={totalPages} setPage={setPage} />
-        }
-      />
+      <div className="w-full min-w-0 overflow-x-auto">
+        <CustomTableNextUi<Transaction & { id: string | number }>
+          items={paginated.map((t) => ({ ...t, id: t.id }))}
+          columns={movimientosColumns}
+          renderCell={renderCell}
+          emptyContent="No hay movimientos registrados"
+          bottomContent={
+            <CustomPagination page={page} pages={totalPages} setPage={setPage} />
+          }
+        />
+      </div>
     </div>
   )
 }

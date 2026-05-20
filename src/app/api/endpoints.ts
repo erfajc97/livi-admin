@@ -61,6 +61,7 @@ export const API_ENDPOINTS = {
   FINANCE_TRANSACTIONS: '/finance/transactions',
   FINANCE_BILLS: '/finance/bills',
   FINANCE_STATS: '/finance/stats',
+  FINANCE_PAYMENT_METHODS: '/finance/payment-methods',
 
   // Métodos de entrega
   DELIVERY_METHODS: '/delivery-methods',

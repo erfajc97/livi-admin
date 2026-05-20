@@ -6,6 +6,9 @@ export function useProductsQuery(filters: ProductFilters = {}) {
   return useQuery<PaginatedProducts>({
     queryKey: ['products', filters],
     queryFn: () => productsService.listProducts(filters),
+    refetchOnWindowFocus: true,
+    refetchInterval: 30_000,
+    refetchIntervalInBackground: false,
   })
 }
 
@@ -14,6 +17,7 @@ export function useProductByIdQuery(id: number, enabled = true) {
     queryKey: ['products', id],
     queryFn: () => productsService.getProductById(id),
     enabled,
+    refetchOnWindowFocus: true,
   })
 }
 

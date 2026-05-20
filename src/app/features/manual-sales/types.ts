@@ -6,10 +6,17 @@ export type PaymentMethod = 'Efectivo' | 'Transferencia' | 'Tarjeta'
 
 /* ── Cart item for manual sale ──────────────────────── */
 
+export interface ComboLineProduct {
+  productId?: number
+  productVariationId?: number
+  quantity: number
+}
+
 export interface ManualSaleItem {
   productId: number
   productVariationId: number
   comboId?: number
+  comboProducts?: ComboLineProduct[]
   productName: string
   variationLabel: string
   imageUrl?: string

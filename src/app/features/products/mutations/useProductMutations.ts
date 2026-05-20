@@ -4,8 +4,12 @@ import { productsService } from '../services/productsService'
 import type { CreateProductPayload, UpdateProductPayload } from '../types'
 
 export function useCreateProductMutation() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (payload: CreateProductPayload) => productsService.createProduct(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+    },
     onError: (error: Error) => {
       addToast({ title: error.message ?? 'Error al crear el producto', color: 'danger' })
     },
@@ -13,9 +17,14 @@ export function useCreateProductMutation() {
 }
 
 export function useUpdateProductMutation() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: UpdateProductPayload }) =>
       productsService.updateProduct(id, data),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: ['product', variables.id] })
+    },
     onError: (error: Error) => {
       addToast({ title: error.message ?? 'Error al actualizar el producto', color: 'danger' })
     },

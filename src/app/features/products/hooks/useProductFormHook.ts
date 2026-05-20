@@ -50,14 +50,18 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
     setImageFiles([])
     setImagePreviews([])
     setVariations(
-      (fullProduct.variations ?? []).map((v) => ({
-        id: v.id,
-        name: v.name ?? '',
-        price: v.price ? String(v.price) : '',
-        mlSize: v.mlSize ? String(v.mlSize) : '',
-        sku: v.sku ?? '',
-        existingImages: v.images,
-      }))
+      (fullProduct.variations ?? [])
+        // Skip the auto-managed full-bottle variation (synced server-side
+        // from product.price / product.totalMl).
+        .filter((v) => !v.isFullBottle)
+        .map((v) => ({
+          id: v.id,
+          name: v.name ?? '',
+          price: v.price ? String(v.price) : '',
+          mlSize: v.mlSize ? String(v.mlSize) : '',
+          sku: v.sku ?? '',
+          existingImages: v.images,
+        }))
     )
   }
 
@@ -133,7 +137,7 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
   }, [])
 
   const buildPayload = useCallback((): CreateProductPayload => {
-    return {
+    const raw = {
       name: formData.name.trim(),
       price: Number(formData.price),
       description: formData.description.trim() || undefined,
@@ -153,6 +157,11 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
         ? JSON.stringify(formData.benefits.trim().split('\n').map((l) => l.trim()).filter(Boolean))
         : undefined,
     }
+
+    // Strip undefined keys so backend Object.assign never nukes stored values
+    return Object.fromEntries(
+      Object.entries(raw).filter(([, value]) => value !== undefined),
+    ) as unknown as CreateProductPayload
   }, [formData])
 
   return {

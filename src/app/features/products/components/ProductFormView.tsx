@@ -72,8 +72,10 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
     const currentVariations = formHook.variations
     const originalVariations = formHook.fullProduct?.variations ?? []
 
-    // Delete removed variations
+    // Delete removed variations — never touch the auto-managed full-bottle
+    // variation (synced server-side from product.price / totalMl).
     for (const orig of originalVariations) {
+      if (orig.isFullBottle) continue
       const stillExists = currentVariations.some((v) => v.id === orig.id)
       if (!stillExists) {
         try {

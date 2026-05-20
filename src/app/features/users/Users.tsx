@@ -24,9 +24,9 @@ export function Users() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">Usuarios</h1>
+          <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent sm:text-3xl">Usuarios</h1>
           <p className="text-sm text-text-muted mt-1">Gestiona los usuarios del sistema</p>
         </div>
         <Button
@@ -34,6 +34,7 @@ export function Users() {
           radius="full"
           startContent={<PlusIcon size={16} />}
           onPress={handleCreateClick}
+          className="h-10 self-start sm:self-auto"
         >
           Nuevo Usuario
         </Button>

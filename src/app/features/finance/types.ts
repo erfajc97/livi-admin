@@ -62,6 +62,23 @@ export interface CreateBillPayload {
 
 export interface UpdateBillPayload extends Partial<CreateBillPayload> {}
 
+export interface PaymentMethod {
+  id: number
+  name: string
+  detail: string | null
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface CreatePaymentMethodPayload {
+  name: string
+  detail?: string
+  isActive?: boolean
+}
+
+export interface UpdatePaymentMethodPayload extends Partial<CreatePaymentMethodPayload> {}
+
 export interface CashFlowEntry {
   date: string
   income: number

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Autocomplete, AutocompleteItem, Button, Spinner } from '@heroui/react'
-import { Search, ShoppingCart } from 'lucide-react'
+import { Search } from 'lucide-react'
 import axiosInstance from '@/app/config/axiosConfig'
 import { API_ENDPOINTS } from '@/app/api/endpoints'
 import type { Product } from '@/app/features/products/types'
@@ -12,8 +12,9 @@ interface ProductSearchProps {
   onAddItem: (item: Omit<ManualSaleItem, 'quantity'>) => void
 }
 
-export default function ProductSearch({ products, items, onAddItem }: ProductSearchProps) {
+export default function ProductSearch({ products, onAddItem }: ProductSearchProps) {
   const [searchTerm, setSearchTerm] = useState('')
+  const [selectedKey, setSelectedKey] = useState<React.Key | null>(null)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [loadingVariations, setLoadingVariations] = useState(false)
 
@@ -27,10 +28,10 @@ export default function ProductSearch({ products, items, onAddItem }: ProductSea
     if (!key) return
     const productId = Number(key)
     setSearchTerm('')
+    setSelectedKey(null) // reset so the same product can be picked again later
     setLoadingVariations(true)
     try {
-      // Fetch product with variations from API
-      const { data } = await axiosInstance.get(`${API_ENDPOINTS.PRODUCTS}/${productId}`)
+      const { data } = await axiosInstance.get(`${API_ENDPOINTS.PRODUCTS}/${productId}?includeVariations=true`)
       const fullProduct = data?.data ?? data
       const variations = fullProduct.variations?.filter((v: any) => v.isActive) ?? []
       if (variations.length > 0) {
@@ -39,7 +40,6 @@ export default function ProductSearch({ products, items, onAddItem }: ProductSea
         onAddItem({ productId: fullProduct.id, productVariationId: 0, productName: fullProduct.name, variationLabel: 'Base', imageUrl: fullProduct.imageUrl, price: fullProduct.price })
       }
     } catch {
-      // Fallback to local product data
       const product = products.find((p) => p.id === productId)
       if (product) {
         onAddItem({ productId: product.id, productVariationId: 0, productName: product.name, variationLabel: 'Base', imageUrl: product.imageUrl, price: product.price })
@@ -65,17 +65,22 @@ export default function ProductSearch({ products, items, onAddItem }: ProductSea
   }
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl border border-border bg-surface p-5">
-      <h3 className="text-base font-semibold text-text">Busca tu producto</h3>
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-2">
+        <Search size={16} className="text-accent" />
+        <h3 className="text-sm font-semibold text-text">Buscar producto</h3>
+      </div>
 
       <Autocomplete
         placeholder="Buscar producto por nombre o marca"
         startContent={<Search size={18} className="text-text-muted" />}
         inputValue={searchTerm}
         onInputChange={setSearchTerm}
+        selectedKey={selectedKey as any}
         items={filteredProducts}
         onSelectionChange={handleSelectProduct}
         defaultFilter={() => true}
+        allowsCustomValue
         inputProps={{ classNames: { label: '!text-text', input: '!text-text' } }}
         listboxProps={{ className: 'bg-surface text-text max-h-64 overflow-y-auto' }}
         popoverProps={{ classNames: { content: 'bg-surface border border-border' } }}
@@ -111,32 +116,35 @@ export default function ProductSearch({ products, items, onAddItem }: ProductSea
       {selectedProduct && !loadingVariations && (
         <div className="rounded-lg border border-accent/30 bg-accent/5 p-4">
           <div className="flex items-center gap-3 mb-3">
-            {selectedProduct.imageUrl && <img src={selectedProduct.imageUrl} alt="" className="h-10 w-10 rounded object-cover" />}
-            <div>
-              <p className="text-sm font-semibold text-text">{selectedProduct.name}</p>
-              <p className="text-xs text-text-muted">Selecciona una variante:</p>
+            {selectedProduct.imageUrl && <img src={selectedProduct.imageUrl} alt="" className="h-10 w-10 rounded object-cover shrink-0" />}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-text truncate">{selectedProduct.name}</p>
+              <p className="text-xs text-text-muted">Selecciona variante para agregar:</p>
             </div>
-            <Button size="sm" variant="flat" className="ml-auto" onPress={() => setSelectedProduct(null)}>Cancelar</Button>
+            <Button size="sm" variant="flat" onPress={() => setSelectedProduct(null)}>Cancelar</Button>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {selectedProduct.variations?.filter((v) => v.isActive).map((v) => (
-              <button
-                key={v.id}
-                onClick={() => handleSelectVariation(v.id)}
-                className="flex items-center justify-between gap-2 rounded-lg border border-border bg-surface px-3 py-2.5 text-sm hover:border-accent hover:bg-accent/10 transition-colors"
-              >
-                <span className="font-medium text-text">{v.mlSize}ml {v.isFullBottle ? 'Botella' : 'Decant'}</span>
-                <span className="text-text-muted text-xs">${Number(v.price || selectedProduct.price).toFixed(2)}</span>
-              </button>
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {selectedProduct.variations
+              ?.filter((v) => v.isActive)
+              .sort((a, b) => Number(b.isFullBottle) - Number(a.isFullBottle) || a.mlSize - b.mlSize)
+              .map((v) => (
+                <button
+                  key={v.id}
+                  type="button"
+                  onClick={() => handleSelectVariation(v.id)}
+                  className={`flex items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
+                    v.isFullBottle
+                      ? 'border-accent/50 bg-accent/10 hover:border-accent'
+                      : 'border-border bg-surface hover:border-accent hover:bg-accent/10'
+                  }`}
+                >
+                  <span className="font-medium text-text">
+                    {v.mlSize}ml {v.isFullBottle ? '· Botella completa' : '· Decant'}
+                  </span>
+                  <span className="text-accent text-xs font-semibold">${Number(v.price || selectedProduct.price).toFixed(2)}</span>
+                </button>
+              ))}
           </div>
-        </div>
-      )}
-
-      {items.length === 0 && !selectedProduct && (
-        <div className="flex flex-col items-center justify-center py-12 text-text-muted">
-          <ShoppingCart size={48} strokeWidth={1} />
-          <p className="mt-3 text-sm">Busca y agrega productos para iniciar la venta</p>
         </div>
       )}
     </div>

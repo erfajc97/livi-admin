@@ -13,5 +13,8 @@ export function useUsersQuery({ page = 1, limit = 10, enabled = true }: UseUsers
     queryKey: ['users', { page, limit }],
     queryFn: () => usersService.listUsers(page, limit),
     enabled,
+    refetchOnWindowFocus: true,
+    refetchInterval: 30_000,
+    refetchIntervalInBackground: false,
   })
 }

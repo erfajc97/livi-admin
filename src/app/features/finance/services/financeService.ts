@@ -8,6 +8,9 @@ import type {
   UpdateTransactionPayload,
   CreateBillPayload,
   UpdateBillPayload,
+  PaymentMethod,
+  CreatePaymentMethodPayload,
+  UpdatePaymentMethodPayload,
 } from '../types'
 
 interface CoreApiResponse<T> {
@@ -81,5 +84,33 @@ export const financeService = {
 
   deleteBill: async (id: number): Promise<void> => {
     await axiosInstance.delete(`${API_ENDPOINTS.FINANCE_BILLS}/${id}`)
+  },
+
+  // Payment methods
+  getPaymentMethods: async (): Promise<PaymentMethod[]> => {
+    const { data } = await axiosInstance.get<CoreApiResponse<PaymentMethod[]>>(
+      API_ENDPOINTS.FINANCE_PAYMENT_METHODS,
+    )
+    return data.data
+  },
+
+  createPaymentMethod: async (payload: CreatePaymentMethodPayload): Promise<PaymentMethod> => {
+    const { data } = await axiosInstance.post<CoreApiResponse<PaymentMethod>>(
+      API_ENDPOINTS.FINANCE_PAYMENT_METHODS,
+      payload,
+    )
+    return data.data
+  },
+
+  updatePaymentMethod: async (id: number, payload: UpdatePaymentMethodPayload): Promise<PaymentMethod> => {
+    const { data } = await axiosInstance.patch<CoreApiResponse<PaymentMethod>>(
+      `${API_ENDPOINTS.FINANCE_PAYMENT_METHODS}/${id}`,
+      payload,
+    )
+    return data.data
+  },
+
+  deletePaymentMethod: async (id: number): Promise<void> => {
+    await axiosInstance.delete(`${API_ENDPOINTS.FINANCE_PAYMENT_METHODS}/${id}`)
   },
 }

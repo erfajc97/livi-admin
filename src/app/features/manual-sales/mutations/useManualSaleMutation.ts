@@ -8,7 +8,12 @@ export function useCreateManualOrderMutation() {
     mutationFn: manualSalesService.createManualOrder,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
       queryClient.invalidateQueries({ queryKey: ['orders'] })
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: ['inventory'] })
+      queryClient.invalidateQueries({ queryKey: ['finance'] })
+      queryClient.invalidateQueries({ queryKey: ['finance-stats'] })
       addToast({
         title: `Venta registrada: ${data.orderNumber}`,
         description: `Total: $${data.total}`,

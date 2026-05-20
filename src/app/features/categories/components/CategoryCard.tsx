@@ -22,9 +22,9 @@ export default function CategoryCard({ category, onEdit, onDelete }: CategoryCar
 
   return (
     <div className="rounded-xl border border-border bg-surface transition hover:border-accent/30">
-      <div className="flex gap-4 p-4">
+      <div className="flex flex-col gap-3 p-4 sm:flex-row sm:gap-4">
         {/* Image thumbnail */}
-        <div className="flex h-24 w-32 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface-raised">
+        <div className="flex h-20 w-28 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface-raised sm:h-24 sm:w-32">
           {category.imageUrl ? (
             <img
               src={category.imageUrl}
@@ -37,10 +37,10 @@ export default function CategoryCard({ category, onEdit, onDelete }: CategoryCar
         </div>
 
         {/* Content */}
-        <div className="flex flex-1 flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3">
-              <h3 className="text-base font-semibold text-text">{category.name}</h3>
+        <div className="flex min-w-0 flex-1 flex-col justify-between">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <h3 className="truncate text-base font-semibold text-text">{category.name}</h3>
               <Chip
                 size="sm"
                 variant="flat"
@@ -55,7 +55,7 @@ export default function CategoryCard({ category, onEdit, onDelete }: CategoryCar
               )}
             </div>
             {category.description && (
-              <p className="mt-1 text-sm text-text-muted">{category.description}</p>
+              <p className="mt-1 line-clamp-2 text-sm text-text-muted">{category.description}</p>
             )}
           </div>
           <Button
@@ -75,7 +75,7 @@ export default function CategoryCard({ category, onEdit, onDelete }: CategoryCar
         </div>
 
         {/* Actions */}
-        <div className="flex shrink-0 items-start gap-1">
+        <div className="flex shrink-0 flex-wrap items-start gap-1 self-end sm:self-start">
           <Button
             isIconOnly
             size="sm"

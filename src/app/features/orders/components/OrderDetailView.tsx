@@ -86,25 +86,38 @@ export default function OrderDetailView({ orderId, onBack }: OrderDetailViewProp
           <div className="rounded-xl border border-border bg-surface p-5">
             <h3 className="text-sm font-medium text-text-muted uppercase mb-4">Productos</h3>
             <div className="flex flex-col gap-3">
-              {order.items.map((item) => (
-                <div key={item.id} className="flex gap-3 items-center">
-                  <div className="w-14 h-14 rounded-lg bg-bg overflow-hidden shrink-0">
-                    {item.productImage ? (
-                      <img src={item.productImage} alt={item.productName} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-text-muted text-[10px]">Sin img</div>
-                    )}
+              {order.items.map((item) => {
+                const bajoPedidoQty = Number((item as any).bajoPedidoQuantity ?? 0)
+                const fulfilledQty = item.quantity - bajoPedidoQty
+                return (
+                  <div key={item.id} className="flex gap-3 items-start">
+                    <div className="w-14 h-14 rounded-lg bg-bg overflow-hidden shrink-0">
+                      {item.productImage ? (
+                        <img src={item.productImage} alt={item.productName} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-text-muted text-[10px]">Sin img</div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-text truncate">{item.productName || `#${item.productId}`}</p>
+                      <p className="text-xs text-text-muted">{item.mlSize ? `${item.mlSize}ml ${item.isFullBottle ? 'Botella' : 'Decant'}` : ''}</p>
+                      {bajoPedidoQty > 0 && (
+                        <div className="mt-1.5 flex items-start gap-1.5 rounded-md bg-amber-500/10 border border-amber-500/30 px-2 py-1">
+                          <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wide shrink-0">⚠ Bajo pedido</span>
+                          <span className="text-[10px] text-amber-300/90 leading-tight">
+                            {bajoPedidoQty} de {item.quantity} {bajoPedidoQty === 1 ? 'unidad' : 'unidades'} por falta de stock
+                            {fulfilledQty > 0 && ` · ${fulfilledQty} entregadas de stock`}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-sm font-semibold text-text">${Number(item.subtotal).toFixed(2)}</p>
+                      <p className="text-[11px] text-text-muted">{item.quantity} × ${Number(item.price).toFixed(2)}</p>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-text truncate">{item.productName || `#${item.productId}`}</p>
-                    <p className="text-xs text-text-muted">{item.mlSize ? `${item.mlSize}ml ${item.isFullBottle ? 'Botella' : 'Decant'}` : ''}</p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-sm font-semibold text-text">${Number(item.subtotal).toFixed(2)}</p>
-                    <p className="text-[11px] text-text-muted">{item.quantity} × ${Number(item.price).toFixed(2)}</p>
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
 
             {/* Totals */}

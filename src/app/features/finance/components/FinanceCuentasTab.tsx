@@ -3,7 +3,8 @@ import { Button, Input, Select, SelectItem, Textarea, Chip, Progress } from '@he
 import { Plus, Trash2, Check, AlertTriangle, Clock, X } from 'lucide-react'
 import { CustomModalNextUI } from '@/app/components/UI/customModalNextUI/CustomModalNextUI'
 import { useCreateBillMutation, useUpdateBillMutation, useDeleteBillMutation } from '../mutations/useFinanceMutations'
-import { PAYMENT_METHODS } from '../data'
+import { usePaymentMethodsQuery } from '@/app/tanstack-queries/financeQuery'
+import PaymentMethodsManager from './PaymentMethodsManager'
 import type { FinanceStats } from '../types'
 
 interface BillItem {
@@ -34,6 +35,8 @@ export default function FinanceCuentasTab({ stats, onMarkPaid }: FinanceCuentasT
   const createMutation = useCreateBillMutation()
   const updateMutation = useUpdateBillMutation()
   const deleteMutation = useDeleteBillMutation()
+  const { data: paymentMethods = [] } = usePaymentMethodsQuery()
+  const activePaymentMethods = paymentMethods.filter((pm) => pm.isActive)
 
   const bills = stats?.bills?.all ?? []
   const pendingBills = bills.filter((b) => b.status !== 'paid')
@@ -95,29 +98,42 @@ export default function FinanceCuentasTab({ stats, onMarkPaid }: FinanceCuentasT
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Payment methods CRUD — feeds the select used in bill form below */}
+      <PaymentMethodsManager />
+
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
           <h2 className="text-lg font-heading font-bold text-text">Cuentas por Pagar</h2>
           <p className="text-xs text-text-muted">
             {pendingBills.length} pendientes · Total: <strong className="text-red-400">${stats?.bills?.pendingTotal?.toFixed(2) ?? '0.00'}</strong>
           </p>
         </div>
-        <Button color="warning" size="sm" startContent={<Plus size={14} />} onPress={() => setShowForm(!showForm)}>
+        <Button color="warning" size="sm" startContent={<Plus size={14} />} onPress={() => setShowForm(!showForm)} className="w-full sm:w-auto">
           Nueva Cuenta
         </Button>
       </div>
 
       {/* Create bill form */}
       {showForm && (
-        <div className="rounded-xl border border-accent/30 bg-surface p-5">
+        <div className="rounded-xl border border-accent/30 bg-surface p-4 sm:p-5">
           <h3 className="text-sm font-bold text-accent mb-4">Registrar cuenta por pagar</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <Input label="Descripción de la compra" value={name} onValueChange={setName} classNames={inputClasses} isRequired />
             <Input label="Monto total ($)" type="number" value={amount} onValueChange={setAmount} classNames={inputClasses} isRequired />
             <Input label="Fecha límite de pago" type="date" value={dueDate} onValueChange={setDueDate} classNames={inputClasses} isRequired />
-            <Select label="Método de pago" selectedKeys={paymentMethod ? [paymentMethod] : []} onSelectionChange={(k) => setPaymentMethod(String(Array.from(k)[0] || ''))} classNames={selectClasses}>
-              {PAYMENT_METHODS.map((m) => <SelectItem key={m}>{m}</SelectItem>)}
+            <Select
+              label="Método de pago"
+              selectedKeys={paymentMethod ? [paymentMethod] : []}
+              onSelectionChange={(k) => setPaymentMethod(String(Array.from(k)[0] || ''))}
+              classNames={selectClasses}
+              description={activePaymentMethods.length === 0 ? 'Crea uno abajo en "Métodos de pago"' : undefined}
+            >
+              {activePaymentMethods.map((m) => (
+                <SelectItem key={m.name} textValue={m.name}>
+                  {m.name}{m.detail ? ` — ${m.detail}` : ''}
+                </SelectItem>
+              ))}
             </Select>
             <Input label="Banco / Cuenta" value={bank} onValueChange={setBank} classNames={inputClasses} placeholder="Ej: TC Produbanco" />
             <div className="sm:col-span-2 lg:col-span-3">
@@ -133,14 +149,16 @@ export default function FinanceCuentasTab({ stats, onMarkPaid }: FinanceCuentasT
             </div>
             <div className="flex flex-col gap-2">
               {items.map((item, idx) => (
-                <div key={idx} className="flex gap-2 items-end">
-                  <Input label="Descripción" size="sm" value={item.description} onValueChange={(v) => updateItem(idx, 'description', v)} classNames={inputClasses} className="flex-1" />
-                  <Input label="Monto ($)" size="sm" type="number" value={item.amount} onValueChange={(v) => updateItem(idx, 'amount', v)} classNames={inputClasses} className="w-32" />
-                  {items.length > 1 && (
-                    <Button isIconOnly size="sm" variant="light" color="danger" onPress={() => removeItem(idx)}>
-                      <X size={14} />
-                    </Button>
-                  )}
+                <div key={idx} className="flex flex-col gap-2 sm:flex-row sm:items-end">
+                  <Input label="Descripción" size="sm" value={item.description} onValueChange={(v) => updateItem(idx, 'description', v)} classNames={inputClasses} className="min-w-0 flex-1" />
+                  <div className="flex items-end gap-2">
+                    <Input label="Monto ($)" size="sm" type="number" value={item.amount} onValueChange={(v) => updateItem(idx, 'amount', v)} classNames={inputClasses} className="w-full sm:w-32" />
+                    {items.length > 1 && (
+                      <Button isIconOnly size="sm" variant="light" color="danger" onPress={() => removeItem(idx)}>
+                        <X size={14} />
+                      </Button>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -196,7 +214,7 @@ export default function FinanceCuentasTab({ stats, onMarkPaid }: FinanceCuentasT
       )}
 
       {/* Pending bills */}
-      <div className="rounded-xl border border-border bg-surface p-5">
+      <div className="rounded-xl border border-border bg-surface p-4 sm:p-5">
         <h3 className="text-sm font-heading font-bold text-text uppercase tracking-wider mb-3">Pendientes</h3>
         {pendingBills.length === 0 ? (
           <p className="text-sm text-text-muted text-center py-6">No hay cuentas pendientes.</p>
@@ -205,9 +223,9 @@ export default function FinanceCuentasTab({ stats, onMarkPaid }: FinanceCuentasT
             {pendingBills.map((bill) => {
               const isOverdue = bill.dueDate < today
               return (
-                <div key={bill.id} className="flex items-center justify-between py-3 px-1 cursor-pointer hover:bg-bg/50 rounded" onClick={() => setSelectedBillId(Number(bill.id))}>
+                <div key={bill.id} className="flex flex-col gap-2 py-3 px-1 cursor-pointer hover:bg-bg/50 rounded sm:flex-row sm:items-center sm:justify-between sm:gap-3" onClick={() => setSelectedBillId(Number(bill.id))}>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <p className="text-sm font-medium text-text truncate">{bill.name}</p>
                       {isOverdue && (
                         <Chip size="sm" color="danger" variant="flat" startContent={<AlertTriangle size={10} />}>
@@ -219,7 +237,7 @@ export default function FinanceCuentasTab({ stats, onMarkPaid }: FinanceCuentasT
                       Vence: {bill.dueDate} · {bill.paymentMethod || bill.bank || '—'}
                     </p>
                   </div>
-                  <div className="flex items-center gap-3 shrink-0">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 sm:shrink-0">
                     <span className="text-sm font-bold text-text">${Number(bill.amount).toFixed(2)}</span>
                     <Button size="sm" color="success" variant="flat" startContent={<Check size={12} />} onPress={(e) => { e.stopPropagation?.(); handleMarkPaid(Number(bill.id)); }}>
                       Pagar
@@ -237,16 +255,16 @@ export default function FinanceCuentasTab({ stats, onMarkPaid }: FinanceCuentasT
 
       {/* Paid bills */}
       {paidBills.length > 0 && (
-        <div className="rounded-xl border border-border bg-surface p-5">
+        <div className="rounded-xl border border-border bg-surface p-4 sm:p-5">
           <h3 className="text-sm font-heading font-bold text-text uppercase tracking-wider mb-3">Pagadas</h3>
           <div className="flex flex-col divide-y divide-border">
             {paidBills.slice(0, 10).map((bill) => (
-              <div key={bill.id} className="flex items-center justify-between py-3 px-1 cursor-pointer hover:bg-bg/50 rounded" onClick={() => setSelectedBillId(Number(bill.id))}>
+              <div key={bill.id} className="flex items-center justify-between gap-3 py-3 px-1 cursor-pointer hover:bg-bg/50 rounded" onClick={() => setSelectedBillId(Number(bill.id))}>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-text-muted truncate">{bill.name}</p>
                   <p className="text-xs text-text-muted">Pagada · {bill.paidAt ? new Date(bill.paidAt).toLocaleDateString('es-EC') : bill.dueDate}</p>
                 </div>
-                <span className="text-sm text-text-muted">${Number(bill.amount).toFixed(2)}</span>
+                <span className="shrink-0 text-sm text-text-muted">${Number(bill.amount).toFixed(2)}</span>
               </div>
             ))}
           </div>
@@ -262,7 +280,7 @@ export default function FinanceCuentasTab({ stats, onMarkPaid }: FinanceCuentasT
       >
         {selectedBill && (
           <div className="flex flex-col gap-4 p-2">
-            <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
               <div>
                 <span className="text-text-muted">Monto:</span>
                 <p className="font-bold text-text">${Number(selectedBill.amount).toFixed(2)}</p>

@@ -28,15 +28,17 @@ export default function CouponCard({ coupon, onEdit, onDelete }: CouponCardProps
         : 'Envío gratis'
 
   return (
-    <div className="flex gap-4 rounded-xl border border-border bg-surface p-4 transition hover:border-accent/30">
-      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-accent/10">
-        <Ticket size={28} className="text-accent" />
+    <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 transition hover:border-accent/30 sm:flex-row sm:gap-4">
+      <div className="flex gap-3 sm:contents">
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-accent/10 sm:h-16 sm:w-16">
+          <Ticket size={28} className="text-accent" />
+        </div>
       </div>
 
-      <div className="flex flex-1 flex-col justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <h3 className="font-mono text-base font-bold text-accent">{coupon.code}</h3>
+      <div className="flex min-w-0 flex-1 flex-col justify-between">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="truncate font-mono text-base font-bold text-accent">{coupon.code}</h3>
             <Chip size="sm" variant="flat" color={coupon.isActive && !isExpired ? 'success' : 'danger'}>
               {isExpired ? 'Expirado' : coupon.isActive ? 'Activo' : 'Inactivo'}
             </Chip>
@@ -44,7 +46,7 @@ export default function CouponCard({ coupon, onEdit, onDelete }: CouponCardProps
               {typeLabels[coupon.type]}
             </Chip>
           </div>
-          <p className="mt-1 text-sm text-text-muted">
+          <p className="mt-1 break-words text-sm text-text-muted">
             Descuento: <span className="font-semibold text-text">{valueText}</span>
             {' · '}
             {usageText}
@@ -62,7 +64,7 @@ export default function CouponCard({ coupon, onEdit, onDelete }: CouponCardProps
             )}
           </p>
           {coupon.description && (
-            <p className="mt-0.5 text-xs text-text-muted">{coupon.description}</p>
+            <p className="mt-0.5 line-clamp-2 text-xs text-text-muted">{coupon.description}</p>
           )}
           <div className="mt-1 flex flex-wrap gap-1.5">
             {coupon.minOrderAmount && (
@@ -77,7 +79,7 @@ export default function CouponCard({ coupon, onEdit, onDelete }: CouponCardProps
         </div>
       </div>
 
-      <div className="flex shrink-0 items-start gap-1">
+      <div className="flex shrink-0 flex-wrap items-start gap-1 self-end sm:self-start">
         <Button isIconOnly size="sm" variant="light" onPress={() => onEdit(coupon)} aria-label="Editar cupón">
           <PencilIcon size={16} className="text-text-muted" />
         </Button>

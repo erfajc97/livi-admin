@@ -31,6 +31,7 @@ export default function FormModal({
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       size="2xl"
+      scrollBehavior="inside"
       isDismissable={!isSubmitting}
       hideCloseButton={isSubmitting}
       headerContent={

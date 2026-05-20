@@ -51,8 +51,9 @@ export function CustomTableNextUi<T extends { id: string | number }>({
   classNames: externalClassNames,
 }: CustomTableProps<T>) {
   return (
-    <div className={`flex h-full flex-col gap-4 rounded-xl bg-surface p-4 sm:rounded-2xl sm:p-6 ${externalClassNames?.base ?? ''}`}>
+    <div className={`flex h-full flex-col gap-4 rounded-xl bg-surface p-3 sm:rounded-2xl sm:p-6 ${externalClassNames?.base ?? ''}`}>
       {topContent && <div className={externalClassNames?.topContent ?? ''}>{topContent}</div>}
+      <div className="-mx-1 overflow-x-auto sm:mx-0">
       <Table
         isStriped
         color="primary"
@@ -62,7 +63,7 @@ export function CustomTableNextUi<T extends { id: string | number }>({
         sortDescriptor={sortDescriptor}
         onSortChange={onSortChange}
         classNames={{
-          wrapper: `table-report h-full rounded-none p-0 shadow-none bg-surface ${externalClassNames?.tableWrapper ?? ''}`,
+          wrapper: `table-report h-full min-w-[640px] rounded-none p-0 shadow-none bg-surface ${externalClassNames?.tableWrapper ?? ''}`,
           th: 'h-9 bg-surface-raised text-text-muted text-xs uppercase tracking-wider',
           tbody: 'text-text',
           tr: '!rounded-full data-[odd=true]:bg-surface-raised',
@@ -104,6 +105,7 @@ export function CustomTableNextUi<T extends { id: string | number }>({
           )}
         </TableBody>
       </Table>
+      </div>
       {bottomContent && <div>{bottomContent}</div>}
     </div>
   )

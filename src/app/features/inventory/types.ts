@@ -37,6 +37,15 @@ export interface OrderHistoryItem {
   orderCreatedAt: string
 }
 
+export interface InventoryVariation {
+  id: number
+  name?: string
+  mlSize: number
+  price: number
+  isFullBottle: boolean
+  isActive: boolean
+}
+
 export interface InventoryDetail {
   product: InventoryProduct
   inventory: {
@@ -45,6 +54,7 @@ export interface InventoryDetail {
     openBottleMlRemaining: number
     availableMl: number
   }
+  variations: InventoryVariation[]
   bottleEvents: BottleEvent[]
   orderHistory: OrderHistoryItem[]
 }
