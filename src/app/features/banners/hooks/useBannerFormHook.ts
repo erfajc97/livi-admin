@@ -1,25 +1,27 @@
 import { useState } from 'react'
-import type { Banner, BannerFormData, CreateBannerPayload, UpdateBannerPayload } from '../types'
+import type { Banner, BannerFormData, BannerType, CreateBannerPayload, UpdateBannerPayload } from '../types'
 import { useCreateBannerMutation, useUpdateBannerMutation } from '../mutations/useBannerMutations'
 
-const emptyForm: BannerFormData = {
+const buildEmptyForm = (type: BannerType): BannerFormData => ({
   title: '',
   subtitle: '',
   link: '',
   buttonText: '',
-  type: 'hero',
+  type,
   isVisible: true,
   categoryId: '',
   marcaId: '',
-}
+})
 
 interface UseBannerFormHookParams {
   id: string | null
   onSuccess: () => void
+  /** Tipo de banner fijo para esta vista (hero, navbar, …). Default 'hero'. */
+  defaultType?: BannerType
 }
 
-export function useBannerFormHook({ id, onSuccess }: UseBannerFormHookParams) {
-  const [formData, setFormData] = useState<BannerFormData>(emptyForm)
+export function useBannerFormHook({ id, onSuccess, defaultType = 'hero' }: UseBannerFormHookParams) {
+  const [formData, setFormData] = useState<BannerFormData>(() => buildEmptyForm(defaultType))
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
@@ -48,7 +50,7 @@ export function useBannerFormHook({ id, onSuccess }: UseBannerFormHookParams) {
       subtitle: banner.subtitle ?? '',
       link: banner.link ?? '',
       buttonText: banner.buttonText ?? '',
-      type: banner.type ?? 'hero',
+      type: banner.type ?? defaultType,
       isVisible: banner.isVisible,
       categoryId: banner.categoryId ? String(banner.categoryId) : '',
       marcaId: banner.marcaId ? String(banner.marcaId) : '',
@@ -58,7 +60,7 @@ export function useBannerFormHook({ id, onSuccess }: UseBannerFormHookParams) {
   }
 
   const resetForm = () => {
-    setFormData(emptyForm)
+    setFormData(buildEmptyForm(defaultType))
     setImageFile(null)
     setImagePreview(null)
   }

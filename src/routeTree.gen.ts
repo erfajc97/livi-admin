@@ -18,6 +18,7 @@ import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedTiposProductoRouteImport } from './routes/_authenticated/tipos-producto'
 import { Route as AuthenticatedStockRouteImport } from './routes/_authenticated/stock'
 import { Route as AuthenticatedSeccionesLandingRouteImport } from './routes/_authenticated/secciones-landing'
+import { Route as AuthenticatedPublicidadNavbarRouteImport } from './routes/_authenticated/publicidad-navbar'
 import { Route as AuthenticatedProductosRouteImport } from './routes/_authenticated/productos'
 import { Route as AuthenticatedOrdenesRouteImport } from './routes/_authenticated/ordenes'
 import { Route as AuthenticatedNewsletterRouteImport } from './routes/_authenticated/newsletter'
@@ -75,6 +76,12 @@ const AuthenticatedSeccionesLandingRoute =
   AuthenticatedSeccionesLandingRouteImport.update({
     id: '/secciones-landing',
     path: '/secciones-landing',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPublicidadNavbarRoute =
+  AuthenticatedPublicidadNavbarRouteImport.update({
+    id: '/publicidad-navbar',
+    path: '/publicidad-navbar',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedProductosRoute = AuthenticatedProductosRouteImport.update({
@@ -148,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/newsletter': typeof AuthenticatedNewsletterRoute
   '/ordenes': typeof AuthenticatedOrdenesRoute
   '/productos': typeof AuthenticatedProductosRoute
+  '/publicidad-navbar': typeof AuthenticatedPublicidadNavbarRoute
   '/secciones-landing': typeof AuthenticatedSeccionesLandingRoute
   '/stock': typeof AuthenticatedStockRoute
   '/tipos-producto': typeof AuthenticatedTiposProductoRoute
@@ -168,6 +176,7 @@ export interface FileRoutesByTo {
   '/newsletter': typeof AuthenticatedNewsletterRoute
   '/ordenes': typeof AuthenticatedOrdenesRoute
   '/productos': typeof AuthenticatedProductosRoute
+  '/publicidad-navbar': typeof AuthenticatedPublicidadNavbarRoute
   '/secciones-landing': typeof AuthenticatedSeccionesLandingRoute
   '/stock': typeof AuthenticatedStockRoute
   '/tipos-producto': typeof AuthenticatedTiposProductoRoute
@@ -191,6 +200,7 @@ export interface FileRoutesById {
   '/_authenticated/newsletter': typeof AuthenticatedNewsletterRoute
   '/_authenticated/ordenes': typeof AuthenticatedOrdenesRoute
   '/_authenticated/productos': typeof AuthenticatedProductosRoute
+  '/_authenticated/publicidad-navbar': typeof AuthenticatedPublicidadNavbarRoute
   '/_authenticated/secciones-landing': typeof AuthenticatedSeccionesLandingRoute
   '/_authenticated/stock': typeof AuthenticatedStockRoute
   '/_authenticated/tipos-producto': typeof AuthenticatedTiposProductoRoute
@@ -215,6 +225,7 @@ export interface FileRouteTypes {
     | '/newsletter'
     | '/ordenes'
     | '/productos'
+    | '/publicidad-navbar'
     | '/secciones-landing'
     | '/stock'
     | '/tipos-producto'
@@ -235,6 +246,7 @@ export interface FileRouteTypes {
     | '/newsletter'
     | '/ordenes'
     | '/productos'
+    | '/publicidad-navbar'
     | '/secciones-landing'
     | '/stock'
     | '/tipos-producto'
@@ -257,6 +269,7 @@ export interface FileRouteTypes {
     | '/_authenticated/newsletter'
     | '/_authenticated/ordenes'
     | '/_authenticated/productos'
+    | '/_authenticated/publicidad-navbar'
     | '/_authenticated/secciones-landing'
     | '/_authenticated/stock'
     | '/_authenticated/tipos-producto'
@@ -334,6 +347,13 @@ declare module '@tanstack/react-router' {
       path: '/secciones-landing'
       fullPath: '/secciones-landing'
       preLoaderRoute: typeof AuthenticatedSeccionesLandingRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/publicidad-navbar': {
+      id: '/_authenticated/publicidad-navbar'
+      path: '/publicidad-navbar'
+      fullPath: '/publicidad-navbar'
+      preLoaderRoute: typeof AuthenticatedPublicidadNavbarRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/productos': {
@@ -428,6 +448,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedNewsletterRoute: typeof AuthenticatedNewsletterRoute
   AuthenticatedOrdenesRoute: typeof AuthenticatedOrdenesRoute
   AuthenticatedProductosRoute: typeof AuthenticatedProductosRoute
+  AuthenticatedPublicidadNavbarRoute: typeof AuthenticatedPublicidadNavbarRoute
   AuthenticatedSeccionesLandingRoute: typeof AuthenticatedSeccionesLandingRoute
   AuthenticatedStockRoute: typeof AuthenticatedStockRoute
   AuthenticatedTiposProductoRoute: typeof AuthenticatedTiposProductoRoute
@@ -448,6 +469,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedNewsletterRoute: AuthenticatedNewsletterRoute,
   AuthenticatedOrdenesRoute: AuthenticatedOrdenesRoute,
   AuthenticatedProductosRoute: AuthenticatedProductosRoute,
+  AuthenticatedPublicidadNavbarRoute: AuthenticatedPublicidadNavbarRoute,
   AuthenticatedSeccionesLandingRoute: AuthenticatedSeccionesLandingRoute,
   AuthenticatedStockRoute: AuthenticatedStockRoute,
   AuthenticatedTiposProductoRoute: AuthenticatedTiposProductoRoute,

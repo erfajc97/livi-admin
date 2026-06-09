@@ -18,6 +18,7 @@ import {
   LayoutGrid,
   Ticket,
   Warehouse,
+  Megaphone,
 } from 'lucide-react'
 
 export interface NavItem {
@@ -40,6 +41,7 @@ export const NAV_ITEMS: Array<NavItem> = [
   { label: 'Finanzas', to: '/finanzas', icon: Wallet },
   { label: 'Usuarios', to: '/usuarios', icon: Users },
   { label: 'Banners', to: '/banners', icon: Image },
+  { label: 'Publicidad navbar', to: '/publicidad-navbar', icon: Megaphone },
   { label: 'Blog', to: '/blog', icon: FileText },
   { label: 'Landing Sections', to: '/secciones-landing', icon: LayoutGrid },
 ]
