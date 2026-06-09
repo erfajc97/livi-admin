@@ -10,6 +10,11 @@ export const Route = createFileRoute('/_authenticated')({
         to: '/login',
       })
     }
+    if (context.auth.roles?.toUpperCase() !== 'ADMIN') {
+      throw redirect({
+        to: '/login',
+      })
+    }
   },
   component: () => <AdminLayout children={<Outlet />} />,
   notFoundComponent: () => (

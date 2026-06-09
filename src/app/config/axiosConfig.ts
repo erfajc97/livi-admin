@@ -62,7 +62,15 @@ axiosInstance.interceptors.response.use(
 
         const newToken = data?.content?.access_token ?? data?.data?.access_token ?? ''
         const newRefreshToken = data?.content?.refresh_token ?? data?.data?.refresh_token ?? ''
-        const decoded = JSON.parse(atob(newToken.split('.')[1])) as { exp: number }
+
+        let decoded: { exp: number }
+        try {
+          decoded = JSON.parse(atob(newToken.split('.')[1])) as { exp: number }
+        } catch {
+          useAuthStore.getState().removeToken()
+          if (!isOnLoginPage()) window.location.href = '/login'
+          return Promise.reject(error)
+        }
         const expiration = decoded.exp * 1000
 
         useAuthStore.getState().setToken(newToken, newRefreshToken, expiration)

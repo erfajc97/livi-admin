@@ -1,6 +1,10 @@
 import { useState } from 'react'
+import { addToast } from '@heroui/react'
 import type { Banner, BannerFormData, BannerType, CreateBannerPayload, UpdateBannerPayload } from '../types'
 import { useCreateBannerMutation, useUpdateBannerMutation } from '../mutations/useBannerMutations'
+
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024
 
 const buildEmptyForm = (type: BannerType): BannerFormData => ({
   title: '',
@@ -36,12 +40,24 @@ export function useBannerFormHook({ id, onSuccess, defaultType = 'hero' }: UseBa
   }
 
   const onImageChange = (file: File | null) => {
-    setImageFile(file)
     if (file) {
-      setImagePreview(URL.createObjectURL(file))
-    } else {
-      setImagePreview(null)
+      if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+        addToast({ title: 'Formato no permitido. Usa JPG, PNG o WEBP.', color: 'danger' })
+        return
+      }
+      if (file.size > MAX_IMAGE_SIZE) {
+        addToast({ title: 'La imagen no debe superar los 5 MB.', color: 'danger' })
+        return
+      }
     }
+
+    setImagePreview((prev) => {
+      if (prev && prev.startsWith('blob:')) {
+        URL.revokeObjectURL(prev)
+      }
+      return file ? URL.createObjectURL(file) : null
+    })
+    setImageFile(file)
   }
 
   const handleToEditForm = (banner: Banner) => {

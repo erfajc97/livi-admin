@@ -18,11 +18,24 @@ export const useLoginMutation = () => {
 
       const token = data.accessToken
       const refreshToken = '' // Set a default if your API doesn't return one currently
-      const decoded = JSON.parse(atob(token.split('.')[1]))
+
+      let decoded: { exp: number }
+      try {
+        decoded = JSON.parse(atob(token.split('.')[1]))
+      } catch {
+        useAuthStore.getState().removeToken()
+        throw new Error('Token inválido')
+      }
       const expiration = decoded.exp * 1000
 
+      const role = data.user?.role ?? ''
+      if (role.toUpperCase() !== 'ADMIN') {
+        useAuthStore.getState().removeToken()
+        throw new Error('Acceso solo para administradores.')
+      }
+
       useAuthStore.getState().setToken(token, refreshToken, expiration)
-      useAuthStore.getState().setRoles(data.user?.role)
+      useAuthStore.getState().setRoles(role)
       useAuthStore.getState().setUserInfo(
         `${data.user?.firstName ?? ''} ${data.user?.lastName ?? ''}`.trim(),
         data.user?.email ?? '',
