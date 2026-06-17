@@ -6,7 +6,7 @@ import FormSectionCategory from './FormSectionCategory'
 import FormSectionPricing from './FormSectionPricing'
 import FormSectionInventory from './FormSectionInventory'
 import FormSectionFragrance from './FormSectionFragrance'
-import FormSectionDetail from './FormSectionDetail'
+import FormSectionEditorial from './FormSectionEditorial'
 import FormSectionVariations from './FormSectionVariations'
 import type { Product, ProductFormData, ProductImage, VariationRow } from '../types'
 
@@ -88,7 +88,7 @@ export default function ProductForm({
             onRemoveNew={removeNewImage}
             onRemoveExisting={removeExistingImage}
           />
-          <FormSectionDetail formData={formData} updateField={updateField} />
+          <FormSectionEditorial formData={formData} updateField={updateField} />
           <FormSectionVariations
             variations={variations}
             totalMl={Number(formData.totalMl) || 0}

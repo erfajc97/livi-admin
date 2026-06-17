@@ -30,6 +30,15 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
       }
     }
 
+    // Imagen de "La firma" (PDP) — sube y setea signatureImageUrl en el server
+    if (formHook.formData.signatureImageFile) {
+      try {
+        await productsService.uploadSignatureImage(productId, formHook.formData.signatureImageFile)
+      } catch (err: any) {
+        addToast({ title: err?.response?.data?.message || 'Error al subir imagen de la firma', color: 'danger' })
+      }
+    }
+
     // Delete removed images
     if (formHook.isEdit && formHook.fullProduct?.images) {
       const removedImages = formHook.fullProduct.images.filter(

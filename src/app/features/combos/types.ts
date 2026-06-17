@@ -32,6 +32,10 @@ export interface Combo {
   discount?: number
   isActive: boolean
   comboProducts: ComboProduct[]
+  /** Si es una versión, ID del combo base. */
+  parentComboId?: number | null
+  /** Versiones del combo (mismo nombre, otros productos/precio). Solo en el base. */
+  versions?: Combo[]
   createdAt: string
   updatedAt: string
 }
@@ -52,6 +56,8 @@ export interface CreateComboPayload {
   discount?: number
   isActive?: boolean
   products: ComboProductPayload[]
+  /** Si se crea una VERSIÓN, ID del combo base. */
+  parentComboId?: number
 }
 
 export interface UpdateComboPayload extends Partial<CreateComboPayload> {}
@@ -66,6 +72,8 @@ export interface ComboFormData {
   finalPrice: string
   discount: string
   isActive: boolean
+  /** Cuando se crea una versión, ID del combo base. */
+  parentComboId?: number
 }
 
 export interface ComboProductRow {

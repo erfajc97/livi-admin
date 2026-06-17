@@ -75,6 +75,16 @@ export const productsService = {
     return data.data
   },
 
+  uploadSignatureImage: async (productId: number, file: File): Promise<{ signatureImageUrl: string }> => {
+    const fd = new FormData()
+    fd.append('file', file)
+    const { data } = await axiosInstance.post<CoreApiResponse<{ signatureImageUrl: string }>>(
+      `${API_ENDPOINTS.PRODUCTS}/${productId}/signature-image`,
+      fd,
+    )
+    return data.data
+  },
+
   listImages: async (productId: number): Promise<ProductImage[]> => {
     const { data } = await axiosInstance.get<CoreApiResponse<ProductImage[]>>(
       `${API_ENDPOINTS.PRODUCTS}/${productId}/images`,

@@ -45,6 +45,17 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
       benefits: fullProduct.benefits
         ? (() => { try { return (JSON.parse(fullProduct.benefits) as string[]).join('\n') } catch { return fullProduct.benefits } })()
         : '',
+      // ── PDP editorial ──
+      scentProfileTitle: fullProduct.scentProfileTitle ?? '',
+      scentSections: fullProduct.scentSections ?? [],
+      mood: fullProduct.mood ?? [],
+      occasion: fullProduct.occasion ?? [],
+      longevity: fullProduct.longevity != null ? String(fullProduct.longevity) : '',
+      projectionScore: fullProduct.projectionScore != null ? String(fullProduct.projectionScore) : '',
+      signatureTitle: fullProduct.signatureTitle ?? '',
+      signatureDescription: fullProduct.signatureDescription ?? '',
+      signatureImageUrl: fullProduct.signatureImageUrl ?? '',
+      signatureImageFile: null,
     })
     setExistingImages(fullProduct.images ?? [])
     setImageFiles([])
@@ -156,6 +167,16 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
       benefits: formData.benefits.trim()
         ? JSON.stringify(formData.benefits.trim().split('\n').map((l) => l.trim()).filter(Boolean))
         : undefined,
+      // ── PDP editorial ── (arrays se envían siempre para permitir vaciarlos)
+      scentProfileTitle: formData.scentProfileTitle.trim() || undefined,
+      scentSections: formData.scentSections,
+      mood: formData.mood,
+      occasion: formData.occasion,
+      longevity: formData.longevity !== '' ? Number(formData.longevity) : undefined,
+      projectionScore: formData.projectionScore !== '' ? Number(formData.projectionScore) : undefined,
+      signatureTitle: formData.signatureTitle.trim() || undefined,
+      signatureDescription: formData.signatureDescription.trim() || undefined,
+      signatureImageUrl: formData.signatureImageUrl.trim() || undefined,
     }
 
     // Strip undefined keys so backend Object.assign never nukes stored values

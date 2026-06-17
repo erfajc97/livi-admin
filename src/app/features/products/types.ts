@@ -82,6 +82,19 @@ export interface ProductVariation {
   updatedAt: string
 }
 
+/* ── Perfil olfativo ─────────────────────────────────── */
+
+export interface ScentNote {
+  name: string
+  color: string
+}
+
+export interface ScentSection {
+  title: string
+  notes: ScentNote[]
+  description: string
+}
+
 /* ── Product ─────────────────────────────────────────── */
 
 export interface Product {
@@ -103,6 +116,16 @@ export interface Product {
   discount?: number
   detailDescription?: string
   benefits?: string
+  // ── PDP editorial ──
+  scentProfileTitle?: string
+  scentSections?: ScentSection[]
+  mood?: string[]
+  occasion?: string[]
+  longevity?: number
+  projectionScore?: number
+  signatureTitle?: string
+  signatureDescription?: string
+  signatureImageUrl?: string
   categoryId: number
   marcaId: number
   category?: Category
@@ -134,6 +157,16 @@ export interface CreateProductPayload {
   discount?: number
   detailDescription?: string
   benefits?: string
+  // ── PDP editorial ──
+  scentProfileTitle?: string
+  scentSections?: ScentSection[]
+  mood?: string[]
+  occasion?: string[]
+  longevity?: number
+  projectionScore?: number
+  signatureTitle?: string
+  signatureDescription?: string
+  signatureImageUrl?: string
 }
 
 export interface UpdateProductPayload extends Partial<CreateProductPayload> {}
@@ -181,6 +214,17 @@ export interface ProductFormData {
   discount: string
   detailDescription: string
   benefits: string
+  // ── PDP editorial ──
+  scentProfileTitle: string
+  scentSections: ScentSection[]
+  mood: string[]
+  occasion: string[]
+  longevity: string
+  projectionScore: string
+  signatureTitle: string
+  signatureDescription: string
+  signatureImageUrl: string
+  signatureImageFile: File | null
 }
 
 export interface VariationRow {

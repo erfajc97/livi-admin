@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { Button, Input, Switch, Textarea } from '@heroui/react'
 import { ArrowLeft, Plus, Upload } from 'lucide-react'
 import ComboProductRowVariations from './ComboProductRowVariations'
@@ -15,6 +16,7 @@ interface ComboFormProps {
   onBack: () => void
   isSubmitting: boolean
   isEdit: boolean
+  children?: ReactNode
 }
 
 export default function ComboForm({
@@ -29,6 +31,7 @@ export default function ComboForm({
   onBack,
   isSubmitting,
   isEdit,
+  children,
 }: ComboFormProps) {
   return (
     <div className="flex flex-col gap-6">
@@ -144,6 +147,8 @@ export default function ComboForm({
           ))}
         </div>
       </div>
+
+      {children}
 
       <div className="flex justify-end gap-3">
         <Button variant="flat" onPress={onBack}>

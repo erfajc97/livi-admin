@@ -11,6 +11,7 @@ interface CreateComboPayloadWithFile {
   finalPrice: number
   discount?: number
   isActive?: boolean
+  parentComboId?: number
   products: { productId: number; productVariationId?: number; quantity: number }[]
 }
 

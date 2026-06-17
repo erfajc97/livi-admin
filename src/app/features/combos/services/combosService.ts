@@ -28,6 +28,7 @@ function buildFormData(payload: CreateComboPayloadWithFile | UpdateComboPayloadW
   if (payload.finalPrice !== undefined) formData.append('finalPrice', String(payload.finalPrice))
   if (payload.discount !== undefined) formData.append('discount', String(payload.discount))
   if (payload.isActive !== undefined) formData.append('isActive', String(payload.isActive))
+  if (payload.parentComboId !== undefined) formData.append('parentComboId', String(payload.parentComboId))
   if (payload.imageFile) formData.append('image', payload.imageFile)
   if (payload.products) {
     formData.append('products', JSON.stringify(payload.products))

@@ -40,6 +40,23 @@ export const PROJECTIONS: { value: Projection; label: string }[] = [
   { value: 'ALTA', label: 'Alta' },
 ]
 
+// ── PDP editorial: opciones predefinidas ──
+export const CARACTER_OPTIONS = [
+  'Elegante', 'Sensual', 'Fresco', 'Amaderado', 'Dulce', 'Intenso',
+  'Sofisticado', 'Versátil', 'Atrevido', 'Clásico', 'Aromático', 'Oriental',
+]
+
+export const OCASION_OPTIONS = [
+  'Día', 'Noche', 'Formal', 'Casual', 'Oficina', 'Cita',
+  'Fiesta', 'Verano', 'Invierno', 'Especial', 'Diario',
+]
+
+// Presets de color para las notas (el admin puede igual elegir cualquier color)
+export const SCENT_COLOR_PRESETS = [
+  '#E8D8C0', '#C9A87A', '#8A6B4A', '#6F5238',
+  '#D9C9A0', '#B89A6A', '#A8C0B0', '#7A8A6B', '#3A3636',
+]
+
 export const INITIAL_FORM_DATA = {
   name: '',
   price: '',
@@ -57,4 +74,15 @@ export const INITIAL_FORM_DATA = {
   discount: '',
   detailDescription: '',
   benefits: '',
+  // ── PDP editorial ──
+  scentProfileTitle: '',
+  scentSections: [] as { title: string; notes: { name: string; color: string }[]; description: string }[],
+  mood: [] as string[],
+  occasion: [] as string[],
+  longevity: '',
+  projectionScore: '',
+  signatureTitle: '',
+  signatureDescription: '',
+  signatureImageUrl: '',
+  signatureImageFile: null as File | null,
 }
