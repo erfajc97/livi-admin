@@ -41,9 +41,25 @@ export const PROJECTIONS: { value: Projection; label: string }[] = [
 ]
 
 // ── PDP editorial: opciones predefinidas ──
+// Vocabulario de perfumería: familias olfativas, texturas, temperamento y
+// contexto. Se muestran como chips seleccionables (multi-selección).
 export const CARACTER_OPTIONS = [
+  // Base / temperamento
   'Elegante', 'Sensual', 'Fresco', 'Amaderado', 'Dulce', 'Intenso',
   'Sofisticado', 'Versátil', 'Atrevido', 'Clásico', 'Aromático', 'Oriental',
+  // Familias olfativas
+  'Cítrico', 'Floral', 'Frutal', 'Especiado', 'Ahumado', 'Avainillado',
+  'Almizclado', 'Ambarino', 'Acuático', 'Marino', 'Herbal', 'Verde',
+  'Terroso', 'Balsámico', 'Resinoso', 'Cuero', 'Gourmand', 'Chipre',
+  'Fougère', 'Achocolatado', 'Atalcado', 'Empolvado',
+  // Textura / percepción
+  'Cremoso', 'Jabonoso', 'Limpio', 'Envolvente', 'Adictivo', 'Luminoso',
+  'Cálido', 'Frío', 'Discreto', 'Potente', 'Minimalista', 'Opulento',
+  // Carácter emocional
+  'Misterioso', 'Seductor', 'Romántico', 'Energético', 'Relajante',
+  'Nostálgico', 'Exótico', 'Artesanal', 'Juvenil', 'Maduro',
+  // Estacional / momento
+  'Nocturno', 'Veraniego', 'Invernal', 'Otoñal', 'Primaveral',
 ]
 
 export const OCASION_OPTIONS = [

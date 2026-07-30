@@ -82,10 +82,12 @@ export function useBannerFormHook({ id, onSuccess, defaultType = 'hero' }: UseBa
   }
 
   const handleSubmit = () => {
+    // Los textos van tal cual (incluido vacío): así el admin puede dejar un
+    // banner sin titular/descripción o limpiarlos al editar.
     const base: Omit<CreateBannerPayload, 'title'> = {
-      subtitle: formData.subtitle || undefined,
-      link: formData.link || undefined,
-      buttonText: formData.buttonText || undefined,
+      subtitle: formData.subtitle,
+      link: formData.link,
+      buttonText: formData.buttonText,
       type: formData.type,
       isVisible: formData.isVisible,
       categoryId: formData.categoryId ? Number(formData.categoryId) : undefined,

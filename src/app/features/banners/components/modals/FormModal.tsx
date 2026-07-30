@@ -44,11 +44,13 @@ export default function FormModal({
           <Button color="danger" variant="flat" onPress={() => onOpenChange(false)} isDisabled={isSubmitting}>
             Cancelar
           </Button>
+          {/* El texto es opcional: lo único imprescindible al crear es la
+              imagen (el arte puede traer el título quemado). */}
           <Button
             color="warning"
             onPress={onSubmit}
             isLoading={isSubmitting}
-            isDisabled={!formData.title.trim()}
+            isDisabled={!isThereId && !imagePreview}
           >
             {isThereId ? 'Actualizar' : 'Crear'}
           </Button>

@@ -14,17 +14,16 @@ export default function BannerForm({ formData, imagePreview, onInputChange, onIm
   return (
     <div className="flex flex-col gap-4">
       <Input
-        label="Título"
+        label="Título (opcional)"
         labelPlacement="outside"
-        placeholder="Ej: Promo Verano"
+        placeholder="Déjalo vacío si la imagen ya trae el texto"
         value={formData.title}
         onValueChange={(v) => onInputChange('title', v)}
         classNames={inputClasses}
         autoComplete="off"
-        isRequired
       />
       <Input
-        label="Subtítulo"
+        label="Subtítulo (opcional)"
         labelPlacement="outside"
         placeholder="Ej: Hasta 50% de descuento"
         value={formData.subtitle}

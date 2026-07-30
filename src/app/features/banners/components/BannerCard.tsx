@@ -58,7 +58,9 @@ export default function BannerCard({ banner, onEdit, onDelete }: BannerCardProps
       <div className="flex min-w-0 flex-1 flex-col justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <h3 className="truncate text-base font-semibold text-text">{banner.title}</h3>
+            <h3 className="truncate text-base font-semibold text-text">
+              {banner.title || 'Banner sin texto'}
+            </h3>
             <Switch
               size="sm"
               color="warning"
