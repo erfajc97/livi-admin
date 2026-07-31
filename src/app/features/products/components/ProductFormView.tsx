@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Spinner, addToast } from '@heroui/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useProductFormHook } from '../hooks/useProductFormHook'
+import { validateProductForm } from '../validators'
 import { useCreateProductMutation, useUpdateProductMutation } from '../mutations/useProductMutations'
 import { productsService } from '../services/productsService'
 import ProductForm from './ProductForm'
@@ -16,6 +17,12 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
   const formHook = useProductFormHook({ productId: product?.id ?? null })
   const queryClient = useQueryClient()
   const [isSaving, setIsSaving] = useState(false)
+
+  // Qué falta para poder guardar (vacío = formulario válido).
+  const errors = useMemo(
+    () => validateProductForm(formHook.formData, formHook.variations),
+    [formHook.formData, formHook.variations],
+  )
 
   const createMutation = useCreateProductMutation()
   const updateMutation = useUpdateProductMutation()
@@ -138,14 +145,10 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
   }
 
   const handleSubmit = () => {
-    // Validate ML don't exceed totalMl
-    const totalMl = Number(formHook.formData.totalMl) || 0
-    const totalVariationMl = formHook.variations.reduce((sum, v) => sum + (Number(v.mlSize) || 0), 0)
-    if (totalMl > 0 && totalVariationMl > totalMl) {
-      addToast({
-        title: `Las variantes suman ${totalVariationMl}ml pero la botella es de ${totalMl}ml. Reduce los ML de las variantes.`,
-        color: 'danger',
-      })
+    // Red de seguridad: el botón ya está deshabilitado con errores, pero si
+    // llegara aquí (submit por teclado, estado viejo) no se envía nada.
+    if (errors.length > 0) {
+      addToast({ title: errors[0], color: 'danger' })
       return
     }
 
@@ -217,6 +220,7 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
       isSubmitting={isSaving}
       isEdit={formHook.isEdit}
       fullProduct={formHook.fullProduct}
+      errors={errors}
     />
   )
 }

@@ -6,10 +6,14 @@ export interface Product {
   isActive: boolean;
 }
 
+/** Dónde se pinta la sección: home o recomendados del carrito. */
+export type SectionPlacement = 'home' | 'cart';
+
 export interface LandingSection {
   id: number;
   title: string;
   order: number;
+  placement: SectionPlacement;
   isActive: boolean;
   products: Product[];
   createdAt: string;
@@ -19,6 +23,7 @@ export interface LandingSection {
 export interface CreateLandingSectionDto {
   title: string;
   order: number;
+  placement?: SectionPlacement;
   isActive?: boolean;
   productIds?: number[];
 }
@@ -26,6 +31,7 @@ export interface CreateLandingSectionDto {
 export interface UpdateLandingSectionDto {
   title?: string;
   order?: number;
+  placement?: SectionPlacement;
   isActive?: boolean;
   productIds?: number[];
 }

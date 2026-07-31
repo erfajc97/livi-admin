@@ -25,7 +25,11 @@ export function SectionCard({
             </Chip>
           </div>
           <p className="text-sm text-text-muted">
-            {section.order <= 1 ? 'Arriba de testimonios' : 'Debajo de testimonios'}
+            {section.placement === 'cart'
+              ? `Carrito · recomendados (orden ${section.order})`
+              : section.order <= 1
+                ? 'Landing · arriba de testimonios'
+                : 'Landing · debajo de testimonios'}
           </p>
         </div>
       </CardHeader>

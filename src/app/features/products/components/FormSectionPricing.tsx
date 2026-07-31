@@ -7,6 +7,10 @@ interface FormSectionPricingProps {
 }
 
 export default function FormSectionPricing({ formData, updateField }: FormSectionPricingProps) {
+  // Solo se marca en rojo si escribieron algo inválido (vacío lo avisa el
+  // resumen de arriba del botón guardar).
+  const priceInvalid = formData.price.trim() !== '' && !(Number(formData.price) > 0)
+
   return (
     <div className="rounded-xl border border-border bg-surface p-5">
       <h3 className="mb-4 text-lg font-semibold text-text">Precio y Descuentos</h3>
@@ -20,6 +24,8 @@ export default function FormSectionPricing({ formData, updateField }: FormSectio
           startContent={<span className="text-text-muted text-sm">$</span>}
           classNames={{ label: '!text-text', input: '!text-text', inputWrapper: 'bg-background border-border' }}
           isRequired
+          isInvalid={priceInvalid}
+          errorMessage={priceInvalid ? 'El precio debe ser mayor a 0.' : undefined}
         />
         <div className="flex items-center justify-between">
           <div>

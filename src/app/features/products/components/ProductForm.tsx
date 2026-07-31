@@ -1,5 +1,5 @@
 import { Button, Spinner } from '@heroui/react'
-import { ArrowLeft, Save } from 'lucide-react'
+import { AlertCircle, ArrowLeft, Save } from 'lucide-react'
 import FormSectionGeneral from './FormSectionGeneral'
 import FormSectionMedia from './FormSectionMedia'
 import FormSectionCategory from './FormSectionCategory'
@@ -30,6 +30,8 @@ interface ProductFormProps {
   isSubmitting: boolean
   isEdit: boolean
   fullProduct?: Product | null
+  /** Campos pendientes; con al menos uno el guardado queda bloqueado. */
+  errors: string[]
 }
 
 export default function ProductForm({
@@ -52,6 +54,7 @@ export default function ProductForm({
   isSubmitting,
   isEdit,
   fullProduct,
+  errors,
 }: ProductFormProps) {
   return (
     <div className="flex flex-col gap-6 relative">
@@ -111,20 +114,37 @@ export default function ProductForm({
         </div>
       </div>
 
-      {/* Submit */}
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3">
-        <Button variant="flat" onPress={onBack} isDisabled={isSubmitting} className="h-10">
-          Cancelar
-        </Button>
-        <Button
-          color="warning"
-          startContent={<Save size={16} />}
-          onPress={onSubmit}
-          isLoading={isSubmitting}
-          className="h-10"
-        >
-          {isEdit ? 'Guardar cambios' : 'Crear producto'}
-        </Button>
+      {/* Submit — bloqueado mientras falten datos obligatorios */}
+      <div className="flex flex-col gap-3">
+        {errors.length > 0 && (
+          <div className="rounded-xl border border-danger/40 bg-danger/5 p-4">
+            <p className="mb-2 flex items-center gap-2 text-sm font-medium text-danger">
+              <AlertCircle size={16} />
+              Completa estos campos para {isEdit ? 'guardar' : 'crear el producto'}
+            </p>
+            <ul className="flex list-disc flex-col gap-1 pl-5 text-xs text-text-muted">
+              {errors.map((error) => (
+                <li key={error}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3">
+          <Button variant="flat" onPress={onBack} isDisabled={isSubmitting} className="h-10">
+            Cancelar
+          </Button>
+          <Button
+            color="warning"
+            startContent={<Save size={16} />}
+            onPress={onSubmit}
+            isLoading={isSubmitting}
+            isDisabled={errors.length > 0}
+            className="h-10"
+          >
+            {isEdit ? 'Guardar cambios' : 'Crear producto'}
+          </Button>
+        </div>
       </div>
     </div>
   )

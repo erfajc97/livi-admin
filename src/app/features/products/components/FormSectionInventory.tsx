@@ -20,6 +20,12 @@ export default function FormSectionInventory({ formData, updateField, product, v
   const openMl = product?.openBottleMlRemaining ?? 0
   const availableMl = openMl + stock * totalMl
 
+  // Marcado en rojo solo con valor escrito e inválido.
+  const rawStock = formData.stock.trim()
+  const stockInvalid =
+    rawStock !== '' && (!Number.isInteger(Number(rawStock)) || Number(rawStock) < 0)
+  const totalMlInvalid = formData.totalMl.trim() !== '' && !(Number(formData.totalMl) > 0)
+
   const [openBottleModal, setOpenBottleModal] = useState(false)
   const openBottleMutation = useOpenBottleMutation()
 
@@ -125,18 +131,24 @@ export default function FormSectionInventory({ formData, updateField, product, v
           label="Botellas selladas (stock)"
           placeholder="0"
           type="number"
+          min={0}
           value={formData.stock}
           onValueChange={(v) => updateField('stock', v)}
           classNames={{ label: '!text-text', input: '!text-text', inputWrapper: 'bg-background border-border' }}
+          isInvalid={stockInvalid}
+          errorMessage={stockInvalid ? 'Debe ser un entero de 0 o más.' : undefined}
         />
         <Input
           label="ML por botella"
           placeholder="100"
           type="number"
+          min={1}
           value={formData.totalMl}
           onValueChange={(v) => updateField('totalMl', v)}
           classNames={{ label: '!text-text', input: '!text-text', inputWrapper: 'bg-background border-border' }}
           isRequired
+          isInvalid={totalMlInvalid}
+          errorMessage={totalMlInvalid ? 'Los ML deben ser mayores a 0.' : undefined}
         />
       </div>
 

@@ -11,7 +11,12 @@ import {
   SelectItem,
 } from '@heroui/react';
 import { useState, useEffect } from 'react';
-import type { LandingSection, CreateLandingSectionDto, UpdateLandingSectionDto } from '../types';
+import type {
+  LandingSection,
+  CreateLandingSectionDto,
+  UpdateLandingSectionDto,
+  SectionPlacement,
+} from '../types';
 
 interface SectionFormModalProps {
   isOpen: boolean;
@@ -30,16 +35,19 @@ export function SectionFormModal({
 }: SectionFormModalProps) {
   const [title, setTitle] = useState('');
   const [order, setOrder] = useState('1');
+  const [placement, setPlacement] = useState<SectionPlacement>('home');
   const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
     if (section) {
       setTitle(section.title);
       setOrder(String(section.order));
+      setPlacement(section.placement ?? 'home');
       setIsActive(section.isActive);
     } else {
       setTitle('');
       setOrder('1');
+      setPlacement('home');
       setIsActive(true);
     }
   }, [section]);
@@ -47,7 +55,8 @@ export function SectionFormModal({
   const handleSubmit = async () => {
     const dto = {
       title,
-      order: parseInt(order, 10),
+      order: parseInt(order, 10) || 1,
+      placement,
       isActive,
     };
     await onSubmit(dto);
@@ -79,11 +88,11 @@ export function SectionFormModal({
                 />
 
                 <Select
-                  label="Posición en la landing"
-                  selectedKeys={[order]}
+                  label="Dónde se muestra"
+                  selectedKeys={[placement]}
                   onSelectionChange={(keys) => {
-                    const val = Array.from(keys)[0] as string;
-                    if (val) setOrder(val);
+                    const val = Array.from(keys)[0] as SectionPlacement;
+                    if (val) setPlacement(val);
                   }}
                   isRequired
                   classNames={{
@@ -92,9 +101,42 @@ export function SectionFormModal({
                     trigger: 'border-border',
                   }}
                 >
-                  <SelectItem key="1">Arriba de testimonios</SelectItem>
-                  <SelectItem key="2">Debajo de testimonios</SelectItem>
+                  <SelectItem key="home">Landing (home)</SelectItem>
+                  <SelectItem key="cart">Carrito — “No te pierdas estos productos”</SelectItem>
                 </Select>
+
+                {placement === 'home' ? (
+                  <Select
+                    label="Posición en la landing"
+                    selectedKeys={[order]}
+                    onSelectionChange={(keys) => {
+                      const val = Array.from(keys)[0] as string;
+                      if (val) setOrder(val);
+                    }}
+                    isRequired
+                    classNames={{
+                      label: 'text-sm font-medium text-text',
+                      value: 'text-sm text-text',
+                      trigger: 'border-border',
+                    }}
+                  >
+                    <SelectItem key="1">Arriba de testimonios</SelectItem>
+                    <SelectItem key="2">Debajo de testimonios</SelectItem>
+                  </Select>
+                ) : (
+                  <Input
+                    type="number"
+                    min={1}
+                    label="Orden dentro del carrito"
+                    value={order}
+                    onValueChange={setOrder}
+                    classNames={{
+                      label: 'text-sm font-medium text-text',
+                      input: 'text-sm text-text',
+                      inputWrapper: 'border-border',
+                    }}
+                  />
+                )}
 
                 <div className="flex items-center gap-2">
                   <Switch

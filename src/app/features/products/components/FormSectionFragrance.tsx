@@ -8,6 +8,12 @@ interface FormSectionFragranceProps {
 }
 
 export default function FormSectionFragrance({ formData, updateField }: FormSectionFragranceProps) {
+  const discountInvalid =
+    formData.discount.trim() !== '' &&
+    (Number.isNaN(Number(formData.discount)) ||
+      Number(formData.discount) < 0 ||
+      Number(formData.discount) > 100)
+
   return (
     <div className="rounded-xl border border-border bg-surface p-5">
       <h3 className="mb-4 text-lg font-semibold text-text">Características de Fragancia</h3>
@@ -78,6 +84,8 @@ export default function FormSectionFragrance({ formData, updateField }: FormSect
           type="number"
           value={formData.discount}
           onValueChange={(v) => updateField('discount', v)}
+          isInvalid={discountInvalid}
+          errorMessage={discountInvalid ? 'El descuento va de 0 a 100.' : undefined}
           endContent={<span className="text-text-muted text-sm">%</span>}
           classNames={{ label: '!text-text', input: '!text-text', inputWrapper: 'bg-background border-border' }}
         />
