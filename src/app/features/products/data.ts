@@ -28,10 +28,12 @@ export const TIME_OF_DAY_OPTIONS: { value: TimeOfDay; label: string }[] = [
 export const CONCENTRATIONS: { value: Concentration; label: string }[] = [
   { value: 'EAU_DE_PARFUM', label: 'Eau de Parfum' },
   { value: 'EAU_DE_TOILETTE', label: 'Eau de Toilette' },
-  { value: 'ELIXIR_DE_PARFUM', label: 'Elixir de Parfum' },
+  { value: 'EAU_DE_TOILETTE_INTENSE', label: 'Eau de Toilette Intense' },
   { value: 'EAU_DE_COLOGNE', label: 'Eau de Cologne' },
   { value: 'BODY_MIST', label: 'Body Mist' },
-  { value: 'PARFUM_EXTRAIT', label: 'Parfum / Extrait' },
+  { value: 'ELIXIR', label: 'Elixir' },
+  { value: 'PARFUM', label: 'Parfum' },
+  { value: 'EXTRAIT_DE_PARFUM', label: 'Extrait de Parfum' },
 ]
 
 export const PROJECTIONS: { value: Projection; label: string }[] = [

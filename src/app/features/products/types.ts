@@ -7,10 +7,12 @@ export type TimeOfDay = 'DIA' | 'NOCHE'
 export type Concentration =
   | 'EAU_DE_PARFUM'
   | 'EAU_DE_TOILETTE'
-  | 'ELIXIR_DE_PARFUM'
+  | 'EAU_DE_TOILETTE_INTENSE'
   | 'EAU_DE_COLOGNE'
   | 'BODY_MIST'
-  | 'PARFUM_EXTRAIT'
+  | 'ELIXIR'
+  | 'PARFUM'
+  | 'EXTRAIT_DE_PARFUM'
 
 export type Projection = 'DISCRETA' | 'MODERADA' | 'ALTA'
 
