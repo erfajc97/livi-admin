@@ -8,7 +8,12 @@ export function Ordenes() {
   const [detailOrderId, setDetailOrderId] = useState<number | null>(null)
 
   if (detailOrderId) {
-    return <OrderDetailView orderId={detailOrderId} onBack={() => setDetailOrderId(null)} />
+    return (
+      <OrderDetailView
+        orderId={detailOrderId}
+        onBack={() => setDetailOrderId(null)}
+      />
+    )
   }
 
   return (

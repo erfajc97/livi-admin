@@ -10,7 +10,12 @@ interface BannerFormProps {
   onImageChange: (file: File | null) => void
 }
 
-export default function BannerForm({ formData, imagePreview, onInputChange, onImageChange }: BannerFormProps) {
+export default function BannerForm({
+  formData,
+  imagePreview,
+  onInputChange,
+  onImageChange,
+}: BannerFormProps) {
   return (
     <div className="flex flex-col gap-4">
       <Input
@@ -33,9 +38,15 @@ export default function BannerForm({ formData, imagePreview, onInputChange, onIm
       />
 
       <div>
-        <label className="mb-2 block text-sm text-text">Imagen del banner</label>
+        <label className="mb-2 block text-sm text-text">
+          Imagen del banner
+        </label>
         {imagePreview && (
-          <img src={imagePreview} alt="Preview" className="mb-2 h-28 w-auto rounded-lg object-cover" />
+          <img
+            src={imagePreview}
+            alt="Preview"
+            className="mb-2 h-28 w-auto rounded-lg object-cover"
+          />
         )}
         <input
           type="file"
@@ -63,7 +74,6 @@ export default function BannerForm({ formData, imagePreview, onInputChange, onIm
         classNames={inputClasses}
         autoComplete="off"
       />
-
     </div>
   )
 }

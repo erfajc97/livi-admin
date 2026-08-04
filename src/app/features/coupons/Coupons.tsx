@@ -26,10 +26,20 @@ export function Coupons() {
     <div className="flex flex-col gap-6 p-4 sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">Cupones</h1>
-          <p className="mt-1 text-sm text-text-muted">Gestiona los cupones de descuento.</p>
+          <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">
+            Cupones
+          </h1>
+          <p className="mt-1 text-sm text-text-muted">
+            Gestiona los cupones de descuento.
+          </p>
         </div>
-        <Button color="warning" radius="full" endContent={<PlusIcon size={18} />} onPress={handleCreateClick} className="w-full sm:w-auto">
+        <Button
+          color="warning"
+          radius="full"
+          endContent={<PlusIcon size={18} />}
+          onPress={handleCreateClick}
+          className="w-full sm:w-auto"
+        >
           Crear Cupón
         </Button>
       </div>
@@ -41,14 +51,24 @@ export function Coupons() {
       ) : coupons.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16">
           <p className="text-text-muted">No hay cupones creados.</p>
-          <Button color="warning" variant="flat" className="mt-4" onPress={handleCreateClick}>
+          <Button
+            color="warning"
+            variant="flat"
+            className="mt-4"
+            onPress={handleCreateClick}
+          >
             Crear el primero
           </Button>
         </div>
       ) : (
         <div className="flex flex-col gap-3">
           {coupons.map((coupon) => (
-            <CouponCard key={coupon.id} coupon={coupon} onEdit={handleEditClick} onDelete={handleDeleteClick} />
+            <CouponCard
+              key={coupon.id}
+              coupon={coupon}
+              onEdit={handleEditClick}
+              onDelete={handleDeleteClick}
+            />
           ))}
         </div>
       )}

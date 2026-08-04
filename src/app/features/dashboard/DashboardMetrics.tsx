@@ -39,10 +39,21 @@ export function DashboardMetrics() {
   const renderCell = useCallback((item: RecentOrder, columnKey: string) => {
     switch (columnKey) {
       case 'total':
-        return <span className="font-semibold">${Number(item.total).toFixed(2)}</span>
+        return (
+          <span className="font-semibold">
+            ${Number(item.total).toFixed(2)}
+          </span>
+        )
       case 'status': {
-        const info = STATUS_LABELS[item.status] || { label: item.status, color: 'default' as const }
-        return <Chip size="sm" variant="flat" color={info.color}>{info.label}</Chip>
+        const info = STATUS_LABELS[item.status] || {
+          label: item.status,
+          color: 'default' as const,
+        }
+        return (
+          <Chip size="sm" variant="flat" color={info.color}>
+            {info.label}
+          </Chip>
+        )
       }
       default:
         return item[columnKey as keyof RecentOrder] ?? '—'
@@ -58,12 +69,19 @@ export function DashboardMetrics() {
   }
 
   if (!stats) {
-    return <p className="p-6 text-text-muted">No se pudieron cargar las estadísticas.</p>
+    return (
+      <p className="p-6 text-text-muted">
+        No se pudieron cargar las estadísticas.
+      </p>
+    )
   }
 
   return (
     <div className="flex flex-col gap-6 p-6">
-      <WelcomeBanner userName={userName} subtitle="Aquí tienes tus métricas de ventas" />
+      <WelcomeBanner
+        userName={userName}
+        subtitle="Aquí tienes tus métricas de ventas"
+      />
 
       {/* Top metric cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -95,13 +113,40 @@ export function DashboardMetrics() {
 
       {/* Gestión de pedidos */}
       <div>
-        <h2 className="mb-3 text-lg font-semibold text-text">Gestión de pedidos</h2>
+        <h2 className="mb-3 text-lg font-semibold text-text">
+          Gestión de pedidos
+        </h2>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-          <StatusCard icon={Clock} count={stats.orders.byStatus.pending} label="Pendiente de pago" color="bg-yellow-600" />
-          <StatusCard icon={CreditCard} count={stats.orders.byStatus.paid} label="Pagados" color="bg-green-600" />
-          <StatusCard icon={PackageCheck} count={stats.orders.byStatus.accepted} label="Listos despachar" color="bg-blue-600" />
-          <StatusCard icon={Truck} count={stats.orders.byStatus.shipped} label="En trámite envío" color="bg-purple-600" />
-          <StatusCard icon={CheckCircle} count={stats.orders.byStatus.delivered} label="Entregados" color="bg-emerald-600" />
+          <StatusCard
+            icon={Clock}
+            count={stats.orders.byStatus.pending}
+            label="Pendiente de pago"
+            color="bg-yellow-600"
+          />
+          <StatusCard
+            icon={CreditCard}
+            count={stats.orders.byStatus.paid}
+            label="Pagados"
+            color="bg-green-600"
+          />
+          <StatusCard
+            icon={PackageCheck}
+            count={stats.orders.byStatus.accepted}
+            label="Listos despachar"
+            color="bg-blue-600"
+          />
+          <StatusCard
+            icon={Truck}
+            count={stats.orders.byStatus.shipped}
+            label="En trámite envío"
+            color="bg-purple-600"
+          />
+          <StatusCard
+            icon={CheckCircle}
+            count={stats.orders.byStatus.delivered}
+            label="Entregados"
+            color="bg-emerald-600"
+          />
         </div>
       </div>
 

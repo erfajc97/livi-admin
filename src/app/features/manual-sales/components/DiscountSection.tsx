@@ -40,7 +40,11 @@ export default function DiscountSection({
         placeholder={discountType === 'percentage' ? 'Ej: 10' : 'Ej: 5.00'}
         value={discountValue}
         onValueChange={onValueChange}
-        startContent={<span className="text-text-muted text-sm">{discountType === 'percentage' ? '%' : '$'}</span>}
+        startContent={
+          <span className="text-text-muted text-sm">
+            {discountType === 'percentage' ? '%' : '$'}
+          </span>
+        }
         classNames={{ input: '!text-text' }}
         size="sm"
       />

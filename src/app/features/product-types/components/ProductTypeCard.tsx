@@ -9,14 +9,20 @@ interface ProductTypeCardProps {
   onDelete: (item: ProductType) => void
 }
 
-export default function ProductTypeCard({ productType, onEdit, onDelete }: ProductTypeCardProps) {
+export default function ProductTypeCard({
+  productType,
+  onEdit,
+  onDelete,
+}: ProductTypeCardProps) {
   const toggleActive = useToggleProductTypeActiveMutation()
 
   return (
     <div className="flex items-center gap-4 rounded-xl border border-border bg-surface p-4 transition hover:border-accent/30">
       <div className="flex flex-1 flex-col">
         <div className="flex items-center gap-3">
-          <h3 className="text-base font-semibold text-text">{productType.name}</h3>
+          <h3 className="text-base font-semibold text-text">
+            {productType.name}
+          </h3>
           <Switch
             size="sm"
             color="warning"
@@ -36,7 +42,9 @@ export default function ProductTypeCard({ productType, onEdit, onDelete }: Produ
           </Chip>
         </div>
         {productType.description && (
-          <p className="mt-1 text-sm text-text-muted">{productType.description}</p>
+          <p className="mt-1 text-sm text-text-muted">
+            {productType.description}
+          </p>
         )}
       </div>
 

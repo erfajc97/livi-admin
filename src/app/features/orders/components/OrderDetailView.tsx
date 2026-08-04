@@ -30,7 +30,10 @@ interface HistoryEntry {
   createdAt: string
 }
 
-export default function OrderDetailView({ orderId, onBack }: OrderDetailViewProps) {
+export default function OrderDetailView({
+  orderId,
+  onBack,
+}: OrderDetailViewProps) {
   const { data: order, isLoading } = useOrderByIdQuery(orderId)
   const updateMutation = useUpdateOrderMutation()
   const [trackingCode, setTrackingCode] = useState('')
@@ -45,7 +48,8 @@ export default function OrderDetailView({ orderId, onBack }: OrderDetailViewProp
 
   useEffect(() => {
     if (orderId) {
-      axiosInstance.get(`/orders/${orderId}/history`)
+      axiosInstance
+        .get(`/orders/${orderId}/history`)
         .then(({ data }) => setHistory(data?.data ?? data ?? []))
         .catch(() => {})
     }
@@ -57,63 +61,114 @@ export default function OrderDetailView({ orderId, onBack }: OrderDetailViewProp
   }
 
   if (isLoading) {
-    return <div className="flex items-center justify-center py-20"><Spinner size="lg" color="warning" /></div>
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Spinner size="lg" color="warning" />
+      </div>
+    )
   }
 
   if (!order) {
-    return <div className="text-center py-20 text-text-muted">Orden no encontrada</div>
+    return (
+      <div className="text-center py-20 text-text-muted">
+        Orden no encontrada
+      </div>
+    )
   }
 
-  const statusInfo = STATUS_LABELS[order.status] || { label: order.status, color: 'default' as const }
-  const paymentInfo = PAYMENT_STATUS_LABELS[order.paymentStatus || 'pending'] || { label: order.paymentStatus || 'N/A', color: 'default' as const }
+  const statusInfo = STATUS_LABELS[order.status] || {
+    label: order.status,
+    color: 'default' as const,
+  }
+  const paymentInfo = PAYMENT_STATUS_LABELS[
+    order.paymentStatus || 'pending'
+  ] || { label: order.paymentStatus || 'N/A', color: 'default' as const }
 
   return (
     <div className="flex flex-col gap-5">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Button isIconOnly variant="flat" onPress={onBack}><ArrowLeft size={18} /></Button>
+        <Button isIconOnly variant="flat" onPress={onBack}>
+          <ArrowLeft size={18} />
+        </Button>
         <div className="flex-1">
-          <h2 className="text-xl font-semibold text-text">Orden {order.orderNumber}</h2>
-          <p className="text-xs text-text-muted">{new Date(order.createdAt).toLocaleString('es-EC', { dateStyle: 'long', timeStyle: 'short' })}</p>
+          <h2 className="text-xl font-semibold text-text">
+            Orden {order.orderNumber}
+          </h2>
+          <p className="text-xs text-text-muted">
+            {new Date(order.createdAt).toLocaleString('es-EC', {
+              dateStyle: 'long',
+              timeStyle: 'short',
+            })}
+          </p>
         </div>
-        <Chip size="sm" variant="flat" color={statusInfo.color}>{statusInfo.label}</Chip>
-        <Chip size="sm" variant="flat" color={paymentInfo.color}>{paymentInfo.label}</Chip>
+        <Chip size="sm" variant="flat" color={statusInfo.color}>
+          {statusInfo.label}
+        </Chip>
+        <Chip size="sm" variant="flat" color={paymentInfo.color}>
+          {paymentInfo.label}
+        </Chip>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* LEFT: Products + Totals */}
         <div className="lg:col-span-2 flex flex-col gap-5">
           <div className="rounded-xl border border-border bg-surface p-5">
-            <h3 className="text-sm font-medium text-text-muted uppercase mb-4">Productos</h3>
+            <h3 className="text-sm font-medium text-text-muted uppercase mb-4">
+              Productos
+            </h3>
             <div className="flex flex-col gap-3">
               {order.items.map((item) => {
-                const bajoPedidoQty = Number((item as any).bajoPedidoQuantity ?? 0)
+                const bajoPedidoQty = Number(
+                  (item as any).bajoPedidoQuantity ?? 0,
+                )
                 const fulfilledQty = item.quantity - bajoPedidoQty
                 return (
                   <div key={item.id} className="flex gap-3 items-start">
                     <div className="w-14 h-14 rounded-lg bg-bg overflow-hidden shrink-0">
                       {item.productImage ? (
-                        <img src={item.productImage} alt={item.productName} className="w-full h-full object-cover" />
+                        <img
+                          src={item.productImage}
+                          alt={item.productName}
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-text-muted text-[10px]">Sin img</div>
+                        <div className="w-full h-full flex items-center justify-center text-text-muted text-[10px]">
+                          Sin img
+                        </div>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-text truncate">{item.productName || `#${item.productId}`}</p>
-                      <p className="text-xs text-text-muted">{item.mlSize ? `${item.mlSize}ml ${item.isFullBottle ? 'Botella' : 'Decant'}` : ''}</p>
+                      <p className="text-sm font-medium text-text truncate">
+                        {item.productName || `#${item.productId}`}
+                      </p>
+                      <p className="text-xs text-text-muted">
+                        {item.mlSize
+                          ? `${item.mlSize}ml ${item.isFullBottle ? 'Botella' : 'Decant'}`
+                          : ''}
+                      </p>
                       {bajoPedidoQty > 0 && (
                         <div className="mt-1.5 flex items-start gap-1.5 rounded-md bg-amber-500/10 border border-amber-500/30 px-2 py-1">
-                          <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wide shrink-0">⚠ Bajo pedido</span>
+                          <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wide shrink-0">
+                            ⚠ Bajo pedido
+                          </span>
                           <span className="text-[10px] text-amber-300/90 leading-tight">
-                            {bajoPedidoQty} de {item.quantity} {bajoPedidoQty === 1 ? 'unidad' : 'unidades'} por falta de stock
-                            {fulfilledQty > 0 && ` · ${fulfilledQty} entregadas de stock`}
+                            {bajoPedidoQty} de {item.quantity}{' '}
+                            {bajoPedidoQty === 1 ? 'unidad' : 'unidades'} por
+                            falta de stock
+                            {fulfilledQty > 0 &&
+                              ` · ${fulfilledQty} entregadas de stock`}
                           </span>
                         </div>
                       )}
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-sm font-semibold text-text">${Number(item.subtotal).toFixed(2)}</p>
-                      <p className="text-[11px] text-text-muted">{item.quantity} × ${Number(item.price).toFixed(2)}</p>
+                      <p className="text-sm font-semibold text-text">
+                        ${Number(item.subtotal).toFixed(2)}
+                      </p>
+                      <p className="text-[11px] text-text-muted">
+                        {item.quantity} × ${Number(item.price).toFixed(2)}
+                      </p>
                     </div>
                   </div>
                 )
@@ -122,18 +177,39 @@ export default function OrderDetailView({ orderId, onBack }: OrderDetailViewProp
 
             {/* Totals */}
             <div className="border-t border-border mt-4 pt-3 space-y-1.5 text-sm">
-              <div className="flex justify-between text-text-muted"><span>Subtotal</span><span>${Number(order.subtotal).toFixed(2)}</span></div>
-              {Number(order.couponDiscount) > 0 && <div className="flex justify-between text-green-500"><span>Cupón</span><span>-${Number(order.couponDiscount).toFixed(2)}</span></div>}
-              <div className="flex justify-between text-text-muted"><span>Envío</span><span>${Number(order.deliveryCost).toFixed(2)}</span></div>
-              {Number(order.payphoneSurcharge) > 0 && <div className="flex justify-between text-text-muted"><span>Recargo PayPhone 6%</span><span>${Number(order.payphoneSurcharge).toFixed(2)}</span></div>}
-              <div className="flex justify-between font-bold text-text text-base pt-2 border-t border-border"><span>Total</span><span>${Number(order.total).toFixed(2)}</span></div>
+              <div className="flex justify-between text-text-muted">
+                <span>Subtotal</span>
+                <span>${Number(order.subtotal).toFixed(2)}</span>
+              </div>
+              {Number(order.couponDiscount) > 0 && (
+                <div className="flex justify-between text-green-500">
+                  <span>Cupón</span>
+                  <span>-${Number(order.couponDiscount).toFixed(2)}</span>
+                </div>
+              )}
+              <div className="flex justify-between text-text-muted">
+                <span>Envío</span>
+                <span>${Number(order.deliveryCost).toFixed(2)}</span>
+              </div>
+              {Number(order.payphoneSurcharge) > 0 && (
+                <div className="flex justify-between text-text-muted">
+                  <span>Recargo PayPhone 6%</span>
+                  <span>${Number(order.payphoneSurcharge).toFixed(2)}</span>
+                </div>
+              )}
+              <div className="flex justify-between font-bold text-text text-base pt-2 border-t border-border">
+                <span>Total</span>
+                <span>${Number(order.total).toFixed(2)}</span>
+              </div>
             </div>
           </div>
 
           {/* Tracking input for Servientrega orders */}
           {isServientrega(order.deliveryMethod) && (
             <div className="rounded-xl border border-border bg-surface p-5">
-              <h3 className="text-sm font-medium text-text-muted uppercase mb-3">Número de guía Servientrega</h3>
+              <h3 className="text-sm font-medium text-text-muted uppercase mb-3">
+                Número de guía Servientrega
+              </h3>
               <div className="flex gap-3">
                 <Input
                   value={trackingCode}
@@ -157,9 +233,19 @@ export default function OrderDetailView({ orderId, onBack }: OrderDetailViewProp
           {/* Transfer receipt */}
           {order.transferReceiptUrl && (
             <div className="rounded-xl border border-border bg-surface p-5">
-              <h3 className="text-sm font-medium text-text-muted uppercase mb-3">Comprobante de transferencia</h3>
-              <a href={order.transferReceiptUrl} target="_blank" rel="noopener noreferrer">
-                <img src={order.transferReceiptUrl} alt="Comprobante" className="max-h-80 rounded-lg border border-border hover:opacity-80 transition-opacity" />
+              <h3 className="text-sm font-medium text-text-muted uppercase mb-3">
+                Comprobante de transferencia
+              </h3>
+              <a
+                href={order.transferReceiptUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={order.transferReceiptUrl}
+                  alt="Comprobante"
+                  className="max-h-80 rounded-lg border border-border hover:opacity-80 transition-opacity"
+                />
               </a>
             </div>
           )}
@@ -167,25 +253,39 @@ export default function OrderDetailView({ orderId, onBack }: OrderDetailViewProp
           {/* Status History Timeline */}
           {history.length > 0 && (
             <div className="rounded-xl border border-border bg-surface p-5">
-              <h3 className="text-sm font-medium text-text-muted uppercase mb-4">Historial de estados</h3>
+              <h3 className="text-sm font-medium text-text-muted uppercase mb-4">
+                Historial de estados
+              </h3>
               <div className="relative pl-6">
                 <div className="absolute left-[9px] top-1 bottom-1 w-px bg-border" />
                 {history.map((entry, i) => {
-                  const label = STATUS_LABELS[entry.toStatus]?.label ?? entry.toStatus;
-                  const isLast = i === history.length - 1;
+                  const label =
+                    STATUS_LABELS[entry.toStatus]?.label ?? entry.toStatus
+                  const isLast = i === history.length - 1
                   return (
                     <div key={entry.id} className="relative pb-4 last:pb-0">
-                      <div className={`absolute -left-6 top-1 w-[18px] h-[18px] rounded-full border-2 flex items-center justify-center ${isLast ? 'bg-accent border-accent' : 'bg-surface border-border'}`}>
-                        {isLast && <div className="w-2 h-2 bg-white rounded-full" />}
+                      <div
+                        className={`absolute -left-6 top-1 w-[18px] h-[18px] rounded-full border-2 flex items-center justify-center ${isLast ? 'bg-accent border-accent' : 'bg-surface border-border'}`}
+                      >
+                        {isLast && (
+                          <div className="w-2 h-2 bg-white rounded-full" />
+                        )}
                       </div>
                       <p className="text-sm font-semibold text-text">{label}</p>
                       <p className="text-[11px] text-text-muted">
-                        {new Date(entry.createdAt).toLocaleString('es-EC', { dateStyle: 'medium', timeStyle: 'short' })}
+                        {new Date(entry.createdAt).toLocaleString('es-EC', {
+                          dateStyle: 'medium',
+                          timeStyle: 'short',
+                        })}
                         {entry.changedBy && <span> · {entry.changedBy}</span>}
                       </p>
-                      {entry.note && <p className="text-[11px] text-text-muted italic mt-0.5">{entry.note}</p>}
+                      {entry.note && (
+                        <p className="text-[11px] text-text-muted italic mt-0.5">
+                          {entry.note}
+                        </p>
+                      )}
                     </div>
-                  );
+                  )
                 })}
               </div>
             </div>
@@ -195,29 +295,63 @@ export default function OrderDetailView({ orderId, onBack }: OrderDetailViewProp
         {/* RIGHT: Client + Delivery + Payment + Notes */}
         <div className="flex flex-col gap-4">
           <div className="rounded-xl border border-border bg-surface p-4">
-            <h3 className="text-xs font-medium text-text-muted uppercase mb-2">Cliente</h3>
-            <p className="text-sm font-medium text-text">{order.customerName || order.userName || 'N/A'}</p>
-            <p className="text-xs text-text-muted">{order.customerEmail || '—'}</p>
-            <p className="text-xs text-text-muted">{order.customerPhone || '—'}</p>
+            <h3 className="text-xs font-medium text-text-muted uppercase mb-2">
+              Cliente
+            </h3>
+            <p className="text-sm font-medium text-text">
+              {order.customerName || order.userName || 'N/A'}
+            </p>
+            <p className="text-xs text-text-muted">
+              {order.customerEmail || '—'}
+            </p>
+            <p className="text-xs text-text-muted">
+              {order.customerPhone || '—'}
+            </p>
           </div>
 
           <div className="rounded-xl border border-border bg-surface p-4">
-            <h3 className="text-xs font-medium text-text-muted uppercase mb-2">Envío</h3>
-            <p className="text-sm font-medium text-text">{order.deliveryMethod ? DELIVERY_LABELS[order.deliveryMethod] || order.deliveryMethod : 'N/A'}</p>
-            {order.shippingAddress && <p className="text-xs text-text-muted mt-1">{order.shippingAddress}</p>}
-            {order.shippingCity && <p className="text-xs text-text-muted">{order.shippingCity}</p>}
-            {order.trackingCode && <p className="text-xs text-accent mt-1">Guía: {order.trackingCode}</p>}
+            <h3 className="text-xs font-medium text-text-muted uppercase mb-2">
+              Envío
+            </h3>
+            <p className="text-sm font-medium text-text">
+              {order.deliveryMethod
+                ? DELIVERY_LABELS[order.deliveryMethod] || order.deliveryMethod
+                : 'N/A'}
+            </p>
+            {order.shippingAddress && (
+              <p className="text-xs text-text-muted mt-1">
+                {order.shippingAddress}
+              </p>
+            )}
+            {order.shippingCity && (
+              <p className="text-xs text-text-muted">{order.shippingCity}</p>
+            )}
+            {order.trackingCode && (
+              <p className="text-xs text-accent mt-1">
+                Guía: {order.trackingCode}
+              </p>
+            )}
           </div>
 
           <div className="rounded-xl border border-border bg-surface p-4">
-            <h3 className="text-xs font-medium text-text-muted uppercase mb-2">Pago</h3>
-            <p className="text-sm font-medium text-text">{order.paymentMethod || 'N/A'}</p>
-            {order.paymentReference && <p className="text-xs text-text-muted mt-1">Ref: {order.paymentReference}</p>}
+            <h3 className="text-xs font-medium text-text-muted uppercase mb-2">
+              Pago
+            </h3>
+            <p className="text-sm font-medium text-text">
+              {order.paymentMethod || 'N/A'}
+            </p>
+            {order.paymentReference && (
+              <p className="text-xs text-text-muted mt-1">
+                Ref: {order.paymentReference}
+              </p>
+            )}
           </div>
 
           {order.notes && (
             <div className="rounded-xl border border-border bg-surface p-4">
-              <h3 className="text-xs font-medium text-text-muted uppercase mb-2">Notas</h3>
+              <h3 className="text-xs font-medium text-text-muted uppercase mb-2">
+                Notas
+              </h3>
               <p className="text-xs text-text-muted">{order.notes}</p>
             </div>
           )}

@@ -11,13 +11,21 @@ interface CoreApiResponse<T> {
 }
 
 function unwrap<T>(data: T | CoreApiResponse<T>): T {
-  if (data && typeof data === 'object' && 'statusCode' in data && 'data' in data) {
-    return (data as CoreApiResponse<T>).data
+  if (
+    data &&
+    typeof data === 'object' &&
+    'statusCode' in data &&
+    'data' in data
+  ) {
+    return data.data
   }
-  return data as T
+  return data
 }
 
-function buildFormData(payload: Record<string, unknown>, file?: File): FormData {
+function buildFormData(
+  payload: Record<string, unknown>,
+  file?: File,
+): FormData {
   const fd = new FormData()
   for (const [key, value] of Object.entries(payload)) {
     if (value !== undefined && value !== null) {
@@ -32,8 +40,10 @@ function buildFormData(payload: Record<string, unknown>, file?: File): FormData 
 
 export const bannersService = {
   listBanners: async (): Promise<Banner[]> => {
-    const { data } = await axiosInstance.get<Banner[] | CoreApiResponse<Banner[]>>(API_ENDPOINTS.BANNERS)
-    return Array.isArray(data) ? data : unwrap(data) as Banner[]
+    const { data } = await axiosInstance.get<
+      Banner[] | CoreApiResponse<Banner[]>
+    >(API_ENDPOINTS.BANNERS)
+    return Array.isArray(data) ? data : unwrap(data)
   },
 
   getBannerById: async (id: string): Promise<Banner> => {
@@ -41,19 +51,38 @@ export const bannersService = {
     return unwrap<Banner>(data)
   },
 
-  createBanner: async (payload: CreateBannerPayload, file?: File): Promise<Banner> => {
-    const fd = buildFormData(payload as unknown as Record<string, unknown>, file)
+  createBanner: async (
+    payload: CreateBannerPayload,
+    file?: File,
+  ): Promise<Banner> => {
+    const fd = buildFormData(
+      payload as unknown as Record<string, unknown>,
+      file,
+    )
     const { data } = await axiosInstance.post(API_ENDPOINTS.BANNERS, fd)
     return unwrap<Banner>(data)
   },
 
-  updateBanner: async (id: string, payload: UpdateBannerPayload, file?: File): Promise<Banner> => {
+  updateBanner: async (
+    id: string,
+    payload: UpdateBannerPayload,
+    file?: File,
+  ): Promise<Banner> => {
     if (!file) {
-      const { data } = await axiosInstance.patch(`${API_ENDPOINTS.BANNERS}/${id}`, payload)
+      const { data } = await axiosInstance.patch(
+        `${API_ENDPOINTS.BANNERS}/${id}`,
+        payload,
+      )
       return unwrap<Banner>(data)
     }
-    const fd = buildFormData(payload as unknown as Record<string, unknown>, file)
-    const { data } = await axiosInstance.patch(`${API_ENDPOINTS.BANNERS}/${id}`, fd)
+    const fd = buildFormData(
+      payload as unknown as Record<string, unknown>,
+      file,
+    )
+    const { data } = await axiosInstance.patch(
+      `${API_ENDPOINTS.BANNERS}/${id}`,
+      fd,
+    )
     return unwrap<Banner>(data)
   },
 

@@ -5,7 +5,12 @@ interface MetricCardProps {
   icon: React.ComponentType<{ size?: number; className?: string }>
 }
 
-export default function MetricCard({ title, value, subtitle, icon: Icon }: MetricCardProps) {
+export default function MetricCard({
+  title,
+  value,
+  subtitle,
+  icon: Icon,
+}: MetricCardProps) {
   return (
     <div className="flex flex-col justify-between rounded-xl border border-border bg-surface p-5 min-h-[140px]">
       <div className="flex items-start justify-between">
@@ -18,7 +23,9 @@ export default function MetricCard({ title, value, subtitle, icon: Icon }: Metri
         <p className="text-3xl font-bold text-text">{value}</p>
         <p className="mt-1 text-xs text-text-muted">{subtitle}</p>
       </div>
-      <p className="mt-2 text-xs text-accent cursor-pointer hover:underline">Ver detalles</p>
+      <p className="mt-2 text-xs text-accent cursor-pointer hover:underline">
+        Ver detalles
+      </p>
     </div>
   )
 }

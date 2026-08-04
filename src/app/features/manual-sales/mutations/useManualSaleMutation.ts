@@ -21,7 +21,10 @@ export function useCreateManualOrderMutation() {
       })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al registrar la venta', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al registrar la venta',
+        color: 'danger',
+      })
     },
   })
 }

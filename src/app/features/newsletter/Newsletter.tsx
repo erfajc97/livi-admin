@@ -1,5 +1,11 @@
 import { Spinner, Tab, Tabs } from '@heroui/react'
-import { MailIcon, MegaphoneIcon, UsersIcon, UserCheckIcon, UserXIcon } from 'lucide-react'
+import {
+  MailIcon,
+  MegaphoneIcon,
+  UsersIcon,
+  UserCheckIcon,
+  UserXIcon,
+} from 'lucide-react'
 import { useNewsletterHook } from './hooks/useNewsletterHook'
 import { SubscribersTable } from './components/SubscribersTable'
 import { CampaignsList } from './components/CampaignsList'
@@ -92,7 +98,9 @@ export function Newsletter() {
       {/* Tabs */}
       <Tabs
         selectedKey={activeTab}
-        onSelectionChange={(key) => setActiveTab(key as 'subscribers' | 'campaigns')}
+        onSelectionChange={(key) =>
+          setActiveTab(key as 'subscribers' | 'campaigns')
+        }
         color="warning"
         variant="underlined"
         classNames={{
@@ -204,12 +212,18 @@ function StatsCard({
 }) {
   return (
     <div className="flex items-center gap-4 rounded-xl border border-border bg-surface p-4">
-      <div className={`rounded-lg p-2 ${accent ? 'bg-accent/10 text-accent' : 'bg-surface-raised text-text-muted'}`}>
+      <div
+        className={`rounded-lg p-2 ${accent ? 'bg-accent/10 text-accent' : 'bg-surface-raised text-text-muted'}`}
+      >
         {icon}
       </div>
       <div>
-        <p className="text-xs uppercase tracking-wider text-text-muted">{label}</p>
-        <p className={`font-heading text-2xl font-bold ${accent ? 'text-accent' : 'text-text'}`}>
+        <p className="text-xs uppercase tracking-wider text-text-muted">
+          {label}
+        </p>
+        <p
+          className={`font-heading text-2xl font-bold ${accent ? 'text-accent' : 'text-text'}`}
+        >
           {value}
         </p>
       </div>

@@ -60,7 +60,8 @@ export default function PublicidadNavbarForm({
           className="text-sm text-text-muted file:mr-4 file:rounded-lg file:border-0 file:bg-accent/10 file:px-4 file:py-2 file:text-sm file:font-medium file:text-accent hover:file:bg-accent/20"
         />
         <p className="mt-1 text-xs text-text-muted">
-          Recomendado vertical/cuadrada — se muestra como panel destacado en el mega menú.
+          Recomendado vertical/cuadrada — se muestra como panel destacado en el
+          mega menú.
         </p>
       </div>
 

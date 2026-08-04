@@ -19,7 +19,9 @@ export default function OrderSummary({
 }: OrderSummaryProps) {
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-accent/30 bg-surface p-4 sm:p-5 shadow-sm">
-      <h3 className="text-base font-semibold uppercase tracking-wide text-accent">Resumen del pedido</h3>
+      <h3 className="text-base font-semibold uppercase tracking-wide text-accent">
+        Resumen del pedido
+      </h3>
 
       <div className="flex flex-col gap-2">
         <div className="flex justify-between text-sm">
@@ -35,14 +37,20 @@ export default function OrderSummary({
         {discountAmount > 0 && (
           <div className="flex justify-between text-sm">
             <span className="text-text-muted">Descuento</span>
-            <span className="text-green-400 font-medium">-${discountAmount.toFixed(2)}</span>
+            <span className="text-green-400 font-medium">
+              -${discountAmount.toFixed(2)}
+            </span>
           </div>
         )}
 
         <div className="border-t border-border pt-2 mt-1">
           <div className="flex justify-between items-baseline">
-            <span className="text-base font-bold uppercase text-text">Total</span>
-            <span className="text-2xl font-bold text-accent">${total.toFixed(2)}</span>
+            <span className="text-base font-bold uppercase text-text">
+              Total
+            </span>
+            <span className="text-2xl font-bold text-accent">
+              ${total.toFixed(2)}
+            </span>
           </div>
         </div>
       </div>

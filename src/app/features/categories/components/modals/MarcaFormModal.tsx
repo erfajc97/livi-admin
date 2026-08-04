@@ -38,7 +38,12 @@ export default function MarcaFormModal({
       }
       footerContent={
         <div className="flex gap-2">
-          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)} isDisabled={isSubmitting}>
+          <Button
+            color="danger"
+            variant="flat"
+            onPress={() => onOpenChange(false)}
+            isDisabled={isSubmitting}
+          >
             Cancelar
           </Button>
           <Button
@@ -52,7 +57,11 @@ export default function MarcaFormModal({
         </div>
       }
     >
-      <MarcaForm formData={formData} onInputChange={onInputChange} onImageChange={onImageChange} />
+      <MarcaForm
+        formData={formData}
+        onInputChange={onInputChange}
+        onImageChange={onImageChange}
+      />
     </CustomModalNextUI>
   )
 }

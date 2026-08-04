@@ -32,11 +32,21 @@ export default function FinanceDashboardView({
   }
 
   if (!stats) {
-    return <p className="p-6 text-text-muted">No se pudieron cargar las estadísticas.</p>
+    return (
+      <p className="p-6 text-text-muted">
+        No se pudieron cargar las estadísticas.
+      </p>
+    )
   }
 
-  const overdueTotal = stats.bills.overdue.reduce((s, b) => s + Number(b.amount), 0)
-  const upcomingTotal = stats.bills.upcoming.reduce((s, b) => s + Number(b.amount), 0)
+  const overdueTotal = stats.bills.overdue.reduce(
+    (s, b) => s + Number(b.amount),
+    0,
+  )
+  const upcomingTotal = stats.bills.upcoming.reduce(
+    (s, b) => s + Number(b.amount),
+    0,
+  )
 
   return (
     <div className="flex flex-col gap-6">
@@ -63,7 +73,9 @@ export default function FinanceDashboardView({
       {/* Cuentas por Pagar — sección unificada */}
       <div className="rounded-xl border border-border bg-surface p-4 sm:p-5">
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="font-heading text-base font-semibold uppercase tracking-wide text-text">Cuentas por Pagar</h3>
+          <h3 className="font-heading text-base font-semibold uppercase tracking-wide text-text">
+            Cuentas por Pagar
+          </h3>
           <Clock size={20} className="text-warning" />
         </div>
 
@@ -74,9 +86,15 @@ export default function FinanceDashboardView({
             <div className="min-w-0">
               <p className="text-xs text-text-muted">Total pendiente</p>
               <p className="break-words text-lg font-bold text-text">
-                ${stats.bills.pendingTotal.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
+                $
+                {stats.bills.pendingTotal.toLocaleString('es-EC', {
+                  minimumFractionDigits: 2,
+                })}
               </p>
-              <p className="text-xs text-text-muted">{stats.bills.pendingCount} cuenta{stats.bills.pendingCount !== 1 ? 's' : ''}</p>
+              <p className="text-xs text-text-muted">
+                {stats.bills.pendingCount} cuenta
+                {stats.bills.pendingCount !== 1 ? 's' : ''}
+              </p>
             </div>
           </div>
           <div className="flex min-w-0 items-center gap-3 rounded-lg border border-error/30 bg-error/5 p-3">
@@ -84,9 +102,15 @@ export default function FinanceDashboardView({
             <div className="min-w-0">
               <p className="text-xs text-text-muted">Vencidas</p>
               <p className="break-words text-lg font-bold text-error">
-                ${overdueTotal.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
+                $
+                {overdueTotal.toLocaleString('es-EC', {
+                  minimumFractionDigits: 2,
+                })}
               </p>
-              <p className="text-xs text-text-muted">{stats.bills.overdueCount} cuenta{stats.bills.overdueCount !== 1 ? 's' : ''}</p>
+              <p className="text-xs text-text-muted">
+                {stats.bills.overdueCount} cuenta
+                {stats.bills.overdueCount !== 1 ? 's' : ''}
+              </p>
             </div>
           </div>
           <div className="flex min-w-0 items-center gap-3 rounded-lg border border-warning/30 bg-warning/5 p-3">
@@ -94,9 +118,15 @@ export default function FinanceDashboardView({
             <div className="min-w-0">
               <p className="text-xs text-text-muted">Próximas a vencer</p>
               <p className="break-words text-lg font-bold text-warning">
-                ${upcomingTotal.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
+                $
+                {upcomingTotal.toLocaleString('es-EC', {
+                  minimumFractionDigits: 2,
+                })}
               </p>
-              <p className="text-xs text-text-muted">{stats.bills.upcomingCount} cuenta{stats.bills.upcomingCount !== 1 ? 's' : ''}</p>
+              <p className="text-xs text-text-muted">
+                {stats.bills.upcomingCount} cuenta
+                {stats.bills.upcomingCount !== 1 ? 's' : ''}
+              </p>
             </div>
           </div>
         </div>
@@ -111,27 +141,38 @@ export default function FinanceDashboardView({
         </div>
 
         <div className="min-w-0 rounded-xl border border-border bg-surface p-4 sm:p-5">
-          <h3 className="mb-3 font-heading text-sm font-semibold uppercase tracking-wide text-text">Por Método de Pago</h3>
+          <h3 className="mb-3 font-heading text-sm font-semibold uppercase tracking-wide text-text">
+            Por Método de Pago
+          </h3>
           <div className="flex flex-col gap-2">
-            {['Payphone', 'Transferencia', 'Efectivo', 'T. Crédito'].map((method) => {
-              const total = stats.transactions
-                .filter((t) => t.type === 'expense' && t.paymentMethod === method)
-                .reduce((s, t) => s + Number(t.amount), 0)
-              const maxVal = stats.totalExpenses || 1
-              const pct = (total / maxVal) * 100
+            {['Payphone', 'Transferencia', 'Efectivo', 'T. Crédito'].map(
+              (method) => {
+                const total = stats.transactions
+                  .filter(
+                    (t) => t.type === 'expense' && t.paymentMethod === method,
+                  )
+                  .reduce((s, t) => s + Number(t.amount), 0)
+                const maxVal = stats.totalExpenses || 1
+                const pct = (total / maxVal) * 100
 
-              return (
-                <div key={method} className="flex min-w-0 items-center gap-3">
-                  <span className="w-20 shrink-0 truncate text-xs text-text-muted sm:w-28">{method}</span>
-                  <div className="h-5 min-w-0 flex-1 overflow-hidden rounded-sm bg-surface-raised">
-                    <div className="h-full rounded-sm bg-success" style={{ width: `${pct}%` }} />
+                return (
+                  <div key={method} className="flex min-w-0 items-center gap-3">
+                    <span className="w-20 shrink-0 truncate text-xs text-text-muted sm:w-28">
+                      {method}
+                    </span>
+                    <div className="h-5 min-w-0 flex-1 overflow-hidden rounded-sm bg-surface-raised">
+                      <div
+                        className="h-full rounded-sm bg-success"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                    <span className="w-16 shrink-0 text-right text-xs text-text-muted">
+                      ${total.toFixed(0)}
+                    </span>
                   </div>
-                  <span className="w-16 shrink-0 text-right text-xs text-text-muted">
-                    ${total.toFixed(0)}
-                  </span>
-                </div>
-              )
-            })}
+                )
+              },
+            )}
           </div>
         </div>
       </div>

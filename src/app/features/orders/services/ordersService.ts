@@ -12,19 +12,23 @@ interface CoreApiResponse<T> {
 
 export const ordersService = {
   getAll: async (): Promise<Order[]> => {
-    const { data } = await axiosInstance.get<CoreApiResponse<Order[]>>(API_ENDPOINTS.ORDERS)
+    const { data } = await axiosInstance.get<CoreApiResponse<Order[]>>(
+      API_ENDPOINTS.ORDERS,
+    )
     return data.data
   },
 
   getById: async (id: number): Promise<Order> => {
-    const { data } = await axiosInstance.get<CoreApiResponse<Order>>(`${API_ENDPOINTS.ORDERS}/${id}`)
+    const { data } = await axiosInstance.get<CoreApiResponse<Order>>(
+      `${API_ENDPOINTS.ORDERS}/${id}`,
+    )
     return data.data
   },
 
   update: async (id: number, payload: UpdateOrderPayload): Promise<Order> => {
     const { data } = await axiosInstance.patch<CoreApiResponse<Order>>(
       `${API_ENDPOINTS.ORDERS}/${id}`,
-      payload
+      payload,
     )
     return data.data
   },

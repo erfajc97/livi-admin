@@ -5,10 +5,16 @@ const inputClasses = { label: '!text-text' }
 
 interface ProductTypeFormProps {
   formData: ProductTypeFormData
-  onInputChange: (field: keyof ProductTypeFormData, value: string | boolean) => void
+  onInputChange: (
+    field: keyof ProductTypeFormData,
+    value: string | boolean,
+  ) => void
 }
 
-export default function ProductTypeForm({ formData, onInputChange }: ProductTypeFormProps) {
+export default function ProductTypeForm({
+  formData,
+  onInputChange,
+}: ProductTypeFormProps) {
   return (
     <div className="flex flex-col gap-4">
       <Input

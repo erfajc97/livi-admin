@@ -45,9 +45,12 @@ const useUserFormHook = ({ onModalOpenChange }: UseUserFormHookProps = {}) => {
   const { mutate: createUser, isPending: isCreating } = useCreateUserMutation()
   const { mutate: updateUser, isPending: isUpdating } = useUpdateUserMutation()
 
-  const handleInputChange = useCallback((field: string, value: string | boolean) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }, [])
+  const handleInputChange = useCallback(
+    (field: string, value: string | boolean) => {
+      setFormData((prev) => ({ ...prev, [field]: value }))
+    },
+    [],
+  )
 
   const handleToEditForm = useCallback((user: User) => {
     setFormData({
@@ -91,7 +94,8 @@ const useUserFormHook = ({ onModalOpenChange }: UseUserFormHookProps = {}) => {
             city: formData.city || undefined,
             address: formData.address || undefined,
             reference: formData.reference || undefined,
-            preferredDeliveryMethod: formData.preferredDeliveryMethod || undefined,
+            preferredDeliveryMethod:
+              formData.preferredDeliveryMethod || undefined,
           },
         },
         options,

@@ -6,14 +6,22 @@ import type { CreateCategoryPayload, UpdateCategoryPayload } from '../types'
 export const useCreateCategoryMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ data, file }: { data: CreateCategoryPayload; file?: File }) =>
-      categoriesService.createCategory(data, file),
+    mutationFn: ({
+      data,
+      file,
+    }: {
+      data: CreateCategoryPayload
+      file?: File
+    }) => categoriesService.createCategory(data, file),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] })
       addToast({ title: 'Categoría creada exitosamente', color: 'success' })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al crear la categoría', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al crear la categoría',
+        color: 'danger',
+      })
     },
   })
 }
@@ -21,14 +29,27 @@ export const useCreateCategoryMutation = () => {
 export const useUpdateCategoryMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, data, file }: { id: number; data: UpdateCategoryPayload; file?: File }) =>
-      categoriesService.updateCategory(id, data, file),
+    mutationFn: ({
+      id,
+      data,
+      file,
+    }: {
+      id: number
+      data: UpdateCategoryPayload
+      file?: File
+    }) => categoriesService.updateCategory(id, data, file),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] })
-      addToast({ title: 'Categoría actualizada exitosamente', color: 'success' })
+      addToast({
+        title: 'Categoría actualizada exitosamente',
+        color: 'success',
+      })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al actualizar la categoría', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al actualizar la categoría',
+        color: 'danger',
+      })
     },
   })
 }
@@ -60,7 +81,10 @@ export const useDeleteCategoryMutation = () => {
       addToast({ title: 'Categoría eliminada exitosamente', color: 'success' })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al eliminar la categoría', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al eliminar la categoría',
+        color: 'danger',
+      })
     },
   })
 }

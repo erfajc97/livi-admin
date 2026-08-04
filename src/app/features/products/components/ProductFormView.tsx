@@ -3,7 +3,10 @@ import { Spinner, addToast } from '@heroui/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useProductFormHook } from '../hooks/useProductFormHook'
 import { validateProductForm } from '../validators'
-import { useCreateProductMutation, useUpdateProductMutation } from '../mutations/useProductMutations'
+import {
+  useCreateProductMutation,
+  useUpdateProductMutation,
+} from '../mutations/useProductMutations'
 import { productsService } from '../services/productsService'
 import ProductForm from './ProductForm'
 import type { Product } from '../types'
@@ -13,7 +16,10 @@ interface ProductFormViewProps {
   onBack: () => void
 }
 
-export default function ProductFormView({ product, onBack }: ProductFormViewProps) {
+export default function ProductFormView({
+  product,
+  onBack,
+}: ProductFormViewProps) {
   const formHook = useProductFormHook({ productId: product?.id ?? null })
   const queryClient = useQueryClient()
   const [isSaving, setIsSaving] = useState(false)
@@ -33,28 +39,41 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
       try {
         await productsService.uploadImages(productId, formHook.imageFiles)
       } catch (err: any) {
-        addToast({ title: err?.response?.data?.message || 'Error al subir imágenes', color: 'danger' })
+        addToast({
+          title: err?.response?.data?.message || 'Error al subir imágenes',
+          color: 'danger',
+        })
       }
     }
 
     // Imagen de "La firma" (PDP) — sube y setea signatureImageUrl en el server
     if (formHook.formData.signatureImageFile) {
       try {
-        await productsService.uploadSignatureImage(productId, formHook.formData.signatureImageFile)
+        await productsService.uploadSignatureImage(
+          productId,
+          formHook.formData.signatureImageFile,
+        )
       } catch (err: any) {
-        addToast({ title: err?.response?.data?.message || 'Error al subir imagen de la firma', color: 'danger' })
+        addToast({
+          title:
+            err?.response?.data?.message || 'Error al subir imagen de la firma',
+          color: 'danger',
+        })
       }
     }
 
     // Delete removed images
     if (formHook.isEdit && formHook.fullProduct?.images) {
       const removedImages = formHook.fullProduct.images.filter(
-        (img) => !formHook.existingImages.some((e) => String(e.id) === String(img.id))
+        (img) =>
+          !formHook.existingImages.some((e) => String(e.id) === String(img.id)),
       )
       for (const img of removedImages) {
         try {
           await productsService.deleteImage(productId, img.id)
-        } catch { /* ignore */ }
+        } catch {
+          /* ignore */
+        }
       }
     }
 
@@ -63,21 +82,37 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
 
     // Variation images (after variations are created/synced)
     for (const variation of formHook.variations) {
-      if (variation.id && variation.imageFiles && variation.imageFiles.length > 0) {
+      if (
+        variation.id &&
+        variation.imageFiles &&
+        variation.imageFiles.length > 0
+      ) {
         try {
-          await productsService.uploadVariationImages(variation.id, variation.imageFiles)
-        } catch { /* ignore */ }
+          await productsService.uploadVariationImages(
+            variation.id,
+            variation.imageFiles,
+          )
+        } catch {
+          /* ignore */
+        }
       }
       if (variation.id && formHook.isEdit) {
-        const original = formHook.fullProduct?.variations?.find((v) => v.id === variation.id)
+        const original = formHook.fullProduct?.variations?.find(
+          (v) => v.id === variation.id,
+        )
         if (original?.images) {
           const removedVarImages = original.images.filter(
-            (img) => !(variation.existingImages ?? []).some((e) => String(e.id) === String(img.id))
+            (img) =>
+              !(variation.existingImages ?? []).some(
+                (e) => String(e.id) === String(img.id),
+              ),
           )
           for (const img of removedVarImages) {
             try {
               await productsService.deleteVariationImage(variation.id, img.id)
-            } catch { /* ignore */ }
+            } catch {
+              /* ignore */
+            }
           }
         }
       }
@@ -96,7 +131,9 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
       if (!stillExists) {
         try {
           await productsService.deleteVariation(orig.id)
-        } catch { /* ignore */ }
+        } catch {
+          /* ignore */
+        }
       }
     }
 
@@ -123,7 +160,9 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
             isFullBottle: false,
             sku,
           })
-        } catch { /* ignore */ }
+        } catch {
+          /* ignore */
+        }
       } else {
         // Create new
         try {
@@ -138,7 +177,10 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
           // Update the local variation with the new id for image uploads
           formHook.variations[i] = { ...v, id: created.id }
         } catch (err: any) {
-          addToast({ title: `Error creando variante: ${err?.response?.data?.message || 'Error'}`, color: 'danger' })
+          addToast({
+            title: `Error creando variante: ${err?.response?.data?.message || 'Error'}`,
+            color: 'danger',
+          })
         }
       }
     }
@@ -163,7 +205,10 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
             try {
               await uploadAndSyncImages(product.id)
               await queryClient.invalidateQueries({ queryKey: ['products'] })
-              addToast({ title: 'Producto actualizado exitosamente', color: 'success' })
+              addToast({
+                title: 'Producto actualizado exitosamente',
+                color: 'success',
+              })
               onBack()
             } finally {
               setIsSaving(false)
@@ -180,7 +225,10 @@ export default function ProductFormView({ product, onBack }: ProductFormViewProp
               await uploadAndSyncImages(createdProduct.id)
             }
             await queryClient.invalidateQueries({ queryKey: ['products'] })
-            addToast({ title: 'Producto creado exitosamente', color: 'success' })
+            addToast({
+              title: 'Producto creado exitosamente',
+              color: 'success',
+            })
             onBack()
           } finally {
             setIsSaving(false)

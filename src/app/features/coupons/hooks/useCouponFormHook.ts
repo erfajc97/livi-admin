@@ -1,6 +1,14 @@
 import { useState } from 'react'
-import type { Coupon, CouponFormData, CreateCouponPayload, UpdateCouponPayload } from '../types'
-import { useCreateCouponMutation, useUpdateCouponMutation } from '../mutations/useCouponMutations'
+import type {
+  Coupon,
+  CouponFormData,
+  CreateCouponPayload,
+  UpdateCouponPayload,
+} from '../types'
+import {
+  useCreateCouponMutation,
+  useUpdateCouponMutation,
+} from '../mutations/useCouponMutations'
 
 /** Convert UTC ISO string to Ecuador local datetime-local value (YYYY-MM-DDTHH:mm) */
 function toEcuadorLocalDatetime(isoString: string): string {
@@ -36,7 +44,10 @@ export function useCouponFormHook({ id, onSuccess }: UseCouponFormHookParams) {
   const isThereId = Boolean(id)
   const isSubmitting = createMutation.isPending || updateMutation.isPending
 
-  const onInputChange = (field: keyof CouponFormData, value: string | boolean) => {
+  const onInputChange = (
+    field: keyof CouponFormData,
+    value: string | boolean,
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
@@ -49,7 +60,9 @@ export function useCouponFormHook({ id, onSuccess }: UseCouponFormHookParams) {
       scope: coupon.scope,
       maxUses: coupon.maxUses ? String(coupon.maxUses) : '',
       singleUsePerCustomer: coupon.singleUsePerCustomer,
-      minOrderAmount: coupon.minOrderAmount ? String(coupon.minOrderAmount) : '',
+      minOrderAmount: coupon.minOrderAmount
+        ? String(coupon.minOrderAmount)
+        : '',
       isActive: coupon.isActive,
       expiresAt: coupon.expiresAt
         ? toEcuadorLocalDatetime(coupon.expiresAt)
@@ -68,7 +81,9 @@ export function useCouponFormHook({ id, onSuccess }: UseCouponFormHookParams) {
       scope: formData.scope,
       maxUses: formData.maxUses ? Number(formData.maxUses) : undefined,
       singleUsePerCustomer: formData.singleUsePerCustomer,
-      minOrderAmount: formData.minOrderAmount ? Number(formData.minOrderAmount) : undefined,
+      minOrderAmount: formData.minOrderAmount
+        ? Number(formData.minOrderAmount)
+        : undefined,
       isActive: formData.isActive,
       // Enviar como ISO con timezone Ecuador (UTC-5) para que el backend guarde la hora correcta
       expiresAt: formData.expiresAt
@@ -77,7 +92,10 @@ export function useCouponFormHook({ id, onSuccess }: UseCouponFormHookParams) {
     }
 
     if (isThereId && id) {
-      updateMutation.mutate({ id, data: base as UpdateCouponPayload }, { onSuccess })
+      updateMutation.mutate(
+        { id, data: base as UpdateCouponPayload },
+        { onSuccess },
+      )
     } else {
       createMutation.mutate(base as CreateCouponPayload, { onSuccess })
     }

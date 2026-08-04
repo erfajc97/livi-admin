@@ -6,13 +6,17 @@ import type { CreateCouponPayload, UpdateCouponPayload } from '../types'
 export const useCreateCouponMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (data: CreateCouponPayload) => couponsService.createCoupon(data),
+    mutationFn: (data: CreateCouponPayload) =>
+      couponsService.createCoupon(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['coupons'] })
       addToast({ title: 'Cupón creado exitosamente', color: 'success' })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al crear el cupón', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al crear el cupón',
+        color: 'danger',
+      })
     },
   })
 }
@@ -27,7 +31,10 @@ export const useUpdateCouponMutation = () => {
       addToast({ title: 'Cupón actualizado exitosamente', color: 'success' })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al actualizar el cupón', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al actualizar el cupón',
+        color: 'danger',
+      })
     },
   })
 }
@@ -41,7 +48,10 @@ export const useDeleteCouponMutation = () => {
       addToast({ title: 'Cupón eliminado exitosamente', color: 'success' })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al eliminar el cupón', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al eliminar el cupón',
+        color: 'danger',
+      })
     },
   })
 }

@@ -1,11 +1,11 @@
-import { Card, CardBody, CardHeader, Button, Chip } from '@heroui/react';
-import type { LandingSection } from '../types';
+import { Card, CardBody, CardHeader, Button, Chip } from '@heroui/react'
+import type { LandingSection } from '../types'
 
 interface SectionCardProps {
-  section: LandingSection;
-  onEdit: (section: LandingSection) => void;
-  onDelete: (id: number) => void;
-  onManageProducts: (section: LandingSection) => void;
+  section: LandingSection
+  onEdit: (section: LandingSection) => void
+  onDelete: (id: number) => void
+  onManageProducts: (section: LandingSection) => void
 }
 
 export function SectionCard({
@@ -19,8 +19,14 @@ export function SectionCard({
       <CardHeader className="flex justify-between items-start px-4 pt-4 pb-2">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <h3 className="font-heading text-lg font-bold text-text">{section.title}</h3>
-            <Chip size="sm" color={section.isActive ? 'success' : 'default'} variant="flat">
+            <h3 className="font-heading text-lg font-bold text-text">
+              {section.title}
+            </h3>
+            <Chip
+              size="sm"
+              color={section.isActive ? 'success' : 'default'}
+              variant="flat"
+            >
               {section.isActive ? 'Activa' : 'Inactiva'}
             </Chip>
           </div>
@@ -37,7 +43,10 @@ export function SectionCard({
       <CardBody className="px-4 pb-4">
         <div className="mb-3">
           <p className="text-sm text-text-muted mb-2">
-            <span className="font-semibold text-accent">{section.products.length}</span> producto(s)
+            <span className="font-semibold text-accent">
+              {section.products.length}
+            </span>{' '}
+            producto(s)
           </p>
 
           {section.products.length > 0 && (
@@ -96,5 +105,5 @@ export function SectionCard({
         </div>
       </CardBody>
     </Card>
-  );
+  )
 }

@@ -31,13 +31,26 @@ export default function OrdersTable({
     (item: Order, columnKey: string) => {
       switch (columnKey) {
         case 'orderNumber':
-          return <span className="font-medium text-accent">{item.orderNumber}</span>
+          return (
+            <span className="font-medium text-accent">{item.orderNumber}</span>
+          )
         case 'customerName':
-          return <span className="text-text">{item.customerName || item.userName || 'Cliente'}</span>
+          return (
+            <span className="text-text">
+              {item.customerName || item.userName || 'Cliente'}
+            </span>
+          )
         case 'paymentMethod':
-          return <span className="text-text-muted">{item.paymentMethod || 'N/A'}</span>
+          return (
+            <span className="text-text-muted">
+              {item.paymentMethod || 'N/A'}
+            </span>
+          )
         case 'paymentStatus': {
-          const ps = PAYMENT_STATUS_LABELS[item.paymentStatus || 'pending'] || { label: item.paymentStatus || 'N/A', color: 'default' as const }
+          const ps = PAYMENT_STATUS_LABELS[item.paymentStatus || 'pending'] || {
+            label: item.paymentStatus || 'N/A',
+            color: 'default' as const,
+          }
           return (
             <Chip size="sm" variant="flat" color={ps.color}>
               {ps.label}
@@ -45,7 +58,10 @@ export default function OrdersTable({
           )
         }
         case 'status': {
-          const info = STATUS_LABELS[item.status] || { label: item.status, color: 'default' as const }
+          const info = STATUS_LABELS[item.status] || {
+            label: item.status,
+            color: 'default' as const,
+          }
           return (
             <Chip size="sm" variant="flat" color={info.color}>
               {info.label}
@@ -53,7 +69,11 @@ export default function OrdersTable({
           )
         }
         case 'total':
-          return <span className="font-semibold">${Number(item.total).toFixed(2)}</span>
+          return (
+            <span className="font-semibold">
+              ${Number(item.total).toFixed(2)}
+            </span>
+          )
         case 'createdAt':
           return (
             <span className="text-xs text-text-muted">
@@ -67,21 +87,33 @@ export default function OrdersTable({
         case 'actions':
           return (
             <div className="flex gap-2">
-              <Button isIconOnly size="sm" variant="light" onPress={() => onEditStatus(item)}>
+              <Button
+                isIconOnly
+                size="sm"
+                variant="light"
+                onPress={() => onEditStatus(item)}
+              >
                 <Pencil size={16} className="text-accent" />
               </Button>
-              <Button isIconOnly size="sm" variant="light" onPress={() => onDelete(item)}>
+              <Button
+                isIconOnly
+                size="sm"
+                variant="light"
+                onPress={() => onDelete(item)}
+              >
                 <Trash2 size={16} className="text-danger" />
               </Button>
             </div>
           )
         default: {
           const value = item[columnKey as keyof Order]
-          return typeof value === 'string' || typeof value === 'number' ? value : '—'
+          return typeof value === 'string' || typeof value === 'number'
+            ? value
+            : '—'
         }
       }
     },
-    [onEditStatus, onDelete]
+    [onEditStatus, onDelete],
   )
 
   return (
@@ -89,11 +121,18 @@ export default function OrdersTable({
       items={orders.map((o) => ({ ...o, id: o.id }))}
       columns={orderColumns}
       renderCell={renderCell}
-      onRowClick={onRowClick ? (item) => onRowClick(item as unknown as Order) : undefined}
+      onRowClick={
+        onRowClick ? (item) => onRowClick(item as unknown as Order) : undefined
+      }
       isLoading={isLoading}
       emptyContent="No hay órdenes registradas"
       bottomContent={
-        <CustomPagination page={page} pages={totalPages} setPage={setPage} isLoading={isLoading} />
+        <CustomPagination
+          page={page}
+          pages={totalPages}
+          setPage={setPage}
+          isLoading={isLoading}
+        />
       }
     />
   )

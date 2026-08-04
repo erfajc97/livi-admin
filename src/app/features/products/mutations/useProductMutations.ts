@@ -6,12 +6,16 @@ import type { CreateProductPayload, UpdateProductPayload } from '../types'
 export function useCreateProductMutation() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (payload: CreateProductPayload) => productsService.createProduct(payload),
+    mutationFn: (payload: CreateProductPayload) =>
+      productsService.createProduct(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al crear el producto', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al crear el producto',
+        color: 'danger',
+      })
     },
   })
 }
@@ -26,7 +30,10 @@ export function useUpdateProductMutation() {
       queryClient.invalidateQueries({ queryKey: ['product', variables.id] })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al actualizar el producto', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al actualizar el producto',
+        color: 'danger',
+      })
     },
   })
 }
@@ -40,7 +47,10 @@ export function useDeleteProductMutation() {
       addToast({ title: 'Producto eliminado exitosamente', color: 'success' })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al eliminar el producto', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al eliminar el producto',
+        color: 'danger',
+      })
     },
   })
 }
@@ -48,14 +58,24 @@ export function useDeleteProductMutation() {
 export function useOpenBottleMutation() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ productId, mlRemaining, note }: { productId: number; mlRemaining?: number; note?: string }) =>
-      productsService.openBottle(productId, { mlRemaining, note }),
+    mutationFn: ({
+      productId,
+      mlRemaining,
+      note,
+    }: {
+      productId: number
+      mlRemaining?: number
+      note?: string
+    }) => productsService.openBottle(productId, { mlRemaining, note }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
       addToast({ title: 'Botella abierta exitosamente', color: 'success' })
     },
     onError: (error: any) => {
-      addToast({ title: error?.response?.data?.message ?? 'Error al abrir botella', color: 'danger' })
+      addToast({
+        title: error?.response?.data?.message ?? 'Error al abrir botella',
+        color: 'danger',
+      })
     },
   })
 }
@@ -63,14 +83,24 @@ export function useOpenBottleMutation() {
 export function useAdjustMlMutation() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ productId, newOpenMl, note }: { productId: number; newOpenMl: number; note?: string }) =>
-      productsService.adjustMl(productId, { newOpenMl, note }),
+    mutationFn: ({
+      productId,
+      newOpenMl,
+      note,
+    }: {
+      productId: number
+      newOpenMl: number
+      note?: string
+    }) => productsService.adjustMl(productId, { newOpenMl, note }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
       addToast({ title: 'ML ajustados exitosamente', color: 'success' })
     },
     onError: (error: any) => {
-      addToast({ title: error?.response?.data?.message ?? 'Error al ajustar ML', color: 'danger' })
+      addToast({
+        title: error?.response?.data?.message ?? 'Error al ajustar ML',
+        color: 'danger',
+      })
     },
   })
 }

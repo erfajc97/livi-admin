@@ -12,12 +12,39 @@ interface CustomModalNextUIProps {
   headerContent?: React.ReactNode
   footerContent?: React.ReactNode
   children: React.ReactNode
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | 'full'
-  placement?: 'center' | 'auto' | 'top' | 'top-center' | 'bottom' | 'bottom-center'
+  size?:
+    | 'xs'
+    | 'sm'
+    | 'md'
+    | 'lg'
+    | 'xl'
+    | '2xl'
+    | '3xl'
+    | '4xl'
+    | '5xl'
+    | 'full'
+  placement?:
+    | 'center'
+    | 'auto'
+    | 'top'
+    | 'top-center'
+    | 'bottom'
+    | 'bottom-center'
   isDismissable?: boolean
   hideCloseButton?: boolean
   scrollBehavior?: 'normal' | 'inside' | 'outside'
-  classNames?: Partial<Record<'wrapper' | 'base' | 'backdrop' | 'header' | 'body' | 'footer' | 'closeButton', string>>
+  classNames?: Partial<
+    Record<
+      | 'wrapper'
+      | 'base'
+      | 'backdrop'
+      | 'header'
+      | 'body'
+      | 'footer'
+      | 'closeButton',
+      string
+    >
+  >
 }
 
 export function CustomModalNextUI({

@@ -1,51 +1,51 @@
-@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap");
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
 @plugin './hero.ts';
 @source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 @custom-variant dark (&:is(.dark *));
 @theme {
   /* ── Tipografía ─────────────────────────────────── */
-  --font-heading: "Oswald", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Oswald', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
   /* ── Colores de marca ───────────────────────────── */
-  --color-bg:             #1B1919;
-  --color-surface:        #252222;
-  --color-surface-raised: #2E2B2B;
-  --color-accent:         #CCB377;
-  --color-accent-hover:   #B89B5E;
-  --color-text:           #FFFFFF;
-  --color-text-muted:     #A09A9A;
-  --color-border:         #3A3636;
-  --color-border-accent:  #CCB377;
-  --color-error:          #E05252;
-  --color-error-muted:    #E0525233;
-  --color-success:        #4CAF50;
-  --color-success-muted:  #4CAF5033;
-  --color-warning:        #E8A838;
-  --color-warning-muted:  #E8A83833;
-  --color-info:           #5B9BD5;
+  --color-bg: #1b1919;
+  --color-surface: #252222;
+  --color-surface-raised: #2e2b2b;
+  --color-accent: #ccb377;
+  --color-accent-hover: #b89b5e;
+  --color-text: #ffffff;
+  --color-text-muted: #a09a9a;
+  --color-border: #3a3636;
+  --color-border-accent: #ccb377;
+  --color-error: #e05252;
+  --color-error-muted: #e0525233;
+  --color-success: #4caf50;
+  --color-success-muted: #4caf5033;
+  --color-warning: #e8a838;
+  --color-warning-muted: #e8a83833;
+  --color-info: #5b9bd5;
 
   /* ── Colores de charts ────────────────────────── */
-  --color-chart-1:        #CCB377;
-  --color-chart-2:        #5B9BD5;
-  --color-chart-3:        #E05252;
-  --color-chart-4:        #E8A838;
-  --color-chart-5:        #8B7EC8;
+  --color-chart-1: #ccb377;
+  --color-chart-2: #5b9bd5;
+  --color-chart-3: #e05252;
+  --color-chart-4: #e8a838;
+  --color-chart-5: #8b7ec8;
 
   /* ── Tokens semánticos de form/UI ──────────────── */
-  --color-form-bg:         #252222;
-  --color-form-primary:    #CCB377;
-  --color-form-foreground: #1B1919;
-  --color-form-muted:      #A09A9A;
-  --color-form-border:     #3A3636;
-  --color-form-accent:     #CCB377;
+  --color-form-bg: #252222;
+  --color-form-primary: #ccb377;
+  --color-form-foreground: #1b1919;
+  --color-form-muted: #a09a9a;
+  --color-form-border: #3a3636;
+  --color-form-accent: #ccb377;
 
   /* ── Tokens de tabla/contenido ─────────────────── */
-  --color-content:         #252222;
-  --color-content-raised:  #2E2B2B;
-  --color-table-header:    #1B1919;
+  --color-content: #252222;
+  --color-content-raised: #2e2b2b;
+  --color-table-header: #1b1919;
 }
 
 /* ── Reset base ─────────────────────────────────── */
@@ -71,7 +71,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   font-weight: 600;
   letter-spacing: 0.02em;

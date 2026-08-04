@@ -21,17 +21,29 @@ interface SingleSeriesChartProps {
   emptyLabel: string
 }
 
-function SingleSeriesChart({ data, color, title, emptyLabel }: SingleSeriesChartProps) {
+function SingleSeriesChart({
+  data,
+  color,
+  title,
+  emptyLabel,
+}: SingleSeriesChartProps) {
   const total = data.reduce((sum, d) => sum + d.value, 0)
 
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="h-3 w-3 rounded-sm" style={{ backgroundColor: color }} />
-          <span className="text-xs font-semibold uppercase tracking-wide text-text-muted">{title}</span>
+          <div
+            className="h-3 w-3 rounded-sm"
+            style={{ backgroundColor: color }}
+          />
+          <span className="text-xs font-semibold uppercase tracking-wide text-text-muted">
+            {title}
+          </span>
         </div>
-        <span className="text-sm font-bold" style={{ color }}>${total.toFixed(2)}</span>
+        <span className="text-sm font-bold" style={{ color }}>
+          ${total.toFixed(2)}
+        </span>
       </div>
       {total === 0 || data.length === 0 ? (
         <div className="flex h-40 items-center justify-center rounded-lg border border-dashed border-border bg-bg">
@@ -40,16 +52,40 @@ function SingleSeriesChart({ data, color, title, emptyLabel }: SingleSeriesChart
       ) : (
         <div className="h-40 w-full min-w-0">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+            <BarChart
+              data={data}
+              margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="#3A3636" />
-              <XAxis dataKey="label" tick={{ fill: '#A09A9A', fontSize: 10 }} axisLine={{ stroke: '#3A3636' }} />
-              <YAxis tick={{ fill: '#A09A9A', fontSize: 10 }} axisLine={{ stroke: '#3A3636' }} width={50} />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#252222', border: '1px solid #3A3636', borderRadius: 8, color: '#fff' }}
-                labelStyle={{ color: '#A09A9A' }}
-                formatter={(value: any) => [`$${Number(value).toFixed(2)}`, title] as any}
+              <XAxis
+                dataKey="label"
+                tick={{ fill: '#A09A9A', fontSize: 10 }}
+                axisLine={{ stroke: '#3A3636' }}
               />
-              <Bar dataKey="value" name={title} fill={color} radius={[4, 4, 0, 0]} maxBarSize={48} />
+              <YAxis
+                tick={{ fill: '#A09A9A', fontSize: 10 }}
+                axisLine={{ stroke: '#3A3636' }}
+                width={50}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#252222',
+                  border: '1px solid #3A3636',
+                  borderRadius: 8,
+                  color: '#fff',
+                }}
+                labelStyle={{ color: '#A09A9A' }}
+                formatter={(value: any) =>
+                  [`$${Number(value).toFixed(2)}`, title] as any
+                }
+              />
+              <Bar
+                dataKey="value"
+                name={title}
+                fill={color}
+                radius={[4, 4, 0, 0]}
+                maxBarSize={48}
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -64,7 +100,10 @@ export default function CashFlowChart({ data }: CashFlowChartProps) {
     .map((entry) => ({
       date: entry.date,
       value: Number(entry.income || 0),
-      label: new Date(entry.date + 'T00:00:00').toLocaleDateString('es-EC', { day: '2-digit', month: 'short' }),
+      label: new Date(entry.date + 'T00:00:00').toLocaleDateString('es-EC', {
+        day: '2-digit',
+        month: 'short',
+      }),
     }))
     .filter((d) => d.value > 0)
 
@@ -72,7 +111,10 @@ export default function CashFlowChart({ data }: CashFlowChartProps) {
     .map((entry) => ({
       date: entry.date,
       value: Number(entry.expense || 0),
-      label: new Date(entry.date + 'T00:00:00').toLocaleDateString('es-EC', { day: '2-digit', month: 'short' }),
+      label: new Date(entry.date + 'T00:00:00').toLocaleDateString('es-EC', {
+        day: '2-digit',
+        month: 'short',
+      }),
     }))
     .filter((d) => d.value > 0)
 

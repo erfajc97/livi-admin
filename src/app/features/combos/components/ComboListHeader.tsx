@@ -7,7 +7,11 @@ interface ComboListHeaderProps {
   onCreate: () => void
 }
 
-export default function ComboListHeader({ search, onSearchChange, onCreate }: ComboListHeaderProps) {
+export default function ComboListHeader({
+  search,
+  onSearchChange,
+  onCreate,
+}: ComboListHeaderProps) {
   return (
     <div className="flex items-center justify-between gap-4">
       <Input
@@ -22,7 +26,11 @@ export default function ComboListHeader({ search, onSearchChange, onCreate }: Co
         }}
         className="max-w-sm"
       />
-      <Button color="warning" startContent={<Plus size={18} />} onPress={onCreate}>
+      <Button
+        color="warning"
+        startContent={<Plus size={18} />}
+        onPress={onCreate}
+      >
         Nuevo Combo
       </Button>
     </div>

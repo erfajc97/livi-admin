@@ -6,7 +6,11 @@ interface WelcomeBannerProps {
   useBgImage?: boolean
 }
 
-export default function WelcomeBanner({ userName, subtitle, useBgImage }: WelcomeBannerProps) {
+export default function WelcomeBanner({
+  userName,
+  subtitle,
+  useBgImage,
+}: WelcomeBannerProps) {
   if (useBgImage) {
     return (
       <div className="relative overflow-hidden rounded-2xl border border-border min-h-[200px] flex items-center">

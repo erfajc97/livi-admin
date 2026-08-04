@@ -7,9 +7,16 @@ import type { ComboFormData, ComboProductRow } from '../types'
 interface ComboFormProps {
   formData: ComboFormData
   productRows: ComboProductRow[]
-  updateField: <K extends keyof ComboFormData>(key: K, value: ComboFormData[K]) => void
+  updateField: <K extends keyof ComboFormData>(
+    key: K,
+    value: ComboFormData[K],
+  ) => void
   addProductRow: () => void
-  updateProductRow: (index: number, field: keyof ComboProductRow, value: string) => void
+  updateProductRow: (
+    index: number,
+    field: keyof ComboProductRow,
+    value: string,
+  ) => void
   removeProductRow: (index: number) => void
   onImageChange: (file: File | null) => void
   onSubmit: () => void
@@ -46,7 +53,9 @@ export default function ComboForm({
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="flex flex-col gap-4 rounded-xl border border-border bg-surface p-5">
-          <h3 className="text-sm font-medium text-text-muted uppercase">Información general</h3>
+          <h3 className="text-sm font-medium text-text-muted uppercase">
+            Información general
+          </h3>
 
           <Input
             label="Nombre del combo"
@@ -67,7 +76,11 @@ export default function ComboForm({
             <label className="text-sm text-text">Imagen del combo</label>
             {(formData.imageUrl || formData.imageFile) && (
               <img
-                src={formData.imageFile ? URL.createObjectURL(formData.imageFile) : formData.imageUrl}
+                src={
+                  formData.imageFile
+                    ? URL.createObjectURL(formData.imageFile)
+                    : formData.imageUrl
+                }
                 alt="Preview"
                 className="h-32 w-32 rounded-lg object-cover"
               />
@@ -75,7 +88,11 @@ export default function ComboForm({
             <div className="flex items-center gap-2">
               <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-border bg-bg px-4 py-2 text-sm text-text hover:bg-surface">
                 <Upload size={16} />
-                <span>{formData.imageFile || formData.imageUrl ? 'Cambiar imagen' : 'Subir imagen'}</span>
+                <span>
+                  {formData.imageFile || formData.imageUrl
+                    ? 'Cambiar imagen'
+                    : 'Subir imagen'}
+                </span>
                 <input
                   type="file"
                   accept="image/*"
@@ -129,8 +146,15 @@ export default function ComboForm({
 
         <div className="flex flex-col gap-4 rounded-xl border border-border bg-surface p-5">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-text-muted uppercase">Productos del combo</h3>
-            <Button size="sm" variant="flat" startContent={<Plus size={16} />} onPress={addProductRow}>
+            <h3 className="text-sm font-medium text-text-muted uppercase">
+              Productos del combo
+            </h3>
+            <Button
+              size="sm"
+              variant="flat"
+              startContent={<Plus size={16} />}
+              onPress={addProductRow}
+            >
               Agregar
             </Button>
           </div>

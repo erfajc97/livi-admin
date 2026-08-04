@@ -26,26 +26,35 @@ export function useManualSaleHook() {
   const allProducts = paginatedProducts?.data ?? []
 
   // Stable key: combos identified by comboId, products by variationId, base products by productId
-  const itemKey = (i: { comboId?: number; productVariationId?: number; productId?: number }) =>
-    i.comboId ? `combo-${i.comboId}` : i.productVariationId ? `var-${i.productVariationId}` : `prod-${i.productId}`
+  const itemKey = (i: {
+    comboId?: number
+    productVariationId?: number
+    productId?: number
+  }) =>
+    i.comboId
+      ? `combo-${i.comboId}`
+      : i.productVariationId
+        ? `var-${i.productVariationId}`
+        : `prod-${i.productId}`
 
-  const addItem = useCallback(
-    (newItem: Omit<ManualSaleItem, 'quantity'>) => {
-      setItems((prev) => {
-        const key = itemKey(newItem)
-        const existing = prev.find((i) => itemKey(i) === key)
-        if (existing) {
-          return prev.map((i) => (itemKey(i) === key ? { ...i, quantity: i.quantity + 1 } : i))
-        }
-        return [...prev, { ...newItem, quantity: 1 }]
-      })
-    },
-    [],
-  )
+  const addItem = useCallback((newItem: Omit<ManualSaleItem, 'quantity'>) => {
+    setItems((prev) => {
+      const key = itemKey(newItem)
+      const existing = prev.find((i) => itemKey(i) === key)
+      if (existing) {
+        return prev.map((i) =>
+          itemKey(i) === key ? { ...i, quantity: i.quantity + 1 } : i,
+        )
+      }
+      return [...prev, { ...newItem, quantity: 1 }]
+    })
+  }, [])
 
   const updateItemQuantity = useCallback((key: string, quantity: number) => {
     if (quantity < 1) return
-    setItems((prev) => prev.map((i) => (itemKey(i) === key ? { ...i, quantity } : i)))
+    setItems((prev) =>
+      prev.map((i) => (itemKey(i) === key ? { ...i, quantity } : i)),
+    )
   }, [])
 
   const removeItem = useCallback((key: string) => {
@@ -54,7 +63,7 @@ export function useManualSaleHook() {
 
   const subtotal = useMemo(
     () => items.reduce((sum, i) => sum + i.price * i.quantity, 0),
-    [items]
+    [items],
   )
 
   const discountAmount = useMemo(() => {
@@ -63,7 +72,10 @@ export function useManualSaleHook() {
     return val // fixed or per_product
   }, [subtotal, discountType, discountValue])
 
-  const total = useMemo(() => Math.max(0, subtotal - discountAmount), [subtotal, discountAmount])
+  const total = useMemo(
+    () => Math.max(0, subtotal - discountAmount),
+    [subtotal, discountAmount],
+  )
 
   const orderNumber = useMemo(() => {
     const now = new Date()

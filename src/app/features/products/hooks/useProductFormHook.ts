@@ -1,14 +1,25 @@
 import { useState, useCallback, useRef } from 'react'
 import { useProductByIdQuery } from '@/app/tanstack-queries/productsQuery'
 import { INITIAL_FORM_DATA } from '../data'
-import type { ProductImage, ProductFormData, CreateProductPayload, VariationRow, Gender, TimeOfDay, Concentration, Projection } from '../types'
+import type {
+  ProductImage,
+  ProductFormData,
+  CreateProductPayload,
+  VariationRow,
+  Gender,
+  TimeOfDay,
+  Concentration,
+  Projection,
+} from '../types'
 
 interface UseProductFormHookParams {
   productId: number | null
 }
 
 export function useProductFormHook({ productId }: UseProductFormHookParams) {
-  const [formData, setFormData] = useState<ProductFormData>({ ...INITIAL_FORM_DATA })
+  const [formData, setFormData] = useState<ProductFormData>({
+    ...INITIAL_FORM_DATA,
+  })
   const [variations, setVariations] = useState<VariationRow[]>([])
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [existingImages, setExistingImages] = useState<ProductImage[]>([])
@@ -16,7 +27,10 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
   const loadedProductIdRef = useRef<number | null>(null)
 
   const isEdit = productId !== null
-  const { data: fullProduct, isLoading } = useProductByIdQuery(productId ?? 0, isEdit)
+  const { data: fullProduct, isLoading } = useProductByIdQuery(
+    productId ?? 0,
+    isEdit,
+  )
 
   // Load product data into form when query resolves — no useEffect needed
   if (fullProduct && loadedProductIdRef.current !== fullProduct.id) {
@@ -24,7 +38,11 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
     console.log('[ProductFormHook] Loading product:', fullProduct.id, {
       images: fullProduct.images?.length ?? 0,
       variations: fullProduct.variations?.length ?? 0,
-      variationImages: fullProduct.variations?.map((v: any) => ({ id: v.id, name: v.name, images: v.images?.length ?? 0 })),
+      variationImages: fullProduct.variations?.map((v: any) => ({
+        id: v.id,
+        name: v.name,
+        images: v.images?.length ?? 0,
+      })),
     })
     setFormData({
       name: fullProduct.name,
@@ -43,15 +61,25 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
       discount: fullProduct.discount ? String(fullProduct.discount) : '',
       detailDescription: fullProduct.detailDescription ?? '',
       benefits: fullProduct.benefits
-        ? (() => { try { return (JSON.parse(fullProduct.benefits) as string[]).join('\n') } catch { return fullProduct.benefits } })()
+        ? (() => {
+            try {
+              return (JSON.parse(fullProduct.benefits) as string[]).join('\n')
+            } catch {
+              return fullProduct.benefits
+            }
+          })()
         : '',
       // ── PDP editorial ──
       scentProfileTitle: fullProduct.scentProfileTitle ?? '',
       scentSections: fullProduct.scentSections ?? [],
       mood: fullProduct.mood ?? [],
       occasion: fullProduct.occasion ?? [],
-      longevity: fullProduct.longevity != null ? String(fullProduct.longevity) : '',
-      projectionScore: fullProduct.projectionScore != null ? String(fullProduct.projectionScore) : '',
+      longevity:
+        fullProduct.longevity != null ? String(fullProduct.longevity) : '',
+      projectionScore:
+        fullProduct.projectionScore != null
+          ? String(fullProduct.projectionScore)
+          : '',
       signatureTitle: fullProduct.signatureTitle ?? '',
       signatureDescription: fullProduct.signatureDescription ?? '',
       signatureImageUrl: fullProduct.signatureImageUrl ?? '',
@@ -72,13 +100,16 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
           mlSize: v.mlSize ? String(v.mlSize) : '',
           sku: v.sku ?? '',
           existingImages: v.images,
-        }))
+        })),
     )
   }
 
-  const updateField = useCallback(<K extends keyof ProductFormData>(key: K, value: ProductFormData[K]) => {
-    setFormData((prev) => ({ ...prev, [key]: value }))
-  }, [])
+  const updateField = useCallback(
+    <K extends keyof ProductFormData>(key: K, value: ProductFormData[K]) => {
+      setFormData((prev) => ({ ...prev, [key]: value }))
+    },
+    [],
+  )
 
   const resetForm = useCallback(() => {
     setFormData({ ...INITIAL_FORM_DATA })
@@ -104,16 +135,26 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
   }, [])
 
   const removeExistingImage = useCallback((imageId: number | string) => {
-    setExistingImages((prev) => prev.filter((img) => String(img.id) !== String(imageId)))
+    setExistingImages((prev) =>
+      prev.filter((img) => String(img.id) !== String(imageId)),
+    )
   }, [])
 
   const addVariation = useCallback(() => {
-    setVariations((prev) => [...prev, { name: '', price: '', mlSize: '', sku: '' }])
+    setVariations((prev) => [
+      ...prev,
+      { name: '', price: '', mlSize: '', sku: '' },
+    ])
   }, [])
 
-  const updateVariation = useCallback((index: number, field: keyof VariationRow, value: string | boolean) => {
-    setVariations((prev) => prev.map((v, i) => (i === index ? { ...v, [field]: value } : v)))
-  }, [])
+  const updateVariation = useCallback(
+    (index: number, field: keyof VariationRow, value: string | boolean) => {
+      setVariations((prev) =>
+        prev.map((v, i) => (i === index ? { ...v, [field]: value } : v)),
+      )
+    },
+    [],
+  )
 
   const removeVariation = useCallback((index: number) => {
     setVariations((prev) => prev.filter((_, i) => i !== index))
@@ -122,30 +163,48 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
   const addVariationImages = useCallback((index: number, files: File[]) => {
     setVariations((prev) =>
       prev.map((v, i) =>
-        i === index ? { ...v, imageFiles: [...(v.imageFiles ?? []), ...files] } : v
-      )
+        i === index
+          ? { ...v, imageFiles: [...(v.imageFiles ?? []), ...files] }
+          : v,
+      ),
     )
   }, [])
 
-  const removeVariationNewImage = useCallback((varIndex: number, imgIndex: number) => {
-    setVariations((prev) =>
-      prev.map((v, i) =>
-        i === varIndex
-          ? { ...v, imageFiles: (v.imageFiles ?? []).filter((_, j) => j !== imgIndex) }
-          : v
+  const removeVariationNewImage = useCallback(
+    (varIndex: number, imgIndex: number) => {
+      setVariations((prev) =>
+        prev.map((v, i) =>
+          i === varIndex
+            ? {
+                ...v,
+                imageFiles: (v.imageFiles ?? []).filter(
+                  (_, j) => j !== imgIndex,
+                ),
+              }
+            : v,
+        ),
       )
-    )
-  }, [])
+    },
+    [],
+  )
 
-  const removeVariationExistingImage = useCallback((varIndex: number, imageId: number) => {
-    setVariations((prev) =>
-      prev.map((v, i) =>
-        i === varIndex
-          ? { ...v, existingImages: (v.existingImages ?? []).filter((img) => img.id !== imageId) }
-          : v
+  const removeVariationExistingImage = useCallback(
+    (varIndex: number, imageId: number) => {
+      setVariations((prev) =>
+        prev.map((v, i) =>
+          i === varIndex
+            ? {
+                ...v,
+                existingImages: (v.existingImages ?? []).filter(
+                  (img) => img.id !== imageId,
+                ),
+              }
+            : v,
+        ),
       )
-    )
-  }, [])
+    },
+    [],
+  )
 
   const buildPayload = useCallback((): CreateProductPayload => {
     const raw = {
@@ -160,20 +219,32 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
       bajoPedido: formData.bajoPedido,
       gender: (formData.gender || undefined) as Gender | undefined,
       timeOfDay: (formData.timeOfDay || undefined) as TimeOfDay | undefined,
-      concentration: (formData.concentration || undefined) as Concentration | undefined,
+      concentration: (formData.concentration || undefined) as
+        | Concentration
+        | undefined,
       projection: (formData.projection || undefined) as Projection | undefined,
       discount: formData.discount ? Number(formData.discount) : undefined,
       detailDescription: formData.detailDescription.trim() || undefined,
       benefits: formData.benefits.trim()
-        ? JSON.stringify(formData.benefits.trim().split('\n').map((l) => l.trim()).filter(Boolean))
+        ? JSON.stringify(
+            formData.benefits
+              .trim()
+              .split('\n')
+              .map((l) => l.trim())
+              .filter(Boolean),
+          )
         : undefined,
       // ── PDP editorial ── (arrays se envían siempre para permitir vaciarlos)
       scentProfileTitle: formData.scentProfileTitle.trim() || undefined,
       scentSections: formData.scentSections,
       mood: formData.mood,
       occasion: formData.occasion,
-      longevity: formData.longevity !== '' ? Number(formData.longevity) : undefined,
-      projectionScore: formData.projectionScore !== '' ? Number(formData.projectionScore) : undefined,
+      longevity:
+        formData.longevity !== '' ? Number(formData.longevity) : undefined,
+      projectionScore:
+        formData.projectionScore !== ''
+          ? Number(formData.projectionScore)
+          : undefined,
       signatureTitle: formData.signatureTitle.trim() || undefined,
       signatureDescription: formData.signatureDescription.trim() || undefined,
       signatureImageUrl: formData.signatureImageUrl.trim() || undefined,

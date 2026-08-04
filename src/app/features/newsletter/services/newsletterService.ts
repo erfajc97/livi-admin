@@ -12,12 +12,20 @@ export const newsletterService = {
   // ─── Subscribers ──────────────────────────────────────
 
   async getSubscribers(): Promise<Subscriber[]> {
-    const { data } = await axiosInstance.get(API_ENDPOINTS.NEWSLETTER_SUBSCRIBERS)
-    return Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : []
+    const { data } = await axiosInstance.get(
+      API_ENDPOINTS.NEWSLETTER_SUBSCRIBERS,
+    )
+    return Array.isArray(data)
+      ? data
+      : Array.isArray(data?.data)
+        ? data.data
+        : []
   },
 
   async getSubscriberStats(): Promise<SubscriberStats> {
-    const { data } = await axiosInstance.get(API_ENDPOINTS.NEWSLETTER_SUBSCRIBERS_STATS)
+    const { data } = await axiosInstance.get(
+      API_ENDPOINTS.NEWSLETTER_SUBSCRIBERS_STATS,
+    )
     return data?.data ?? data
   },
 
@@ -29,20 +37,32 @@ export const newsletterService = {
 
   async getCampaigns(): Promise<Campaign[]> {
     const { data } = await axiosInstance.get(API_ENDPOINTS.NEWSLETTER_CAMPAIGNS)
-    return Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : []
+    return Array.isArray(data)
+      ? data
+      : Array.isArray(data?.data)
+        ? data.data
+        : []
   },
 
   async getCampaignById(id: number): Promise<Campaign> {
-    const { data } = await axiosInstance.get(`${API_ENDPOINTS.NEWSLETTER_CAMPAIGNS}/${id}`)
+    const { data } = await axiosInstance.get(
+      `${API_ENDPOINTS.NEWSLETTER_CAMPAIGNS}/${id}`,
+    )
     return data?.data ?? data
   },
 
   async createCampaign(payload: CreateCampaignPayload): Promise<Campaign> {
-    const { data } = await axiosInstance.post(API_ENDPOINTS.NEWSLETTER_CAMPAIGNS, payload)
+    const { data } = await axiosInstance.post(
+      API_ENDPOINTS.NEWSLETTER_CAMPAIGNS,
+      payload,
+    )
     return data?.data ?? data
   },
 
-  async updateCampaign(id: number, payload: UpdateCampaignPayload): Promise<Campaign> {
+  async updateCampaign(
+    id: number,
+    payload: UpdateCampaignPayload,
+  ): Promise<Campaign> {
     const { data } = await axiosInstance.patch(
       `${API_ENDPOINTS.NEWSLETTER_CAMPAIGNS}/${id}`,
       payload,

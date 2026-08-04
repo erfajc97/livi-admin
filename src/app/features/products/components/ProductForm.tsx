@@ -8,19 +8,31 @@ import FormSectionInventory from './FormSectionInventory'
 import FormSectionFragrance from './FormSectionFragrance'
 import FormSectionEditorial from './FormSectionEditorial'
 import FormSectionVariations from './FormSectionVariations'
-import type { Product, ProductFormData, ProductImage, VariationRow } from '../types'
+import type {
+  Product,
+  ProductFormData,
+  ProductImage,
+  VariationRow,
+} from '../types'
 
 interface ProductFormProps {
   formData: ProductFormData
   variations: VariationRow[]
   imagePreviews: string[]
   existingImages: ProductImage[]
-  updateField: <K extends keyof ProductFormData>(key: K, value: ProductFormData[K]) => void
+  updateField: <K extends keyof ProductFormData>(
+    key: K,
+    value: ProductFormData[K],
+  ) => void
   addImageFiles: (files: File[]) => void
   removeNewImage: (index: number) => void
   removeExistingImage: (imageId: number) => void
   addVariation: () => void
-  updateVariation: (index: number, field: keyof VariationRow, value: string | boolean) => void
+  updateVariation: (
+    index: number,
+    field: keyof VariationRow,
+    value: string | boolean,
+  ) => void
   removeVariation: (index: number) => void
   addVariationImages: (varIndex: number, files: File[]) => void
   removeVariationNewImage: (varIndex: number, imgIndex: number) => void
@@ -71,7 +83,12 @@ export default function ProductForm({
 
       {/* Header */}
       <div className="flex items-center gap-3 sm:gap-4">
-        <Button isIconOnly variant="light" onPress={onBack} isDisabled={isSubmitting}>
+        <Button
+          isIconOnly
+          variant="light"
+          onPress={onBack}
+          isDisabled={isSubmitting}
+        >
           <ArrowLeft size={20} className="text-text" />
         </Button>
         <h2 className="text-lg sm:text-xl font-semibold text-text truncate">
@@ -110,7 +127,12 @@ export default function ProductForm({
           <FormSectionCategory formData={formData} updateField={updateField} />
           <FormSectionPricing formData={formData} updateField={updateField} />
           <FormSectionFragrance formData={formData} updateField={updateField} />
-          <FormSectionInventory formData={formData} updateField={updateField} product={fullProduct} variations={variations} />
+          <FormSectionInventory
+            formData={formData}
+            updateField={updateField}
+            product={fullProduct}
+            variations={variations}
+          />
         </div>
       </div>
 
@@ -120,7 +142,8 @@ export default function ProductForm({
           <div className="rounded-xl border border-danger/40 bg-danger/5 p-4">
             <p className="mb-2 flex items-center gap-2 text-sm font-medium text-danger">
               <AlertCircle size={16} />
-              Completa estos campos para {isEdit ? 'guardar' : 'crear el producto'}
+              Completa estos campos para{' '}
+              {isEdit ? 'guardar' : 'crear el producto'}
             </p>
             <ul className="flex list-disc flex-col gap-1 pl-5 text-xs text-text-muted">
               {errors.map((error) => (
@@ -131,7 +154,12 @@ export default function ProductForm({
         )}
 
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3">
-          <Button variant="flat" onPress={onBack} isDisabled={isSubmitting} className="h-10">
+          <Button
+            variant="flat"
+            onPress={onBack}
+            isDisabled={isSubmitting}
+            className="h-10"
+          >
             Cancelar
           </Button>
           <Button

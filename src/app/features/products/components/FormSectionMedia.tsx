@@ -28,7 +28,9 @@ export default function FormSectionMedia({
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
-    const files = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith('image/'))
+    const files = Array.from(e.dataTransfer.files).filter((f) =>
+      f.type.startsWith('image/'),
+    )
     if (files.length > 0) onAddFiles(files)
   }
 
@@ -36,7 +38,9 @@ export default function FormSectionMedia({
 
   return (
     <div className="rounded-xl border border-border bg-surface p-5">
-      <h3 className="mb-4 text-lg font-semibold text-text">Imágenes del producto</h3>
+      <h3 className="mb-4 text-lg font-semibold text-text">
+        Imágenes del producto
+      </h3>
 
       {/* Existing images */}
       {existingImages.length > 0 && (
@@ -47,7 +51,10 @@ export default function FormSectionMedia({
                 src={img.url}
                 alt={img.alt ?? 'Imagen del producto'}
                 className="h-28 w-full rounded-lg object-cover bg-bg"
-                onError={(e) => { (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23333" width="100" height="100"/><text x="50" y="55" text-anchor="middle" fill="%23666" font-size="12">Sin imagen</text></svg>' }}
+                onError={(e) => {
+                  ;(e.target as HTMLImageElement).src =
+                    'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23333" width="100" height="100"/><text x="50" y="55" text-anchor="middle" fill="%23666" font-size="12">Sin imagen</text></svg>'
+                }}
               />
               <Button
                 isIconOnly
@@ -102,7 +109,9 @@ export default function FormSectionMedia({
           <ImageIcon size={40} className="text-text-muted" />
         )}
         <p className="mt-2 text-sm text-text-muted">
-          {hasImages ? 'Agregar más imágenes' : 'Arrastra imágenes o haz clic para seleccionar'}
+          {hasImages
+            ? 'Agregar más imágenes'
+            : 'Arrastra imágenes o haz clic para seleccionar'}
         </p>
         <p className="mt-1 text-xs text-text-muted">Máximo 10 imágenes</p>
       </div>

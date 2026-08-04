@@ -40,11 +40,7 @@ export default function DeleteModal({
           >
             <p className="text-text">Cancelar</p>
           </Button>
-          <Button
-            color="danger"
-            isLoading={isPending}
-            onPress={handleDelete}
-          >
+          <Button color="danger" isLoading={isPending} onPress={handleDelete}>
             Eliminar
           </Button>
         </>

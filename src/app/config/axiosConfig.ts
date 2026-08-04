@@ -29,7 +29,8 @@ axiosInstance.interceptors.request.use((config) => {
 })
 
 const isAuthEndpoint = (url?: string) =>
-  !!url && (url.includes(API_ENDPOINTS.LOGIN) || url.includes(API_ENDPOINTS.RENEW_TOKEN))
+  !!url &&
+  (url.includes(API_ENDPOINTS.LOGIN) || url.includes(API_ENDPOINTS.RENEW_TOKEN))
 
 const isOnLoginPage = () =>
   typeof window !== 'undefined' && window.location.pathname.startsWith('/login')
@@ -46,13 +47,22 @@ axiosInstance.interceptors.response.use(
     const hasRetried = originalRequest._retry
     const fromAuthEndpoint = isAuthEndpoint(originalRequest?.url)
 
-    if (error.response?.status === 502 && !fromAuthEndpoint && !isOnLoginPage()) {
+    if (
+      error.response?.status === 502 &&
+      !fromAuthEndpoint &&
+      !isOnLoginPage()
+    ) {
       useAuthStore.getState().removeToken()
       window.location.href = '/login'
       return Promise.reject(error)
     }
 
-    if (error.response?.status === 401 && refreshToken && !hasRetried && !fromAuthEndpoint) {
+    if (
+      error.response?.status === 401 &&
+      refreshToken &&
+      !hasRetried &&
+      !fromAuthEndpoint
+    ) {
       originalRequest._retry = true
       try {
         const { data } = await axiosInstance.post<{
@@ -60,8 +70,10 @@ axiosInstance.interceptors.response.use(
           data?: { access_token: string; refresh_token: string }
         }>(API_ENDPOINTS.RENEW_TOKEN, { refresh_token: refreshToken })
 
-        const newToken = data?.content?.access_token ?? data?.data?.access_token ?? ''
-        const newRefreshToken = data?.content?.refresh_token ?? data?.data?.refresh_token ?? ''
+        const newToken =
+          data?.content?.access_token ?? data?.data?.access_token ?? ''
+        const newRefreshToken =
+          data?.content?.refresh_token ?? data?.data?.refresh_token ?? ''
 
         let decoded: { exp: number }
         try {
@@ -86,7 +98,11 @@ axiosInstance.interceptors.response.use(
       }
     }
 
-    if (error.response?.status === 401 && !fromAuthEndpoint && !isOnLoginPage()) {
+    if (
+      error.response?.status === 401 &&
+      !fromAuthEndpoint &&
+      !isOnLoginPage()
+    ) {
       useAuthStore.getState().removeToken()
       window.location.href = '/login'
     }

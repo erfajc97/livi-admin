@@ -15,7 +15,7 @@ export function useMovimientosHook(transactions: Transaction[]) {
         t.category.toLowerCase().includes(q) ||
         t.paymentMethod?.toLowerCase().includes(q) ||
         t.description?.toLowerCase().includes(q) ||
-        t.type.toLowerCase().includes(q)
+        t.type.toLowerCase().includes(q),
     )
   }, [transactions, search])
 

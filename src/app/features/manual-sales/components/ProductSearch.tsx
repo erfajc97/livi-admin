@@ -12,7 +12,10 @@ interface ProductSearchProps {
   onAddItem: (item: Omit<ManualSaleItem, 'quantity'>) => void
 }
 
-export default function ProductSearch({ products, onAddItem }: ProductSearchProps) {
+export default function ProductSearch({
+  products,
+  onAddItem,
+}: ProductSearchProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedKey, setSelectedKey] = useState<React.Key | null>(null)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
@@ -21,7 +24,9 @@ export default function ProductSearch({ products, onAddItem }: ProductSearchProp
   const filteredProducts = useMemo(() => {
     if (!searchTerm) return products.slice(0, 50)
     const lower = searchTerm.toLowerCase()
-    return products.filter((p) => p.name.toLowerCase().includes(lower)).slice(0, 50)
+    return products
+      .filter((p) => p.name.toLowerCase().includes(lower))
+      .slice(0, 50)
   }, [products, searchTerm])
 
   const handleSelectProduct = async (key: React.Key | null) => {
@@ -31,18 +36,35 @@ export default function ProductSearch({ products, onAddItem }: ProductSearchProp
     setSelectedKey(null) // reset so the same product can be picked again later
     setLoadingVariations(true)
     try {
-      const { data } = await axiosInstance.get(`${API_ENDPOINTS.PRODUCTS}/${productId}?includeVariations=true`)
+      const { data } = await axiosInstance.get(
+        `${API_ENDPOINTS.PRODUCTS}/${productId}?includeVariations=true`,
+      )
       const fullProduct = data?.data ?? data
-      const variations = fullProduct.variations?.filter((v: any) => v.isActive) ?? []
+      const variations =
+        fullProduct.variations?.filter((v: any) => v.isActive) ?? []
       if (variations.length > 0) {
         setSelectedProduct(fullProduct)
       } else {
-        onAddItem({ productId: fullProduct.id, productVariationId: 0, productName: fullProduct.name, variationLabel: 'Base', imageUrl: fullProduct.imageUrl, price: fullProduct.price })
+        onAddItem({
+          productId: fullProduct.id,
+          productVariationId: 0,
+          productName: fullProduct.name,
+          variationLabel: 'Base',
+          imageUrl: fullProduct.imageUrl,
+          price: fullProduct.price,
+        })
       }
     } catch {
       const product = products.find((p) => p.id === productId)
       if (product) {
-        onAddItem({ productId: product.id, productVariationId: 0, productName: product.name, variationLabel: 'Base', imageUrl: product.imageUrl, price: product.price })
+        onAddItem({
+          productId: product.id,
+          productVariationId: 0,
+          productName: product.name,
+          variationLabel: 'Base',
+          imageUrl: product.imageUrl,
+          price: product.price,
+        })
       }
     } finally {
       setLoadingVariations(false)
@@ -81,26 +103,43 @@ export default function ProductSearch({ products, onAddItem }: ProductSearchProp
         onSelectionChange={handleSelectProduct}
         defaultFilter={() => true}
         allowsCustomValue
-        inputProps={{ classNames: { label: '!text-text', input: '!text-text' } }}
-        listboxProps={{ className: 'bg-surface text-text max-h-64 overflow-y-auto' }}
-        popoverProps={{ classNames: { content: 'bg-surface border border-border' } }}
+        inputProps={{
+          classNames: { label: '!text-text', input: '!text-text' },
+        }}
+        listboxProps={{
+          className: 'bg-surface text-text max-h-64 overflow-y-auto',
+        }}
+        popoverProps={{
+          classNames: { content: 'bg-surface border border-border' },
+        }}
       >
         {(product) => (
           <AutocompleteItem
             key={String(product.id)}
             textValue={product.name}
-            classNames={{ base: 'text-text data-[hover=true]:bg-bg', title: '!text-text' }}
+            classNames={{
+              base: 'text-text data-[hover=true]:bg-bg',
+              title: '!text-text',
+            }}
           >
             <div className="flex items-center gap-3">
               {product.imageUrl ? (
-                <img src={product.imageUrl} alt="" className="h-8 w-8 rounded object-cover" />
+                <img
+                  src={product.imageUrl}
+                  alt=""
+                  className="h-8 w-8 rounded object-cover"
+                />
               ) : (
-                <div className="flex h-8 w-8 items-center justify-center rounded bg-bg text-text-muted text-xs">N/A</div>
+                <div className="flex h-8 w-8 items-center justify-center rounded bg-bg text-text-muted text-xs">
+                  N/A
+                </div>
               )}
               <div className="flex flex-col">
                 <span className="text-sm text-text">{product.name}</span>
                 <span className="text-xs text-text-muted">
-                  {product.variations?.length ? `${product.variations.length} variantes` : `$${product.price}`}
+                  {product.variations?.length
+                    ? `${product.variations.length} variantes`
+                    : `$${product.price}`}
                 </span>
               </div>
             </div>
@@ -109,24 +148,49 @@ export default function ProductSearch({ products, onAddItem }: ProductSearchProp
       </Autocomplete>
 
       {loadingVariations && (
-        <div className="flex items-center justify-center py-6"><Spinner size="sm" color="warning" /><span className="ml-2 text-sm text-text-muted">Cargando variantes...</span></div>
+        <div className="flex items-center justify-center py-6">
+          <Spinner size="sm" color="warning" />
+          <span className="ml-2 text-sm text-text-muted">
+            Cargando variantes...
+          </span>
+        </div>
       )}
 
       {/* Variation picker */}
       {selectedProduct && !loadingVariations && (
         <div className="rounded-lg border border-accent/30 bg-accent/5 p-4">
           <div className="flex items-center gap-3 mb-3">
-            {selectedProduct.imageUrl && <img src={selectedProduct.imageUrl} alt="" className="h-10 w-10 rounded object-cover shrink-0" />}
+            {selectedProduct.imageUrl && (
+              <img
+                src={selectedProduct.imageUrl}
+                alt=""
+                className="h-10 w-10 rounded object-cover shrink-0"
+              />
+            )}
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-text truncate">{selectedProduct.name}</p>
-              <p className="text-xs text-text-muted">Selecciona variante para agregar:</p>
+              <p className="text-sm font-semibold text-text truncate">
+                {selectedProduct.name}
+              </p>
+              <p className="text-xs text-text-muted">
+                Selecciona variante para agregar:
+              </p>
             </div>
-            <Button size="sm" variant="flat" onPress={() => setSelectedProduct(null)}>Cancelar</Button>
+            <Button
+              size="sm"
+              variant="flat"
+              onPress={() => setSelectedProduct(null)}
+            >
+              Cancelar
+            </Button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {selectedProduct.variations
               ?.filter((v) => v.isActive)
-              .sort((a, b) => Number(b.isFullBottle) - Number(a.isFullBottle) || a.mlSize - b.mlSize)
+              .sort(
+                (a, b) =>
+                  Number(b.isFullBottle) - Number(a.isFullBottle) ||
+                  a.mlSize - b.mlSize,
+              )
               .map((v) => (
                 <button
                   key={v.id}
@@ -139,9 +203,12 @@ export default function ProductSearch({ products, onAddItem }: ProductSearchProp
                   }`}
                 >
                   <span className="font-medium text-text">
-                    {v.mlSize}ml {v.isFullBottle ? '· Botella completa' : '· Decant'}
+                    {v.mlSize}ml{' '}
+                    {v.isFullBottle ? '· Botella completa' : '· Decant'}
                   </span>
-                  <span className="text-accent text-xs font-semibold">${Number(v.price || selectedProduct.price).toFixed(2)}</span>
+                  <span className="text-accent text-xs font-semibold">
+                    ${Number(v.price || selectedProduct.price).toFixed(2)}
+                  </span>
                 </button>
               ))}
           </div>

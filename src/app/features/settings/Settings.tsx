@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Input } from '@heroui/react'
-import { Save, RotateCcw, Settings as SettingsIcon, Plus, Trash2 } from 'lucide-react'
+import {
+  Save,
+  RotateCcw,
+  Settings as SettingsIcon,
+  Plus,
+  Trash2,
+} from 'lucide-react'
 import { settingsService } from './services/settingsService'
 import { useUpdateSettingMutation } from './mutations/useSettingsMutations'
 
@@ -18,7 +24,9 @@ const parseAnnouncements = (raw: string): string[] => {
   try {
     const parsed = JSON.parse(raw)
     if (Array.isArray(parsed)) {
-      const list = parsed.filter((t): t is string => typeof t === 'string' && t.trim() !== '')
+      const list = parsed.filter(
+        (t): t is string => typeof t === 'string' && t.trim() !== '',
+      )
       return list.length > 0 ? list : [ANNOUNCEMENT_DEFAULT]
     }
   } catch {
@@ -29,7 +37,9 @@ const parseAnnouncements = (raw: string): string[] => {
 
 export const Settings = () => {
   const [offset, setOffset] = useState('0')
-  const [announcements, setAnnouncements] = useState<string[]>([ANNOUNCEMENT_DEFAULT])
+  const [announcements, setAnnouncements] = useState<string[]>([
+    ANNOUNCEMENT_DEFAULT,
+  ])
 
   const { data: settings, isLoading } = useQuery({
     queryKey: ['settings'],
@@ -44,7 +54,9 @@ export const Settings = () => {
       if (deliverySetting) {
         setOffset(deliverySetting.value)
       }
-      const announcementSetting = settings.find((s) => s.key === ANNOUNCEMENT_KEY)
+      const announcementSetting = settings.find(
+        (s) => s.key === ANNOUNCEMENT_KEY,
+      )
       if (announcementSetting) {
         setAnnouncements(parseAnnouncements(announcementSetting.value))
       }
@@ -74,7 +86,9 @@ export const Settings = () => {
   const addAnnouncement = () => setAnnouncements((prev) => [...prev, ''])
 
   const removeAnnouncement = (index: number) =>
-    setAnnouncements((prev) => (prev.length === 1 ? prev : prev.filter((_, i) => i !== index)))
+    setAnnouncements((prev) =>
+      prev.length === 1 ? prev : prev.filter((_, i) => i !== index),
+    )
 
   const handleSaveAnnouncement = () => {
     const clean = announcements.map((t) => t.trim()).filter(Boolean)
@@ -89,14 +103,18 @@ export const Settings = () => {
     <div className="flex flex-col gap-6 p-6">
       <div className="flex items-center gap-3">
         <SettingsIcon size={28} className="text-accent" />
-        <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">Ajustes</h1>
+        <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">
+          Ajustes
+        </h1>
       </div>
 
       <div className="bg-content1 rounded-xl p-6 shadow-sm max-w-xl">
-        <h2 className="font-heading text-lg font-semibold uppercase tracking-wide text-text mb-1">Días de entrega</h2>
+        <h2 className="font-heading text-lg font-semibold uppercase tracking-wide text-text mb-1">
+          Días de entrega
+        </h2>
         <p className="text-sm text-default-500 mb-5">
-          Días adicionales para la entrega. Si pones 2, los clientes verán 4 días de entrega en vez
-          de 2.
+          Días adicionales para la entrega. Si pones 2, los clientes verán 4
+          días de entrega en vez de 2.
         </p>
 
         <Input
@@ -131,10 +149,12 @@ export const Settings = () => {
       </div>
 
       <div className="bg-content1 rounded-xl p-6 shadow-sm max-w-xl">
-        <h2 className="font-heading text-lg font-semibold uppercase tracking-wide text-text mb-1">Barra superior (promociones)</h2>
+        <h2 className="font-heading text-lg font-semibold uppercase tracking-wide text-text mb-1">
+          Barra superior (promociones)
+        </h2>
         <p className="text-sm text-default-500 mb-5">
-          Textos que rotan en la barra superior del sitio. Agrega los que quieras: el
-          visitante los cambia con las flechas de los extremos.
+          Textos que rotan en la barra superior del sitio. Agrega los que
+          quieras: el visitante los cambia con las flechas de los extremos.
         </p>
 
         <div className="mb-4 flex flex-col gap-3">

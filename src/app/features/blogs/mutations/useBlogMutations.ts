@@ -28,7 +28,9 @@ export function useUpdateBlogMutation() {
       toast.success('Blog post actualizado exitosamente')
     },
     onError: (error: any) => {
-      toast.error(error?.response?.data?.message || 'Error al actualizar blog post')
+      toast.error(
+        error?.response?.data?.message || 'Error al actualizar blog post',
+      )
     },
   })
 }
@@ -43,7 +45,9 @@ export function useDeleteBlogMutation() {
       toast.success('Blog post eliminado exitosamente')
     },
     onError: (error: any) => {
-      toast.error(error?.response?.data?.message || 'Error al eliminar blog post')
+      toast.error(
+        error?.response?.data?.message || 'Error al eliminar blog post',
+      )
     },
   })
 }

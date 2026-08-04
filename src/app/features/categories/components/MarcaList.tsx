@@ -55,6 +55,15 @@ export default function MarcaList({
                 <span className="truncate text-sm text-text">{marca.name}</span>
                 <Chip
                   size="sm"
+                  variant="bordered"
+                  color="default"
+                  className="h-5 font-mono text-[10px]"
+                  title="Usa este ID en la columna marca_id del Excel de importación"
+                >
+                  ID: {marca.id}
+                </Chip>
+                <Chip
+                  size="sm"
                   variant="flat"
                   color={marca.isActive ? 'success' : 'default'}
                   className="h-5 text-[10px]"

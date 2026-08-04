@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { Button, Spinner, useDisclosure } from '@heroui/react';
-import { SectionCard } from '../components/SectionCard';
-import { SectionFormModal } from '../components/SectionFormModal';
-import { ProductsManagementModal } from '../components/ProductsManagementModal';
-import { useLandingSectionsLogic } from '../hooks/useLandingSectionsLogic';
-import type { LandingSection } from '../types';
+import { useState } from 'react'
+import { Button, Spinner, useDisclosure } from '@heroui/react'
+import { SectionCard } from '../components/SectionCard'
+import { SectionFormModal } from '../components/SectionFormModal'
+import { ProductsManagementModal } from '../components/ProductsManagementModal'
+import { useLandingSectionsLogic } from '../hooks/useLandingSectionsLogic'
+import type { LandingSection } from '../types'
 
 export default function LandingSectionsPage() {
   const {
@@ -22,40 +22,52 @@ export default function LandingSectionsPage() {
     handleCancelDelete,
     isSubmitting,
     isDeleting,
-  } = useLandingSectionsLogic();
+  } = useLandingSectionsLogic()
 
-  const [productsSectionId, setProductsSectionId] = useState<number | null>(null);
+  const [productsSectionId, setProductsSectionId] = useState<number | null>(
+    null,
+  )
   const {
     isOpen: isProductsModalOpen,
     onOpen: onProductsModalOpen,
     onOpenChange: onProductsModalOpenChange,
-  } = useDisclosure();
+  } = useDisclosure()
+
+  // El límite de 2 secciones aplica solo a la landing (2 huecos: arriba y
+  // debajo de testimonios). Las secciones del carrito no tienen tope: si el
+  // botón dependía del total, con 2 de home ya no se podía crear la del
+  // carrito y la publicidad del carrito quedaba inaccesible.
+  const homeSections = Array.isArray(sections)
+    ? sections.filter((s) => s.placement !== 'cart')
+    : []
+  const homeFull = homeSections.length >= 2
 
   // Siempre leer la sección fresca de la query para que se actualice al agregar/quitar productos
   const productsSection = Array.isArray(sections)
-    ? sections.find((s) => s.id === productsSectionId) ?? null
-    : null;
+    ? (sections.find((s) => s.id === productsSectionId) ?? null)
+    : null
 
   const handleManageProducts = (section: LandingSection) => {
-    setProductsSectionId(section.id);
-    onProductsModalOpen();
-  };
+    setProductsSectionId(section.id)
+    onProductsModalOpen()
+  }
 
   return (
     <div className="p-6">
       {/* Header */}
       <div className="mb-6 flex justify-between items-center">
         <div>
-          <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">Secciones de Landing</h1>
+          <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">
+            Secciones de Landing
+          </h1>
           <p className="text-sm text-text-muted mt-1">
-            Gestiona las secciones editables de la página principal
+            Gestiona las secciones de la página principal y la publicidad del
+            carrito
           </p>
         </div>
-        {Array.isArray(sections) && sections.length < 2 && (
-          <Button color="primary" onPress={handleCreate}>
-            Nueva Sección
-          </Button>
-        )}
+        <Button color="primary" onPress={handleCreate}>
+          Nueva Sección
+        </Button>
       </div>
 
       {/* Content */}
@@ -94,6 +106,7 @@ export default function LandingSectionsPage() {
         section={selectedSection}
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
+        homeFull={homeFull}
       />
 
       <ProductsManagementModal
@@ -106,9 +119,12 @@ export default function LandingSectionsPage() {
       {isDeleteDialogOpen && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-surface rounded-lg p-6 max-w-md mx-4 border border-border">
-            <h3 className="font-heading text-lg font-bold text-text mb-2">Confirmar eliminación</h3>
+            <h3 className="font-heading text-lg font-bold text-text mb-2">
+              Confirmar eliminación
+            </h3>
             <p className="text-text-muted mb-6">
-              ¿Estás seguro de que deseas eliminar esta sección? Esta acción no se puede deshacer.
+              ¿Estás seguro de que deseas eliminar esta sección? Esta acción no
+              se puede deshacer.
             </p>
             <div className="flex gap-2 justify-end">
               <Button
@@ -131,5 +147,5 @@ export default function LandingSectionsPage() {
         </div>
       )}
     </div>
-  );
+  )
 }

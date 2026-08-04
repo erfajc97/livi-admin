@@ -35,7 +35,11 @@ export default function ComboListView({
 }: ComboListViewProps) {
   return (
     <div className="flex flex-col gap-5">
-      <ComboListHeader search={search} onSearchChange={onSearchChange} onCreate={onCreate} />
+      <ComboListHeader
+        search={search}
+        onSearchChange={onSearchChange}
+        onCreate={onCreate}
+      />
 
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
@@ -48,7 +52,12 @@ export default function ComboListView({
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {combos.map((combo) => (
-            <ComboCard key={combo.id} combo={combo} onEdit={onEdit} onDelete={onDeleteClick} />
+            <ComboCard
+              key={combo.id}
+              combo={combo}
+              onEdit={onEdit}
+              onDelete={onDeleteClick}
+            />
           ))}
         </div>
       )}

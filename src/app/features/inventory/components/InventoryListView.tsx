@@ -25,7 +25,9 @@ export default function InventoryListView({
           <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent sm:text-3xl">
             Inventario
           </h1>
-          <p className="mt-1 text-sm text-text-muted">Control de stock y botellas por producto</p>
+          <p className="mt-1 text-sm text-text-muted">
+            Control de stock y botellas por producto
+          </p>
         </div>
       </div>
 
@@ -49,7 +51,9 @@ export default function InventoryListView({
         </div>
       ) : products.length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-text-muted text-sm">No se encontraron productos.</p>
+          <p className="text-text-muted text-sm">
+            No se encontraron productos.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-3">
@@ -67,7 +71,11 @@ export default function InventoryListView({
                 {/* Image */}
                 <div className="w-14 h-14 rounded-lg bg-background overflow-hidden shrink-0">
                   {product.imageUrl ? (
-                    <img src={product.imageUrl} alt="" className="w-full h-full object-cover" />
+                    <img
+                      src={product.imageUrl}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-text-muted">
                       <Package size={20} />
@@ -77,7 +85,9 @@ export default function InventoryListView({
 
                 {/* Info */}
                 <div className="flex-1 min-w-0 basis-[calc(100%-72px)] sm:basis-auto">
-                  <p className="text-sm font-bold text-text truncate">{product.name}</p>
+                  <p className="text-sm font-bold text-text truncate">
+                    {product.name}
+                  </p>
                   <p className="text-xs text-text-muted truncate">
                     {product.category?.name} — {product.marca?.name}
                   </p>
@@ -88,19 +98,25 @@ export default function InventoryListView({
                   <div className="text-center">
                     <div className="flex items-center gap-1 text-text-muted">
                       <Package size={12} />
-                      <span className="text-base sm:text-lg font-bold text-text">{product.stock}</span>
+                      <span className="text-base sm:text-lg font-bold text-text">
+                        {product.stock}
+                      </span>
                     </div>
                     <p className="text-xs text-text-muted">Selladas</p>
                   </div>
                   <div className="text-center">
                     <div className="flex items-center gap-1 text-text-muted">
                       <Droplets size={12} />
-                      <span className="text-base sm:text-lg font-bold text-text">{openMl}ml</span>
+                      <span className="text-base sm:text-lg font-bold text-text">
+                        {openMl}ml
+                      </span>
                     </div>
                     <p className="text-xs text-text-muted">Abierta</p>
                   </div>
                   <div className="text-center">
-                    <span className="text-base sm:text-lg font-bold text-accent">{availableMl}ml</span>
+                    <span className="text-base sm:text-lg font-bold text-accent">
+                      {availableMl}ml
+                    </span>
                     <p className="text-xs text-text-muted">Total</p>
                   </div>
                   {/* Action */}

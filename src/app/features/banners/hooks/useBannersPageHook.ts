@@ -4,7 +4,10 @@ import { arrayMove } from '@dnd-kit/sortable'
 import type { DragEndEvent } from '@dnd-kit/core'
 import { useBannersQuery } from '@/app/tanstack-queries/bannersQuery'
 import { useBannerFormHook } from './useBannerFormHook'
-import { useDeleteBannerMutation, useReorderBannersMutation } from '../mutations/useBannerMutations'
+import {
+  useDeleteBannerMutation,
+  useReorderBannersMutation,
+} from '../mutations/useBannerMutations'
 import type { Banner } from '../types'
 
 export function useBannersPageHook() {

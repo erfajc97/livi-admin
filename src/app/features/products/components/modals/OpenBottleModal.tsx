@@ -28,7 +28,10 @@ export default function OpenBottleModal({
   const [note, setNote] = useState('')
 
   const totalMlSold = useMemo(() => {
-    return Object.entries(soldDecants).reduce((sum, [ml, qty]) => sum + Number(ml) * qty, 0)
+    return Object.entries(soldDecants).reduce(
+      (sum, [ml, qty]) => sum + Number(ml) * qty,
+      0,
+    )
   }, [soldDecants])
 
   const mlRemaining = totalMl - totalMlSold
@@ -62,7 +65,8 @@ export default function OpenBottleModal({
 
   const hasVariations = variationMlSizes.length > 0
   // Can only confirm if at least 1 decant was sold (partial bottle) OR no variations (open full)
-  const canConfirm = !isOverLimit && !isFullBottle && (!hasVariations || totalMlSold > 0)
+  const canConfirm =
+    !isOverLimit && !isFullBottle && (!hasVariations || totalMlSold > 0)
 
   return (
     <CustomModalNextUI
@@ -71,13 +75,25 @@ export default function OpenBottleModal({
       size="md"
       isDismissable={!isLoading}
       hideCloseButton={isLoading}
-      headerContent={<h3 className="text-lg font-semibold text-text">Abrir botella</h3>}
+      headerContent={
+        <h3 className="text-lg font-semibold text-text">Abrir botella</h3>
+      }
       footerContent={
         <div className="flex gap-2">
-          <Button color="danger" variant="flat" onPress={() => handleClose(false)} isDisabled={isLoading}>
+          <Button
+            color="danger"
+            variant="flat"
+            onPress={() => handleClose(false)}
+            isDisabled={isLoading}
+          >
             Cancelar
           </Button>
-          <Button color="warning" onPress={handleConfirm} isLoading={isLoading} isDisabled={!canConfirm}>
+          <Button
+            color="warning"
+            onPress={handleConfirm}
+            isLoading={isLoading}
+            isDisabled={!canConfirm}
+          >
             Confirmar
           </Button>
         </div>
@@ -89,22 +105,31 @@ export default function OpenBottleModal({
             Vas a abrir una botella sellada de <strong>{productName}</strong>.
           </p>
           <p className="text-xs text-text-muted mt-1">
-            Stock actual: <strong>{currentStock}</strong> selladas. Despues: <strong>{currentStock - 1}</strong>.
+            Stock actual: <strong>{currentStock}</strong> selladas. Despues:{' '}
+            <strong>{currentStock - 1}</strong>.
           </p>
         </div>
 
         {hasVariations ? (
           <>
-            <p className="text-sm text-text font-semibold">Decants ya vendidos de esta botella:</p>
+            <p className="text-sm text-text font-semibold">
+              Decants ya vendidos de esta botella:
+            </p>
             <p className="text-xs text-text-muted -mt-2">
-              Selecciona cuantos decants de cada tamaño ya vendiste de esta botella.
+              Selecciona cuantos decants de cada tamaño ya vendiste de esta
+              botella.
             </p>
             <div className="flex flex-col gap-2">
               {variationMlSizes.map((ml) => {
                 const qty = soldDecants[ml] || 0
                 return (
-                  <div key={ml} className="flex items-center justify-between rounded-lg border border-border/50 bg-bg px-3 py-2">
-                    <span className="text-sm text-text font-medium">{ml}ml</span>
+                  <div
+                    key={ml}
+                    className="flex items-center justify-between rounded-lg border border-border/50 bg-bg px-3 py-2"
+                  >
+                    <span className="text-sm text-text font-medium">
+                      {ml}ml
+                    </span>
                     <div className="flex items-center gap-2">
                       <Button
                         isIconOnly
@@ -116,7 +141,9 @@ export default function OpenBottleModal({
                       >
                         <Minus size={12} />
                       </Button>
-                      <span className="text-sm font-bold text-text w-6 text-center">{qty}</span>
+                      <span className="text-sm font-bold text-text w-6 text-center">
+                        {qty}
+                      </span>
                       <Button
                         isIconOnly
                         size="sm"
@@ -127,7 +154,9 @@ export default function OpenBottleModal({
                       >
                         <Plus size={12} />
                       </Button>
-                      <span className="text-xs text-text-muted w-14 text-right">= {ml * qty}ml</span>
+                      <span className="text-xs text-text-muted w-14 text-right">
+                        = {ml * qty}ml
+                      </span>
                     </div>
                   </div>
                 )
@@ -145,8 +174,12 @@ export default function OpenBottleModal({
                 <span className="font-bold text-text">-{totalMlSold}ml</span>
               </div>
               <div className="border-t border-border mt-2 pt-2 flex justify-between text-sm">
-                <span className="text-text font-bold">ML restantes en botella</span>
-                <span className="text-lg font-bold text-accent">{mlRemaining}ml</span>
+                <span className="text-text font-bold">
+                  ML restantes en botella
+                </span>
+                <span className="text-lg font-bold text-accent">
+                  {mlRemaining}ml
+                </span>
               </div>
             </div>
 
@@ -154,21 +187,24 @@ export default function OpenBottleModal({
               <div className="flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/30 px-3 py-2">
                 <AlertTriangle size={14} className="text-red-400 shrink-0" />
                 <p className="text-xs text-red-400">
-                  Si vendiste todos los {totalMl}ml, esa botella ya se uso completa.
-                  No necesitas abrirla — el sistema la descontara automaticamente al procesar ordenes.
+                  Si vendiste todos los {totalMl}ml, esa botella ya se uso
+                  completa. No necesitas abrirla — el sistema la descontara
+                  automaticamente al procesar ordenes.
                 </p>
               </div>
             )}
 
             {hasNoSales && (
               <p className="text-xs text-text-muted">
-                Selecciona al menos 1 decant vendido para abrir la botella como parcial.
+                Selecciona al menos 1 decant vendido para abrir la botella como
+                parcial.
               </p>
             )}
           </>
         ) : (
           <p className="text-sm text-text-muted">
-            No hay variantes configuradas. Se abrira la botella completa con <strong>{totalMl}ml</strong>.
+            No hay variantes configuradas. Se abrira la botella completa con{' '}
+            <strong>{totalMl}ml</strong>.
           </p>
         )}
 
@@ -178,7 +214,11 @@ export default function OpenBottleModal({
           size="sm"
           value={note}
           onValueChange={setNote}
-          classNames={{ label: '!text-text', input: '!text-text', inputWrapper: 'bg-background border-border' }}
+          classNames={{
+            label: '!text-text',
+            input: '!text-text',
+            inputWrapper: 'bg-background border-border',
+          }}
         />
       </div>
     </CustomModalNextUI>

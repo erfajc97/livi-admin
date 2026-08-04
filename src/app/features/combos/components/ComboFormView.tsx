@@ -38,7 +38,10 @@ export default function ComboFormView({ combo, onBack }: ComboFormViewProps) {
     handleImageChange,
   } = useComboFormHook()
 
-  const { data: fullCombo, isLoading } = useComboByIdQuery(combo?.id ?? 0, isEdit)
+  const { data: fullCombo, isLoading } = useComboByIdQuery(
+    combo?.id ?? 0,
+    isEdit,
+  )
 
   useEffect(() => {
     if (fullCombo) loadCombo(fullCombo)
@@ -52,9 +55,10 @@ export default function ComboFormView({ combo, onBack }: ComboFormViewProps) {
     setIsSaving(true)
     try {
       const basePayload = { ...buildPayload(), imageFile: formData.imageFile }
-      const base = isEdit && combo
-        ? await combosService.updateCombo(combo.id, basePayload)
-        : await combosService.createCombo(basePayload)
+      const base =
+        isEdit && combo
+          ? await combosService.updateCombo(combo.id, basePayload)
+          : await combosService.createCombo(basePayload)
 
       // Versiones: crear/actualizar/eliminar tras tener el id del combo base.
       const ops = buildVersionOps(formData.name, base.id)
@@ -65,10 +69,16 @@ export default function ComboFormView({ combo, onBack }: ComboFormViewProps) {
       ])
 
       queryClient.invalidateQueries({ queryKey: ['combos'] })
-      addToast({ title: isEdit ? 'Combo actualizado' : 'Combo creado', color: 'success' })
+      addToast({
+        title: isEdit ? 'Combo actualizado' : 'Combo creado',
+        color: 'success',
+      })
       onBack()
     } catch (e) {
-      addToast({ title: (e as Error)?.message ?? 'Error al guardar el combo', color: 'danger' })
+      addToast({
+        title: (e as Error)?.message ?? 'Error al guardar el combo',
+        color: 'danger',
+      })
     } finally {
       setIsSaving(false)
     }

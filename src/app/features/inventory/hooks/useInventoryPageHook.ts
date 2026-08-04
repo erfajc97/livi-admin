@@ -7,12 +7,22 @@ import type { InventoryDetail } from '../types'
 
 export function useInventoryPageHook() {
   const queryClient = useQueryClient()
-  const [selectedProductId, setSelectedProductId] = useState<number | null>(null)
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(
+    null,
+  )
   const [search, setSearch] = useState('')
 
   const productsQuery = useQuery({
-    queryKey: ['products', { page: 1, limit: 100, search: search || undefined }],
-    queryFn: () => productsService.listProducts({ page: 1, limit: 100, search: search || undefined }),
+    queryKey: [
+      'products',
+      { page: 1, limit: 100, search: search || undefined },
+    ],
+    queryFn: () =>
+      productsService.listProducts({
+        page: 1,
+        limit: 100,
+        search: search || undefined,
+      }),
     staleTime: 0, // Always refetch when navigating to inventory
     refetchOnMount: 'always',
   })
@@ -27,11 +37,14 @@ export function useInventoryPageHook() {
 
   const products: Product[] = productsQuery.data?.data ?? []
 
-  const selectProduct = useCallback((id: number) => {
-    // Invalidate previous detail cache to force fresh data
-    queryClient.invalidateQueries({ queryKey: ['inventory', id] })
-    setSelectedProductId(id)
-  }, [queryClient])
+  const selectProduct = useCallback(
+    (id: number) => {
+      // Invalidate previous detail cache to force fresh data
+      queryClient.invalidateQueries({ queryKey: ['inventory', id] })
+      setSelectedProductId(id)
+    },
+    [queryClient],
+  )
 
   const goBackToList = useCallback(() => {
     setSelectedProductId(null)

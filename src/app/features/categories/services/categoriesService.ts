@@ -18,15 +18,23 @@ interface CoreApiResponse<T> {
 }
 
 function unwrap<T>(data: T | CoreApiResponse<T>): T {
-  if (data && typeof data === 'object' && 'statusCode' in data && 'data' in data) {
-    return (data as CoreApiResponse<T>).data
+  if (
+    data &&
+    typeof data === 'object' &&
+    'statusCode' in data &&
+    'data' in data
+  ) {
+    return data.data
   }
-  return data as T
+  return data
 }
 
 const UPLOAD_TIMEOUT_MS = 120_000
 
-function buildFormData(payload: Record<string, unknown>, file?: File): FormData {
+function buildFormData(
+  payload: Record<string, unknown>,
+  file?: File,
+): FormData {
   const fd = new FormData()
   for (const [key, value] of Object.entries(payload)) {
     if (value !== undefined && value !== null) {
@@ -51,13 +59,21 @@ export const categoriesService = {
   },
 
   getCategoryById: async (id: number): Promise<Category> => {
-    const { data } = await axiosInstance.get(`${API_ENDPOINTS.CATEGORIES}/${id}`)
+    const { data } = await axiosInstance.get(
+      `${API_ENDPOINTS.CATEGORIES}/${id}`,
+    )
     return unwrap<Category>(data)
   },
 
-  createCategory: async (payload: CreateCategoryPayload, file?: File): Promise<Category> => {
+  createCategory: async (
+    payload: CreateCategoryPayload,
+    file?: File,
+  ): Promise<Category> => {
     if (file) {
-      const fd = buildFormData(payload as unknown as Record<string, unknown>, file)
+      const fd = buildFormData(
+        payload as unknown as Record<string, unknown>,
+        file,
+      )
       const { data } = await axiosInstance.post(API_ENDPOINTS.CATEGORIES, fd, {
         timeout: UPLOAD_TIMEOUT_MS,
       })
@@ -67,15 +83,29 @@ export const categoriesService = {
     return unwrap<Category>(data)
   },
 
-  updateCategory: async (id: number, payload: UpdateCategoryPayload, file?: File): Promise<Category> => {
+  updateCategory: async (
+    id: number,
+    payload: UpdateCategoryPayload,
+    file?: File,
+  ): Promise<Category> => {
     if (!file) {
-      const { data } = await axiosInstance.patch(`${API_ENDPOINTS.CATEGORIES}/${id}`, payload)
+      const { data } = await axiosInstance.patch(
+        `${API_ENDPOINTS.CATEGORIES}/${id}`,
+        payload,
+      )
       return unwrap<Category>(data)
     }
-    const fd = buildFormData(payload as unknown as Record<string, unknown>, file)
-    const { data } = await axiosInstance.patch(`${API_ENDPOINTS.CATEGORIES}/${id}`, fd, {
-      timeout: UPLOAD_TIMEOUT_MS,
-    })
+    const fd = buildFormData(
+      payload as unknown as Record<string, unknown>,
+      file,
+    )
+    const { data } = await axiosInstance.patch(
+      `${API_ENDPOINTS.CATEGORIES}/${id}`,
+      fd,
+      {
+        timeout: UPLOAD_TIMEOUT_MS,
+      },
+    )
     return unwrap<Category>(data)
   },
 
@@ -99,7 +129,10 @@ export const marcasService = {
 
   create: async (payload: CreateMarcaPayload, file?: File): Promise<Marca> => {
     if (file) {
-      const fd = buildFormData(payload as unknown as Record<string, unknown>, file)
+      const fd = buildFormData(
+        payload as unknown as Record<string, unknown>,
+        file,
+      )
       const { data } = await axiosInstance.post(API_ENDPOINTS.MARCAS, fd, {
         timeout: UPLOAD_TIMEOUT_MS,
       })
@@ -109,15 +142,29 @@ export const marcasService = {
     return unwrap<Marca>(data)
   },
 
-  update: async (id: number, payload: UpdateMarcaPayload, file?: File): Promise<Marca> => {
+  update: async (
+    id: number,
+    payload: UpdateMarcaPayload,
+    file?: File,
+  ): Promise<Marca> => {
     if (file) {
-      const fd = buildFormData(payload as unknown as Record<string, unknown>, file)
-      const { data } = await axiosInstance.patch(`${API_ENDPOINTS.MARCAS}/${id}`, fd, {
-        timeout: UPLOAD_TIMEOUT_MS,
-      })
+      const fd = buildFormData(
+        payload as unknown as Record<string, unknown>,
+        file,
+      )
+      const { data } = await axiosInstance.patch(
+        `${API_ENDPOINTS.MARCAS}/${id}`,
+        fd,
+        {
+          timeout: UPLOAD_TIMEOUT_MS,
+        },
+      )
       return unwrap<Marca>(data)
     }
-    const { data } = await axiosInstance.patch(`${API_ENDPOINTS.MARCAS}/${id}`, payload)
+    const { data } = await axiosInstance.patch(
+      `${API_ENDPOINTS.MARCAS}/${id}`,
+      payload,
+    )
     return unwrap<Marca>(data)
   },
 

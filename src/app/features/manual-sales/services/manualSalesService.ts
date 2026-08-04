@@ -12,20 +12,26 @@ interface CoreApiResponse<T> {
 
 export const manualSalesService = {
   searchUsers: async (): Promise<ManualSaleClient[]> => {
-    const { data } = await axiosInstance.get<CoreApiResponse<ManualSaleClient[]>>(API_ENDPOINTS.USERS)
+    const { data } = await axiosInstance.get<
+      CoreApiResponse<ManualSaleClient[]>
+    >(API_ENDPOINTS.USERS)
     return data.data
   },
 
   createManualOrder: async (payload: {
     userId: number
-    items: Array<{ productId?: number; productVariationId?: number; quantity: number }>
+    items: Array<{
+      productId?: number
+      productVariationId?: number
+      quantity: number
+    }>
     paymentMethod?: string
     discountAmount?: number
     notes?: string
   }): Promise<OrderResponse> => {
     const { data } = await axiosInstance.post<CoreApiResponse<OrderResponse>>(
       `${API_ENDPOINTS.ORDERS}/manual`,
-      payload
+      payload,
     )
     return data.data
   },

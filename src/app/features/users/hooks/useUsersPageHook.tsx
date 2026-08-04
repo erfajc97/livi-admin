@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react'
-import { Button, Chip } from '@heroui/react'
+import { Button, Chip, useDisclosure } from '@heroui/react'
 import { PencilIcon, TrashIcon } from 'lucide-react'
-import { useDisclosure } from '@heroui/react'
 import { useUsersTableHook } from './useUsersTableHook'
 import useUserFormHook from './useUserFormHook'
 import type { User } from '../types'
@@ -60,12 +59,22 @@ export function useUsersPageHook() {
   }
 
   const renderCell = useCallback((item: User, columnKey: string) => {
-    const txt = (v?: string) => <span className="text-xs text-text-muted">{v || '—'}</span>
-    const trunc = (v?: string) => <span className="text-xs text-text-muted max-w-[120px] truncate block">{v || '—'}</span>
+    const txt = (v?: string) => (
+      <span className="text-xs text-text-muted">{v || '—'}</span>
+    )
+    const trunc = (v?: string) => (
+      <span className="text-xs text-text-muted max-w-[120px] truncate block">
+        {v || '—'}
+      </span>
+    )
 
     switch (columnKey) {
       case 'name':
-        return <span className="text-sm font-medium text-text whitespace-nowrap">{item.firstName} {item.lastName}</span>
+        return (
+          <span className="text-sm font-medium text-text whitespace-nowrap">
+            {item.firstName} {item.lastName}
+          </span>
+        )
       case 'email':
         return <span className="text-xs text-text-muted">{item.email}</span>
       case 'cedula':
@@ -81,21 +90,87 @@ export function useUsersPageHook() {
       case 'reference':
         return trunc(item.reference)
       case 'deliveryPref':
-        return txt(item.preferredDeliveryMethod ? DELIVERY_LABELS[item.preferredDeliveryMethod] || item.preferredDeliveryMethod : undefined)
+        return txt(
+          item.preferredDeliveryMethod
+            ? DELIVERY_LABELS[item.preferredDeliveryMethod] ||
+                item.preferredDeliveryMethod
+            : undefined,
+        )
       case 'role':
-        return <Chip size="sm" variant="flat" color={item.role === 'admin' ? 'danger' : 'primary'}>{item.role === 'admin' ? 'Admin' : 'Cliente'}</Chip>
+        return (
+          <Chip
+            size="sm"
+            variant="flat"
+            color={item.role === 'admin' ? 'danger' : 'primary'}
+          >
+            {item.role === 'admin' ? 'Admin' : 'Cliente'}
+          </Chip>
+        )
       case 'authProvider':
-        return <Chip size="sm" variant="flat" color={item.authProvider === 'google' ? 'warning' : 'default'}>{item.authProvider === 'google' ? 'Google' : 'Local'}</Chip>
+        return (
+          <Chip
+            size="sm"
+            variant="flat"
+            color={item.authProvider === 'google' ? 'warning' : 'default'}
+          >
+            {item.authProvider === 'google' ? 'Google' : 'Local'}
+          </Chip>
+        )
       case 'status':
-        return <Chip size="sm" variant="dot" color={item.isActive ? 'success' : 'default'}>{item.isActive ? 'Activo' : 'Inactivo'}</Chip>
+        return (
+          <Chip
+            size="sm"
+            variant="dot"
+            color={item.isActive ? 'success' : 'default'}
+          >
+            {item.isActive ? 'Activo' : 'Inactivo'}
+          </Chip>
+        )
       case 'emailVerified':
-        return <Chip size="sm" variant="flat" color={item.isEmailVerified ? 'success' : 'warning'}>{item.isEmailVerified ? 'Sí' : 'No'}</Chip>
+        return (
+          <Chip
+            size="sm"
+            variant="flat"
+            color={item.isEmailVerified ? 'success' : 'warning'}
+          >
+            {item.isEmailVerified ? 'Sí' : 'No'}
+          </Chip>
+        )
       case 'createdAt':
-        return <span className="text-xs text-text-muted whitespace-nowrap">{new Date(item.createdAt).toLocaleDateString('es-EC', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+        return (
+          <span className="text-xs text-text-muted whitespace-nowrap">
+            {new Date(item.createdAt).toLocaleDateString('es-EC', {
+              day: '2-digit',
+              month: 'short',
+              year: 'numeric',
+            })}
+          </span>
+        )
       case 'edit':
-        return <Button isIconOnly size="sm" variant="light" radius="full" onPress={() => handleEditClick(item)}><PencilIcon size={16} className="text-text-muted" /></Button>
+        return (
+          <Button
+            isIconOnly
+            size="sm"
+            variant="light"
+            radius="full"
+            onPress={() => handleEditClick(item)}
+          >
+            <PencilIcon size={16} className="text-text-muted" />
+          </Button>
+        )
       case 'delete':
-        return <Button isIconOnly size="sm" variant="light" color="danger" radius="full" onPress={() => handleDeleteClick(item)}><TrashIcon size={16} /></Button>
+        return (
+          <Button
+            isIconOnly
+            size="sm"
+            variant="light"
+            color="danger"
+            radius="full"
+            onPress={() => handleDeleteClick(item)}
+          >
+            <TrashIcon size={16} />
+          </Button>
+        )
       default:
         return null
     }

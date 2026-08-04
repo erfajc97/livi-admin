@@ -14,7 +14,11 @@ interface InventoryDetailViewProps {
   onBack: () => void
 }
 
-export default function InventoryDetailView({ detail, isLoading, onBack }: InventoryDetailViewProps) {
+export default function InventoryDetailView({
+  detail,
+  isLoading,
+  onBack,
+}: InventoryDetailViewProps) {
   const [openBottleModal, setOpenBottleModal] = useState(false)
   const openBottleMutation = useOpenBottleMutation()
 
@@ -31,11 +35,13 @@ export default function InventoryDetailView({ detail, isLoading, onBack }: Inven
   const canOpenBottle = inventory.stock >= 1 && !hasOpenBottle
 
   // Get unique decant ml sizes from configured variations (skip the auto-managed full bottle)
-  const variationMlSizes = [...new Set(
-    (variations ?? [])
-      .filter((v) => v.isActive && !v.isFullBottle && v.mlSize > 0)
-      .map((v) => v.mlSize),
-  )].sort((a, b) => a - b)
+  const variationMlSizes = [
+    ...new Set(
+      (variations ?? [])
+        .filter((v) => v.isActive && !v.isFullBottle && v.mlSize > 0)
+        .map((v) => v.mlSize),
+    ),
+  ].sort((a, b) => a - b)
 
   return (
     <div className="flex flex-col gap-6">
@@ -46,10 +52,16 @@ export default function InventoryDetailView({ detail, isLoading, onBack }: Inven
             <ArrowLeft size={20} className="text-text" />
           </Button>
           {product.imageUrl && (
-            <img src={product.imageUrl} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0" />
+            <img
+              src={product.imageUrl}
+              alt=""
+              className="w-12 h-12 rounded-lg object-cover shrink-0"
+            />
           )}
           <div className="min-w-0">
-            <h2 className="text-lg sm:text-xl font-heading font-bold text-text truncate">{product.name}</h2>
+            <h2 className="text-lg sm:text-xl font-heading font-bold text-text truncate">
+              {product.name}
+            </h2>
             <p className="text-xs text-text-muted truncate">
               {product.category?.name} — {product.marca?.name}
             </p>

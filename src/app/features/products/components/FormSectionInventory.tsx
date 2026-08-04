@@ -8,12 +8,20 @@ import type { ProductFormData, Product, VariationRow } from '../types'
 
 interface FormSectionInventoryProps {
   formData: ProductFormData
-  updateField: <K extends keyof ProductFormData>(key: K, value: ProductFormData[K]) => void
+  updateField: <K extends keyof ProductFormData>(
+    key: K,
+    value: ProductFormData[K],
+  ) => void
   product?: Product | null
   variations?: VariationRow[]
 }
 
-export default function FormSectionInventory({ formData, updateField, product, variations = [] }: FormSectionInventoryProps) {
+export default function FormSectionInventory({
+  formData,
+  updateField,
+  product,
+  variations = [],
+}: FormSectionInventoryProps) {
   const queryClient = useQueryClient()
   const stock = Number(formData.stock) || 0
   const totalMl = Number(formData.totalMl) || 0
@@ -23,8 +31,10 @@ export default function FormSectionInventory({ formData, updateField, product, v
   // Marcado en rojo solo con valor escrito e inválido.
   const rawStock = formData.stock.trim()
   const stockInvalid =
-    rawStock !== '' && (!Number.isInteger(Number(rawStock)) || Number(rawStock) < 0)
-  const totalMlInvalid = formData.totalMl.trim() !== '' && !(Number(formData.totalMl) > 0)
+    rawStock !== '' &&
+    (!Number.isInteger(Number(rawStock)) || Number(rawStock) < 0)
+  const totalMlInvalid =
+    formData.totalMl.trim() !== '' && !(Number(formData.totalMl) > 0)
 
   const [openBottleModal, setOpenBottleModal] = useState(false)
   const openBottleMutation = useOpenBottleMutation()
@@ -57,9 +67,11 @@ export default function FormSectionInventory({ formData, updateField, product, v
   const canOpenBottle = stock >= 1 && !hasOpenBottle
 
   // Get unique ml sizes from variations
-  const variationMlSizes = [...new Set(
-    variations.map((v) => Number(v.mlSize) || 0).filter((ml) => ml > 0)
-  )].sort((a, b) => a - b)
+  const variationMlSizes = [
+    ...new Set(
+      variations.map((v) => Number(v.mlSize) || 0).filter((ml) => ml > 0),
+    ),
+  ].sort((a, b) => a - b)
 
   return (
     <div className="rounded-xl border border-border bg-surface p-5">
@@ -68,7 +80,9 @@ export default function FormSectionInventory({ formData, updateField, product, v
       {/* Full bottle info card */}
       {totalMl > 0 && (
         <div className="mb-4 rounded-lg border border-accent/30 bg-accent/5 p-3">
-          <p className="text-xs font-bold text-accent uppercase tracking-wider mb-2">Botella completa</p>
+          <p className="text-xs font-bold text-accent uppercase tracking-wider mb-2">
+            Botella completa
+          </p>
           <div className="grid grid-cols-3 gap-2 text-center">
             <div>
               <div className="flex items-center justify-center mb-1">
@@ -94,7 +108,11 @@ export default function FormSectionInventory({ formData, updateField, product, v
           </div>
           {formData.price && (
             <p className="text-xs text-text-muted text-center mt-2">
-              Precio botella: <span className="text-accent font-bold">${Number(formData.price).toFixed(2)}</span> — {totalMl}ml
+              Precio botella:{' '}
+              <span className="text-accent font-bold">
+                ${Number(formData.price).toFixed(2)}
+              </span>{' '}
+              — {totalMl}ml
             </p>
           )}
 
@@ -103,7 +121,8 @@ export default function FormSectionInventory({ formData, updateField, product, v
             <div className="mt-3">
               {hasOpenBottle ? (
                 <p className="text-xs text-blue-400 text-center py-1">
-                  Ya hay una botella abierta con {openMl}ml. Se abrira otra cuando se agoten.
+                  Ya hay una botella abierta con {openMl}ml. Se abrira otra
+                  cuando se agoten.
                 </p>
               ) : (
                 <Button
@@ -119,7 +138,9 @@ export default function FormSectionInventory({ formData, updateField, product, v
                 </Button>
               )}
               {stock < 1 && !hasOpenBottle && (
-                <p className="text-xs text-red-400 text-center mt-1">Sin botellas selladas</p>
+                <p className="text-xs text-red-400 text-center mt-1">
+                  Sin botellas selladas
+                </p>
               )}
             </div>
           )}
@@ -134,9 +155,15 @@ export default function FormSectionInventory({ formData, updateField, product, v
           min={0}
           value={formData.stock}
           onValueChange={(v) => updateField('stock', v)}
-          classNames={{ label: '!text-text', input: '!text-text', inputWrapper: 'bg-background border-border' }}
+          classNames={{
+            label: '!text-text',
+            input: '!text-text',
+            inputWrapper: 'bg-background border-border',
+          }}
           isInvalid={stockInvalid}
-          errorMessage={stockInvalid ? 'Debe ser un entero de 0 o más.' : undefined}
+          errorMessage={
+            stockInvalid ? 'Debe ser un entero de 0 o más.' : undefined
+          }
         />
         <Input
           label="ML por botella"
@@ -145,10 +172,16 @@ export default function FormSectionInventory({ formData, updateField, product, v
           min={1}
           value={formData.totalMl}
           onValueChange={(v) => updateField('totalMl', v)}
-          classNames={{ label: '!text-text', input: '!text-text', inputWrapper: 'bg-background border-border' }}
+          classNames={{
+            label: '!text-text',
+            input: '!text-text',
+            inputWrapper: 'bg-background border-border',
+          }}
           isRequired
           isInvalid={totalMlInvalid}
-          errorMessage={totalMlInvalid ? 'Los ML deben ser mayores a 0.' : undefined}
+          errorMessage={
+            totalMlInvalid ? 'Los ML deben ser mayores a 0.' : undefined
+          }
         />
       </div>
 

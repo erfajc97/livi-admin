@@ -13,7 +13,11 @@ interface CategoryCardProps {
   onDelete: (category: Category) => void
 }
 
-export default function CategoryCard({ category, onEdit, onDelete }: CategoryCardProps) {
+export default function CategoryCard({
+  category,
+  onEdit,
+  onDelete,
+}: CategoryCardProps) {
   const [expanded, setExpanded] = useState(false)
 
   const marcaHook = useMarcaHook(expanded ? category.id : null)
@@ -40,7 +44,18 @@ export default function CategoryCard({ category, onEdit, onDelete }: CategoryCar
         <div className="flex min-w-0 flex-1 flex-col justify-between">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-              <h3 className="truncate text-base font-semibold text-text">{category.name}</h3>
+              <h3 className="truncate text-base font-semibold text-text">
+                {category.name}
+              </h3>
+              <Chip
+                size="sm"
+                variant="bordered"
+                color="default"
+                className="h-5 font-mono text-[10px]"
+                title="Usa este ID en la columna categoria_id del Excel de importación"
+              >
+                ID: {category.id}
+              </Chip>
               <Chip
                 size="sm"
                 variant="flat"
@@ -55,7 +70,9 @@ export default function CategoryCard({ category, onEdit, onDelete }: CategoryCar
               )}
             </div>
             {category.description && (
-              <p className="mt-1 line-clamp-2 text-sm text-text-muted">{category.description}</p>
+              <p className="mt-1 line-clamp-2 text-sm text-text-muted">
+                {category.description}
+              </p>
             )}
           </div>
           <Button

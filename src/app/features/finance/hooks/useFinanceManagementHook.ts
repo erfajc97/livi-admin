@@ -1,6 +1,14 @@
 import { useState, useCallback } from 'react'
-import { useCreateTransactionMutation, useCreateBillMutation, useUpdateBillMutation } from '../mutations/useFinanceMutations'
-import type { TransactionFormData, TransactionType, CreateBillPayload } from '../types'
+import {
+  useCreateTransactionMutation,
+  useCreateBillMutation,
+  useUpdateBillMutation,
+} from '../mutations/useFinanceMutations'
+import type {
+  TransactionFormData,
+  TransactionType,
+  CreateBillPayload,
+} from '../types'
 
 const INITIAL_FORM: TransactionFormData = {
   type: 'expense',
@@ -14,16 +22,24 @@ const INITIAL_FORM: TransactionFormData = {
 }
 
 export function useFinanceManagementHook() {
-  const [activeTab, setActiveTab] = useState<'transaction' | 'bills'>('transaction')
+  const [activeTab, setActiveTab] = useState<'transaction' | 'bills'>(
+    'transaction',
+  )
   const [formData, setFormData] = useState<TransactionFormData>(INITIAL_FORM)
 
   const createTxMutation = useCreateTransactionMutation()
   const createBillMutation = useCreateBillMutation()
   const updateBillMutation = useUpdateBillMutation()
 
-  const updateField = useCallback(<K extends keyof TransactionFormData>(key: K, value: TransactionFormData[K]) => {
-    setFormData((prev) => ({ ...prev, [key]: value }))
-  }, [])
+  const updateField = useCallback(
+    <K extends keyof TransactionFormData>(
+      key: K,
+      value: TransactionFormData[K],
+    ) => {
+      setFormData((prev) => ({ ...prev, [key]: value }))
+    },
+    [],
+  )
 
   const resetForm = useCallback(() => {
     setFormData(INITIAL_FORM)
@@ -35,7 +51,7 @@ export function useFinanceManagementHook() {
 
     createTxMutation.mutate(
       {
-        type: formData.type as TransactionType,
+        type: formData.type,
         category: formData.category,
         amount,
         date: formData.date,
@@ -44,7 +60,7 @@ export function useFinanceManagementHook() {
         notes: formData.notes || undefined,
         accountName: formData.accountName || undefined,
       },
-      { onSuccess: () => resetForm() }
+      { onSuccess: () => resetForm() },
     )
   }, [formData, createTxMutation, resetForm])
 
@@ -52,14 +68,14 @@ export function useFinanceManagementHook() {
     (id: number) => {
       updateBillMutation.mutate({ id, payload: { status: 'paid' } })
     },
-    [updateBillMutation]
+    [updateBillMutation],
   )
 
   const handleCreateBill = useCallback(
     (payload: CreateBillPayload) => {
       createBillMutation.mutate(payload)
     },
-    [createBillMutation]
+    [createBillMutation],
   )
 
   return {

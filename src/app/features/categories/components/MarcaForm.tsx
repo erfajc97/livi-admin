@@ -10,7 +10,11 @@ interface MarcaFormProps {
   onImageChange: (file: File | null) => void
 }
 
-export default function MarcaForm({ formData, onInputChange, onImageChange }: MarcaFormProps) {
+export default function MarcaForm({
+  formData,
+  onInputChange,
+  onImageChange,
+}: MarcaFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +51,9 @@ export default function MarcaForm({ formData, onInputChange, onImageChange }: Ma
 
       <div>
         <p className="text-sm font-medium text-text mb-2">Imagen de la marca</p>
-        <p className="text-xs text-text-muted mb-3">Se muestra como fondo en el banner del catálogo</p>
+        <p className="text-xs text-text-muted mb-3">
+          Se muestra como fondo en el banner del catálogo
+        </p>
 
         {formData.imagePreview && (
           <div className="relative mb-3 rounded-lg overflow-hidden border border-border">
@@ -92,7 +98,9 @@ export default function MarcaForm({ formData, onInputChange, onImageChange }: Ma
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-text">Bajo pedido</p>
-          <p className="text-xs text-text-muted">Aparece en la sección Bajo Pedido</p>
+          <p className="text-xs text-text-muted">
+            Aparece en la sección Bajo Pedido
+          </p>
         </div>
         <Switch
           isSelected={formData.bajoPedido}

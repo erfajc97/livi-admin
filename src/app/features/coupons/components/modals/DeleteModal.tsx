@@ -10,17 +10,33 @@ interface DeleteModalProps {
   onConfirm: () => void
 }
 
-export default function DeleteModal({ isOpen, onOpenChange, coupon, isDeleting, onConfirm }: DeleteModalProps) {
+export default function DeleteModal({
+  isOpen,
+  onOpenChange,
+  coupon,
+  isDeleting,
+  onConfirm,
+}: DeleteModalProps) {
   return (
     <CustomModalNextUI
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       size="md"
-      headerContent={<h3 className="text-lg font-semibold text-text">Eliminar cupón</h3>}
+      headerContent={
+        <h3 className="text-lg font-semibold text-text">Eliminar cupón</h3>
+      }
       footerContent={
         <div className="flex gap-2">
-          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)}>Cancelar</Button>
-          <Button color="danger" onPress={onConfirm} isLoading={isDeleting}>Eliminar</Button>
+          <Button
+            color="danger"
+            variant="flat"
+            onPress={() => onOpenChange(false)}
+          >
+            Cancelar
+          </Button>
+          <Button color="danger" onPress={onConfirm} isLoading={isDeleting}>
+            Eliminar
+          </Button>
         </div>
       }
     >

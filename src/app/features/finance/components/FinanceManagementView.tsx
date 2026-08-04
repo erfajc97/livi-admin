@@ -13,7 +13,10 @@ interface FinanceManagementViewProps {
   formData: TransactionFormData
   isSubmitting: boolean
   onSetActiveTab: (tab: 'transaction' | 'bills') => void
-  onUpdateField: <K extends keyof TransactionFormData>(key: K, value: TransactionFormData[K]) => void
+  onUpdateField: <K extends keyof TransactionFormData>(
+    key: K,
+    value: TransactionFormData[K],
+  ) => void
   onSubmitTransaction: () => void
   onMarkBillPaid: (id: number) => void
   onGoToDashboard: () => void
@@ -40,7 +43,9 @@ export default function FinanceManagementView({
   }
 
   if (!stats) {
-    return <p className="p-6 text-text-muted">No se pudieron cargar los datos.</p>
+    return (
+      <p className="p-6 text-text-muted">No se pudieron cargar los datos.</p>
+    )
   }
 
   return (
@@ -54,7 +59,10 @@ export default function FinanceManagementView({
 
       <FinanceReminders
         overdueCount={stats.bills.overdueCount}
-        overdueTotal={stats.bills.overdue.reduce((s, b) => s + Number(b.amount), 0)}
+        overdueTotal={stats.bills.overdue.reduce(
+          (s, b) => s + Number(b.amount),
+          0,
+        )}
         upcomingCount={stats.bills.upcomingCount}
       />
 

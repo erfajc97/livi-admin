@@ -41,7 +41,12 @@ export default function PublicidadFormModal({
       }
       footerContent={
         <div className="flex gap-2">
-          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)} isDisabled={isSubmitting}>
+          <Button
+            color="danger"
+            variant="flat"
+            onPress={() => onOpenChange(false)}
+            isDisabled={isSubmitting}
+          >
             Cancelar
           </Button>
           <Button

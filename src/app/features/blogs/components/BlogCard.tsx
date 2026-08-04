@@ -11,7 +11,14 @@ interface BlogCardProps {
 }
 
 export default function BlogCard({ blog, onEdit, onDelete }: BlogCardProps) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id: blog.id,
   })
 
@@ -55,7 +62,9 @@ export default function BlogCard({ blog, onEdit, onDelete }: BlogCardProps) {
       <div className="flex min-w-0 flex-1 flex-col justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <h3 className="truncate text-base font-semibold text-text">{blog.title}</h3>
+            <h3 className="truncate text-base font-semibold text-text">
+              {blog.title}
+            </h3>
             <Chip
               size="sm"
               variant="flat"
@@ -65,7 +74,9 @@ export default function BlogCard({ blog, onEdit, onDelete }: BlogCardProps) {
             </Chip>
           </div>
           {blog.excerpt && (
-            <p className="mt-1 line-clamp-2 text-sm text-text-muted">{blog.excerpt}</p>
+            <p className="mt-1 line-clamp-2 text-sm text-text-muted">
+              {blog.excerpt}
+            </p>
           )}
         </div>
       </div>

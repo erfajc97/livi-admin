@@ -1,6 +1,10 @@
 import { API_ENDPOINTS } from '@/app/api/endpoints'
 import axiosInstance from '@/app/config/axiosConfig'
-import type { ProductType, CreateProductTypePayload, UpdateProductTypePayload } from '../types'
+import type {
+  ProductType,
+  CreateProductTypePayload,
+  UpdateProductTypePayload,
+} from '../types'
 
 interface CoreApiResponse<T> {
   statusCode: number
@@ -11,10 +15,15 @@ interface CoreApiResponse<T> {
 }
 
 function unwrap<T>(data: T | CoreApiResponse<T>): T {
-  if (data && typeof data === 'object' && 'statusCode' in data && 'data' in data) {
-    return (data as CoreApiResponse<T>).data
+  if (
+    data &&
+    typeof data === 'object' &&
+    'statusCode' in data &&
+    'data' in data
+  ) {
+    return data.data
   }
-  return data as T
+  return data
 }
 
 export const productTypesService = {
@@ -29,12 +38,21 @@ export const productTypesService = {
   },
 
   create: async (payload: CreateProductTypePayload): Promise<ProductType> => {
-    const { data } = await axiosInstance.post(API_ENDPOINTS.PRODUCT_TYPES, payload)
+    const { data } = await axiosInstance.post(
+      API_ENDPOINTS.PRODUCT_TYPES,
+      payload,
+    )
     return unwrap<ProductType>(data)
   },
 
-  update: async (id: number, payload: UpdateProductTypePayload): Promise<ProductType> => {
-    const { data } = await axiosInstance.patch(`${API_ENDPOINTS.PRODUCT_TYPES}/${id}`, payload)
+  update: async (
+    id: number,
+    payload: UpdateProductTypePayload,
+  ): Promise<ProductType> => {
+    const { data } = await axiosInstance.patch(
+      `${API_ENDPOINTS.PRODUCT_TYPES}/${id}`,
+      payload,
+    )
     return unwrap<ProductType>(data)
   },
 

@@ -15,7 +15,7 @@ const NotFoundPage = ({ text, codeError, errorDetail }: NotFoundPageProps) => {
   const { mutateAsync: logout } = useLogoutMutation()
   const { token } = useAuthStore()
   const navigate = useNavigate()
-  
+
   const handleLogout = async () => {
     await logout()
     navigate({ to: '/' })
@@ -29,7 +29,7 @@ const NotFoundPage = ({ text, codeError, errorDetail }: NotFoundPageProps) => {
     <div className="flex flex-col items-center justify-center text-center h-[calc(100vh-90px)] sm:h-[calc(100vh-120px)] relative bg-black rounded-2xl">
       <div className="relative z-1">
         <div className="flex items-center justify-center">
-         <img src={logo} alt="Logo" className="w-80 h-30" />
+          <img src={logo} alt="Logo" className="w-80 h-30" />
         </div>
         <h1 className="text-6xl sm:text-7xl font-bold text-primary ">
           {codeError}
@@ -48,11 +48,9 @@ const NotFoundPage = ({ text, codeError, errorDetail }: NotFoundPageProps) => {
             <Button
               variant="flat"
               onPress={handleGoBack}
-              startContent={<FaArrowLeftLong className='text-white' />}
+              startContent={<FaArrowLeftLong className="text-white" />}
             >
-              <p className='text-white'>
-                Ir atras
-              </p>
+              <p className="text-white">Ir atras</p>
             </Button>
           )}
           <Button

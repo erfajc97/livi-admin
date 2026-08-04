@@ -24,7 +24,8 @@ export function validateProductForm(
 
   const totalMl = num(formData.totalMl)
   if (Number.isNaN(totalMl)) errors.push('Faltan los ML por botella.')
-  else if (totalMl <= 0) errors.push('Los ML por botella deben ser mayores a 0.')
+  else if (totalMl <= 0)
+    errors.push('Los ML por botella deben ser mayores a 0.')
 
   if (!formData.categoryId) errors.push('Selecciona una categoría.')
   if (!formData.marcaId) errors.push('Selecciona una marca.')
@@ -62,15 +63,20 @@ export function validateProductForm(
 
     const ml = num(v.mlSize)
     if (Number.isNaN(ml)) errors.push(`Variante ${pos}: faltan los ML.`)
-    else if (ml <= 0) errors.push(`Variante ${pos}: los ML deben ser mayores a 0.`)
+    else if (ml <= 0)
+      errors.push(`Variante ${pos}: los ML deben ser mayores a 0.`)
 
     const vPrice = num(v.price)
     if (Number.isNaN(vPrice)) errors.push(`Variante ${pos}: falta el precio.`)
-    else if (vPrice <= 0) errors.push(`Variante ${pos}: el precio debe ser mayor a 0.`)
+    else if (vPrice <= 0)
+      errors.push(`Variante ${pos}: el precio debe ser mayor a 0.`)
   })
 
   // Una variante no puede pedir más ml de los que trae la botella.
-  const variationMl = variations.reduce((sum, v) => sum + (Number(v.mlSize) || 0), 0)
+  const variationMl = variations.reduce(
+    (sum, v) => sum + (Number(v.mlSize) || 0),
+    0,
+  )
   if (totalMl > 0 && variationMl > totalMl) {
     errors.push(
       `Las variantes suman ${variationMl} ml y la botella es de ${totalMl} ml: reduce los ML.`,

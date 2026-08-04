@@ -41,13 +41,25 @@ export default function AdjustMlModal({
       size="md"
       isDismissable={!isLoading}
       hideCloseButton={isLoading}
-      headerContent={<h3 className="text-lg font-semibold text-text">Ajustar ML abiertos</h3>}
+      headerContent={
+        <h3 className="text-lg font-semibold text-text">Ajustar ML abiertos</h3>
+      }
       footerContent={
         <div className="flex gap-2">
-          <Button color="danger" variant="flat" onPress={() => handleClose(false)} isDisabled={isLoading}>
+          <Button
+            color="danger"
+            variant="flat"
+            onPress={() => handleClose(false)}
+            isDisabled={isLoading}
+          >
             Cancelar
           </Button>
-          <Button color="warning" onPress={handleConfirm} isLoading={isLoading} isDisabled={!newMl}>
+          <Button
+            color="warning"
+            onPress={handleConfirm}
+            isLoading={isLoading}
+            isDisabled={!newMl}
+          >
             Guardar ajuste
           </Button>
         </div>
@@ -55,8 +67,8 @@ export default function AdjustMlModal({
     >
       <div className="flex flex-col gap-4">
         <p className="text-sm text-text-muted">
-          Ajusta manualmente los ML restantes en la botella abierta.
-          Valor actual: <strong className="text-text">{currentOpenMl}ml</strong>
+          Ajusta manualmente los ML restantes en la botella abierta. Valor
+          actual: <strong className="text-text">{currentOpenMl}ml</strong>
         </p>
 
         <Input
@@ -65,7 +77,11 @@ export default function AdjustMlModal({
           type="number"
           value={newMl}
           onValueChange={setNewMl}
-          classNames={{ label: '!text-text', input: '!text-text', inputWrapper: 'bg-background border-border' }}
+          classNames={{
+            label: '!text-text',
+            input: '!text-text',
+            inputWrapper: 'bg-background border-border',
+          }}
           isRequired
         />
 
@@ -75,7 +91,11 @@ export default function AdjustMlModal({
           size="sm"
           value={note}
           onValueChange={setNote}
-          classNames={{ label: '!text-text', input: '!text-text', inputWrapper: 'bg-background border-border' }}
+          classNames={{
+            label: '!text-text',
+            input: '!text-text',
+            inputWrapper: 'bg-background border-border',
+          }}
         />
       </div>
     </CustomModalNextUI>

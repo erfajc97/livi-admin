@@ -68,7 +68,9 @@ export default function FormModal({
           radius="full"
           isLoading={isLoading}
           onPress={onSubmit}
-          endContent={isThereId ? <PencilIcon size={14} /> : <PlusIcon size={14} />}
+          endContent={
+            isThereId ? <PencilIcon size={14} /> : <PlusIcon size={14} />
+          }
         >
           {isThereId ? 'Editar' : 'Crear'} usuario
         </Button>

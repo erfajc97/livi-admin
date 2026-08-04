@@ -13,7 +13,7 @@ export function useCombosPageHook() {
   const deleteMutation = useDeleteComboMutation()
 
   const filteredCombos = combos.filter((combo) =>
-    combo.name.toLowerCase().includes(search.toLowerCase())
+    combo.name.toLowerCase().includes(search.toLowerCase()),
   )
 
   const handleSearch = useCallback((value: string) => {

@@ -10,7 +10,11 @@ export function Dashboard() {
 
   return (
     <div className="flex flex-col gap-6 p-6">
-      <WelcomeBanner userName={userName} subtitle="Panel de administración NönDecants" useBgImage />
+      <WelcomeBanner
+        userName={userName}
+        subtitle="Panel de administración NönDecants"
+        useBgImage
+      />
 
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
@@ -19,7 +23,9 @@ export function Dashboard() {
       ) : stats ? (
         <StatsGrid stats={stats} />
       ) : (
-        <p className="text-text-muted">No se pudieron cargar las estadísticas.</p>
+        <p className="text-text-muted">
+          No se pudieron cargar las estadísticas.
+        </p>
       )}
     </div>
   )

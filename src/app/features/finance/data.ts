@@ -8,10 +8,7 @@ export const EXPENSE_CATEGORIES = [
   'Otros',
 ] as const
 
-export const INCOME_CATEGORIES = [
-  'Venta Online',
-  'Venta Directa',
-] as const
+export const INCOME_CATEGORIES = ['Venta Online', 'Venta Directa'] as const
 
 export const PAYMENT_METHODS = [
   'Efectivo',

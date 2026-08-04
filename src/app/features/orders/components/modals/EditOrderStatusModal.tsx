@@ -32,7 +32,9 @@ export default function EditOrderStatusModal({
   return (
     <CustomModalNextUI
       isOpen={isOpen}
-      onOpenChange={(open) => { if (!open) onClose() }}
+      onOpenChange={(open) => {
+        if (!open) onClose()
+      }}
       headerContent={<span className="text-text">Cambiar estado de orden</span>}
     >
       <div className="flex flex-col gap-4 p-4">

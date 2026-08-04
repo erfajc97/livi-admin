@@ -1,6 +1,12 @@
 import { Button, Spinner } from '@heroui/react'
 import { PlusIcon } from 'lucide-react'
-import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useBannersPageHook } from './hooks/useBannersPageHook'
 import BannerCard from './components/BannerCard'
@@ -38,7 +44,8 @@ export function Banners() {
             Banners
           </h1>
           <p className="mt-1 text-sm text-text-muted">
-            Gestiona los banners promocionales de la tienda. Arrastra para reordenar.
+            Gestiona los banners promocionales de la tienda. Arrastra para
+            reordenar.
           </p>
         </div>
         <Button

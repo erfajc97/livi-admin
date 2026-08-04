@@ -6,10 +6,7 @@ interface LoginFormProps {
   isLoading: boolean
 }
 
-export function LoginForm({
- handleLogin,
- isLoading
-}: LoginFormProps) {
+export function LoginForm({ handleLogin, isLoading }: LoginFormProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
@@ -17,7 +14,9 @@ export function LoginForm({
   return (
     <div className="w-full max-w-sm">
       {/* Heading */}
-      <h1 className="mb-1 font-heading text-4xl font-bold text-gray-900">Bienvenido</h1>
+      <h1 className="mb-1 font-heading text-4xl font-bold text-gray-900">
+        Bienvenido
+      </h1>
       <p className="mb-8 text-sm text-gray-500">
         Ingresa tu email y contraseña para iniciar sesión
       </p>

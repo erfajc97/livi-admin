@@ -14,7 +14,11 @@ interface CouponCardProps {
   onDelete: (coupon: Coupon) => void
 }
 
-export default function CouponCard({ coupon, onEdit, onDelete }: CouponCardProps) {
+export default function CouponCard({
+  coupon,
+  onEdit,
+  onDelete,
+}: CouponCardProps) {
   const isExpired = coupon.expiresAt && new Date(coupon.expiresAt) < new Date()
   const usageText = coupon.maxUses
     ? `${coupon.currentUses}/${coupon.maxUses} usos`
@@ -38,8 +42,14 @@ export default function CouponCard({ coupon, onEdit, onDelete }: CouponCardProps
       <div className="flex min-w-0 flex-1 flex-col justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="truncate font-mono text-base font-bold text-accent">{coupon.code}</h3>
-            <Chip size="sm" variant="flat" color={coupon.isActive && !isExpired ? 'success' : 'danger'}>
+            <h3 className="truncate font-mono text-base font-bold text-accent">
+              {coupon.code}
+            </h3>
+            <Chip
+              size="sm"
+              variant="flat"
+              color={coupon.isActive && !isExpired ? 'success' : 'danger'}
+            >
               {isExpired ? 'Expirado' : coupon.isActive ? 'Activo' : 'Inactivo'}
             </Chip>
             <Chip size="sm" variant="flat" color="warning">
@@ -47,7 +57,8 @@ export default function CouponCard({ coupon, onEdit, onDelete }: CouponCardProps
             </Chip>
           </div>
           <p className="mt-1 break-words text-sm text-text-muted">
-            Descuento: <span className="font-semibold text-text">{valueText}</span>
+            Descuento:{' '}
+            <span className="font-semibold text-text">{valueText}</span>
             {' · '}
             {usageText}
             {coupon.expiresAt && (
@@ -64,7 +75,9 @@ export default function CouponCard({ coupon, onEdit, onDelete }: CouponCardProps
             )}
           </p>
           {coupon.description && (
-            <p className="mt-0.5 line-clamp-2 text-xs text-text-muted">{coupon.description}</p>
+            <p className="mt-0.5 line-clamp-2 text-xs text-text-muted">
+              {coupon.description}
+            </p>
           )}
           <div className="mt-1 flex flex-wrap gap-1.5">
             {coupon.minOrderAmount && (
@@ -72,18 +85,37 @@ export default function CouponCard({ coupon, onEdit, onDelete }: CouponCardProps
                 Mín. ${coupon.minOrderAmount}
               </Chip>
             )}
-            <Chip size="sm" variant="flat" color={coupon.singleUsePerCustomer ? 'secondary' : 'default'}>
-              {coupon.singleUsePerCustomer ? '1 uso/cliente' : 'Multi-uso/cliente'}
+            <Chip
+              size="sm"
+              variant="flat"
+              color={coupon.singleUsePerCustomer ? 'secondary' : 'default'}
+            >
+              {coupon.singleUsePerCustomer
+                ? '1 uso/cliente'
+                : 'Multi-uso/cliente'}
             </Chip>
           </div>
         </div>
       </div>
 
       <div className="flex shrink-0 flex-wrap items-start gap-1 self-end sm:self-start">
-        <Button isIconOnly size="sm" variant="light" onPress={() => onEdit(coupon)} aria-label="Editar cupón">
+        <Button
+          isIconOnly
+          size="sm"
+          variant="light"
+          onPress={() => onEdit(coupon)}
+          aria-label="Editar cupón"
+        >
           <PencilIcon size={16} className="text-text-muted" />
         </Button>
-        <Button isIconOnly size="sm" variant="light" color="danger" onPress={() => onDelete(coupon)} aria-label="Eliminar cupón">
+        <Button
+          isIconOnly
+          size="sm"
+          variant="light"
+          color="danger"
+          onPress={() => onDelete(coupon)}
+          aria-label="Eliminar cupón"
+        >
           <TrashIcon size={16} />
         </Button>
       </div>

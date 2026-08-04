@@ -63,12 +63,24 @@ export default function ComboVariationSelector({
               <SelectItem
                 key={FULL_BOTTLE_KEY}
                 textValue={`Botella completa — ${product.totalMl}ml`}
-                classNames={{ base: 'text-text data-[hover=true]:bg-bg', title: '!text-text' }}
+                classNames={{
+                  base: 'text-text data-[hover=true]:bg-bg',
+                  title: '!text-text',
+                }}
               >
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-text font-semibold">Botella completa — {product.totalMl}ml</span>
-                  <span className="text-xs text-text-muted">${product.price}</span>
-                  <Chip size="sm" variant="flat" color="warning" className="text-xs">
+                  <span className="text-sm text-text font-semibold">
+                    Botella completa — {product.totalMl}ml
+                  </span>
+                  <span className="text-xs text-text-muted">
+                    ${product.price}
+                  </span>
+                  <Chip
+                    size="sm"
+                    variant="flat"
+                    color="warning"
+                    className="text-xs"
+                  >
                     Sellada
                   </Chip>
                 </div>
@@ -80,10 +92,15 @@ export default function ComboVariationSelector({
           <SelectItem
             key={String(v.id)}
             textValue={buildVariationLabel(v)}
-            classNames={{ base: 'text-text data-[hover=true]:bg-bg', title: '!text-text' }}
+            classNames={{
+              base: 'text-text data-[hover=true]:bg-bg',
+              title: '!text-text',
+            }}
           >
             <div className="flex items-center gap-2">
-              <span className="text-sm text-text">{buildVariationLabel(v)}</span>
+              <span className="text-sm text-text">
+                {buildVariationLabel(v)}
+              </span>
               {v.price != null && (
                 <span className="text-xs text-text-muted">${v.price}</span>
               )}

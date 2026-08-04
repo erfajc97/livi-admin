@@ -15,6 +15,6 @@ export const useLogoutMutation = () => {
       console.error('Logout error:', error)
       // Force remove token anyway to prevent stuck states
       useAuthStore.getState().removeToken()
-    }
+    },
   })
 }

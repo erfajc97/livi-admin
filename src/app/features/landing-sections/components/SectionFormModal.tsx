@@ -9,21 +9,25 @@ import {
   Switch,
   Select,
   SelectItem,
-} from '@heroui/react';
-import { useState, useEffect } from 'react';
+} from '@heroui/react'
+import { useState, useEffect } from 'react'
 import type {
   LandingSection,
   CreateLandingSectionDto,
   UpdateLandingSectionDto,
   SectionPlacement,
-} from '../types';
+} from '../types'
 
 interface SectionFormModalProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  section: LandingSection | null;
-  onSubmit: (dto: CreateLandingSectionDto | UpdateLandingSectionDto) => Promise<void>;
-  isSubmitting: boolean;
+  isOpen: boolean
+  onOpenChange: (open: boolean) => void
+  section: LandingSection | null
+  onSubmit: (
+    dto: CreateLandingSectionDto | UpdateLandingSectionDto,
+  ) => Promise<void>
+  isSubmitting: boolean
+  /** true cuando ya hay 2 secciones de home: solo se pueden crear de carrito. */
+  homeFull?: boolean
 }
 
 export function SectionFormModal({
@@ -32,25 +36,31 @@ export function SectionFormModal({
   section,
   onSubmit,
   isSubmitting,
+  homeFull = false,
 }: SectionFormModalProps) {
-  const [title, setTitle] = useState('');
-  const [order, setOrder] = useState('1');
-  const [placement, setPlacement] = useState<SectionPlacement>('home');
-  const [isActive, setIsActive] = useState(true);
+  const [title, setTitle] = useState('')
+  const [order, setOrder] = useState('1')
+  const [placement, setPlacement] = useState<SectionPlacement>('home')
+  const [isActive, setIsActive] = useState(true)
+
+  // Home bloqueado solo al crear una sección nueva (al editar se respeta la actual).
+  const homeDisabled = homeFull && !section
 
   useEffect(() => {
     if (section) {
-      setTitle(section.title);
-      setOrder(String(section.order));
-      setPlacement(section.placement ?? 'home');
-      setIsActive(section.isActive);
+      setTitle(section.title)
+      setOrder(String(section.order))
+      setPlacement(
+        (section.placement as SectionPlacement | undefined) ?? 'home',
+      )
+      setIsActive(section.isActive)
     } else {
-      setTitle('');
-      setOrder('1');
-      setPlacement('home');
-      setIsActive(true);
+      setTitle('')
+      setOrder('1')
+      setPlacement(homeDisabled ? 'cart' : 'home')
+      setIsActive(true)
     }
-  }, [section]);
+  }, [section, homeDisabled])
 
   const handleSubmit = async () => {
     const dto = {
@@ -58,9 +68,9 @@ export function SectionFormModal({
       order: parseInt(order, 10) || 1,
       placement,
       isActive,
-    };
-    await onSubmit(dto);
-  };
+    }
+    await onSubmit(dto)
+  }
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="md">
@@ -91,10 +101,18 @@ export function SectionFormModal({
                   label="Dónde se muestra"
                   selectedKeys={[placement]}
                   onSelectionChange={(keys) => {
-                    const val = Array.from(keys)[0] as SectionPlacement;
-                    if (val) setPlacement(val);
+                    const val = Array.from(keys)[0] as
+                      | SectionPlacement
+                      | undefined
+                    if (val) setPlacement(val)
                   }}
                   isRequired
+                  disabledKeys={homeDisabled ? ['home'] : []}
+                  description={
+                    homeDisabled
+                      ? 'La landing ya tiene sus 2 secciones.'
+                      : undefined
+                  }
                   classNames={{
                     label: 'text-sm font-medium text-text',
                     value: 'text-sm text-text',
@@ -102,7 +120,9 @@ export function SectionFormModal({
                   }}
                 >
                   <SelectItem key="home">Landing (home)</SelectItem>
-                  <SelectItem key="cart">Carrito — “No te pierdas estos productos”</SelectItem>
+                  <SelectItem key="cart">
+                    Carrito — “No te pierdas estos productos”
+                  </SelectItem>
                 </Select>
 
                 {placement === 'home' ? (
@@ -110,8 +130,8 @@ export function SectionFormModal({
                     label="Posición en la landing"
                     selectedKeys={[order]}
                     onSelectionChange={(keys) => {
-                      const val = Array.from(keys)[0] as string;
-                      if (val) setOrder(val);
+                      const val = Array.from(keys)[0] as string
+                      if (val) setOrder(val)
                     }}
                     isRequired
                     classNames={{
@@ -171,5 +191,5 @@ export function SectionFormModal({
         )}
       </ModalContent>
     </Modal>
-  );
+  )
 }

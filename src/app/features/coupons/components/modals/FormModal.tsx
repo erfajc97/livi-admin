@@ -35,12 +35,22 @@ export default function FormModal({
       }
       footerContent={
         <div className="flex gap-2">
-          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)}>Cancelar</Button>
+          <Button
+            color="danger"
+            variant="flat"
+            onPress={() => onOpenChange(false)}
+          >
+            Cancelar
+          </Button>
           <Button
             color="warning"
             onPress={onSubmit}
             isLoading={isSubmitting}
-            isDisabled={!formData.code.trim() || (formData.type !== 'free_shipping' && !formData.value) || !formData.expiresAt}
+            isDisabled={
+              !formData.code.trim() ||
+              (formData.type !== 'free_shipping' && !formData.value) ||
+              !formData.expiresAt
+            }
           >
             {isThereId ? 'Actualizar' : 'Crear'}
           </Button>

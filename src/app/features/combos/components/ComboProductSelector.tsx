@@ -13,7 +13,10 @@ export default function ComboProductSelector({
   onChange,
   onProductSelected,
 }: ComboProductSelectorProps) {
-  const { data: paginatedData, isLoading } = useProductsQuery({ page: 1, limit: 100 })
+  const { data: paginatedData, isLoading } = useProductsQuery({
+    page: 1,
+    limit: 100,
+  })
   const allProducts = paginatedData?.data ?? []
 
   return (
@@ -45,7 +48,9 @@ export default function ComboProductSelector({
       }}
       listboxProps={{
         className: 'bg-surface text-text max-h-64 overflow-y-auto',
-        emptyContent: isLoading ? "Cargando productos..." : "No se encontraron productos.",
+        emptyContent: isLoading
+          ? 'Cargando productos...'
+          : 'No se encontraron productos.',
       }}
       popoverProps={{
         classNames: {
@@ -57,17 +62,22 @@ export default function ComboProductSelector({
         <AutocompleteItem
           key={String(product.id)}
           textValue={product.name}
-          classNames={{ base: 'text-text data-[hover=true]:bg-bg', title: '!text-text' }}
+          classNames={{
+            base: 'text-text data-[hover=true]:bg-bg',
+            title: '!text-text',
+          }}
         >
           <div className="flex items-center gap-2">
             {product.imageUrl && (
-              <img src={product.imageUrl} alt="" className="h-6 w-6 rounded object-cover" />
+              <img
+                src={product.imageUrl}
+                alt=""
+                className="h-6 w-6 rounded object-cover"
+              />
             )}
             <div className="flex flex-col">
               <span className="text-sm text-text">{product.name}</span>
-              <span className="text-xs text-text-muted">
-                ${product.price}
-              </span>
+              <span className="text-xs text-text-muted">${product.price}</span>
             </div>
           </div>
         </AutocompleteItem>

@@ -20,7 +20,10 @@ export default function FinanceMetricCards({
         <div className="min-w-0">
           <p className="text-xs text-text-muted">Egresos del mes</p>
           <p className="break-words text-lg font-bold text-text">
-            ${expensesMonth.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
+            $
+            {expensesMonth.toLocaleString('es-EC', {
+              minimumFractionDigits: 2,
+            })}
           </p>
         </div>
       </div>
@@ -32,7 +35,8 @@ export default function FinanceMetricCards({
         <div className="min-w-0">
           <p className="text-xs text-text-muted">Pendientes</p>
           <p className="break-words text-lg font-bold text-text">
-            ${pendingTotal.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
+            $
+            {pendingTotal.toLocaleString('es-EC', { minimumFractionDigits: 2 })}
           </p>
         </div>
       </div>

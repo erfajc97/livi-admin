@@ -25,18 +25,18 @@ Panel de administración para gestión de productos, usuarios, órdenes, finanza
 
 ## 📦 Stack
 
-| Capa | Tecnología |
-|------|-----------|
-| Meta-framework | **TanStack Start** (SSR/streaming) |
-| Router | **TanStack Router** (file-based) |
-| UI | **HeroUI v2** + **Tailwind CSS v4** |
-| Estado global | **Zustand v5** |
-| Data fetching | **TanStack Query v5** |
-| HTTP | **Axios** (JWT interceptors) |
-| Formularios | **React Hook Form** + **Zod** |
-| Notificaciones | **HeroUI Toast** |
-| Animaciones | **Framer Motion** |
-| Lenguaje | **TypeScript** strict mode |
+| Capa           | Tecnología                          |
+| -------------- | ----------------------------------- |
+| Meta-framework | **TanStack Start** (SSR/streaming)  |
+| Router         | **TanStack Router** (file-based)    |
+| UI             | **HeroUI v2** + **Tailwind CSS v4** |
+| Estado global  | **Zustand v5**                      |
+| Data fetching  | **TanStack Query v5**               |
+| HTTP           | **Axios** (JWT interceptors)        |
+| Formularios    | **React Hook Form** + **Zod**       |
+| Notificaciones | **HeroUI Toast**                    |
+| Animaciones    | **Framer Motion**                   |
+| Lenguaje       | **TypeScript** strict mode          |
 
 ---
 
@@ -188,19 +188,20 @@ const useAuthStore = create(
     (set) => ({
       token: null,
       user: null,
-      setToken: (token, user) => { },
-      removeToken: () => { },
+      setToken: (token, user) => {},
+      removeToken: () => {},
       isLogged: () => Boolean(token),
     }),
     {
       name: 'auth-store',
       storage: localStorage, // localStorage estándar (sin encriptación)
-    }
-  )
-);
+    },
+  ),
+)
 ```
 
 **Flujo:**
+
 1. Usuario ingresa email + password en `/login`
 2. Backend valida (solo ADMIN permitido)
 3. Responde con JWT token + user data
@@ -325,8 +326,8 @@ export const useUsersQuery = (filters) => {
     queryKey: ['users', filters],
     queryFn: () => usersService.getAll(filters),
     staleTime: 5 * 60 * 1000,
-  });
-};
+  })
+}
 ```
 
 ### Mutations
@@ -334,35 +335,35 @@ export const useUsersQuery = (filters) => {
 ```typescript
 // src/app/features/users/mutations/useCreateUserMutation.ts
 export const useCreateUserMutation = () => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: (dto) => usersService.create(dto),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-      addToast({ title: 'Usuario creado' });
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+      addToast({ title: 'Usuario creado' })
     },
     onError: (error) => {
-      addToast({ title: error.message, color: 'danger' });
+      addToast({ title: error.message, color: 'danger' })
     },
-  });
-};
+  })
+}
 ```
 
 ---
 
 ## 📝 Scripts
 
-| Script | Descripción |
-|--------|-----------|
-| `npm run dev` | Desarrollo (SSR + HMR) |
-| `npm run build` | Build SSR |
-| `npm run preview` | Preview del build |
-| `npm run test` | Tests con Vitest |
-| `npm run test:watch` | Tests en watch mode |
-| `npm run lint` | ESLint |
-| `npm run format` | Prettier |
-| `npm run check` | Prettier + ESLint + TypeScript |
+| Script               | Descripción                    |
+| -------------------- | ------------------------------ |
+| `npm run dev`        | Desarrollo (SSR + HMR)         |
+| `npm run build`      | Build SSR                      |
+| `npm run preview`    | Preview del build              |
+| `npm run test`       | Tests con Vitest               |
+| `npm run test:watch` | Tests en watch mode            |
+| `npm run lint`       | ESLint                         |
+| `npm run format`     | Prettier                       |
+| `npm run check`      | Prettier + ESLint + TypeScript |
 
 ---
 
@@ -442,6 +443,7 @@ function UserForm({ onSubmit, defaultValues }) {
 ## 🌐 Integración Frontend
 
 Admin y Frontend **comparten**:
+
 - Backend API (mismo servidor 3030)
 - Zustand stores (auth store)
 - TanStack Query config

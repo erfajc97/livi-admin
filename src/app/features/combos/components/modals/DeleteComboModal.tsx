@@ -25,8 +25,9 @@ export default function DeleteComboModal({
     >
       <div className="flex flex-col gap-4">
         <p className="text-text-muted">
-          ¿Estás seguro de eliminar <strong className="text-text">{combo?.name}</strong>?
-          Esta acción no se puede deshacer.
+          ¿Estás seguro de eliminar{' '}
+          <strong className="text-text">{combo?.name}</strong>? Esta acción no
+          se puede deshacer.
         </p>
         <div className="flex justify-end gap-3">
           <Button variant="flat" onPress={onClose}>

@@ -1,6 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { productsService } from '@/app/features/products/services/productsService'
-import type { PaginatedProducts, Product, ProductFilters, Category } from '@/app/features/products/types'
+import type {
+  PaginatedProducts,
+  Product,
+  ProductFilters,
+  Category,
+} from '@/app/features/products/types'
 
 export function useProductsQuery(filters: ProductFilters = {}) {
   return useQuery<PaginatedProducts>({

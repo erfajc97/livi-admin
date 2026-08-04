@@ -1,6 +1,7 @@
 import { Button, Chip } from '@heroui/react'
 import { Trash2Icon } from 'lucide-react'
-import { CustomTableNextUi, type Column } from '@/app/components/UI/table-nextui/CustomTableNextUi'
+import { CustomTableNextUi } from '@/app/components/UI/table-nextui/CustomTableNextUi'
+import type { Column } from '@/app/components/UI/table-nextui/CustomTableNextUi'
 import type { Subscriber } from '../types'
 
 interface SubscribersTableProps {
@@ -17,7 +18,11 @@ const columns: Column[] = [
   { key: 'actions', name: 'Acciones', align: 'center' },
 ]
 
-export function SubscribersTable({ subscribers, isLoading, onDelete }: SubscribersTableProps) {
+export function SubscribersTable({
+  subscribers,
+  isLoading,
+  onDelete,
+}: SubscribersTableProps) {
   const renderCell = (item: Subscriber, columnKey: string) => {
     switch (columnKey) {
       case 'email':

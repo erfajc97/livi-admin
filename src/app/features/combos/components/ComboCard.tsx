@@ -28,34 +28,56 @@ export default function ComboCard({ combo, onEdit, onDelete }: ComboCardProps) {
           )}
           <div className="flex flex-col gap-1">
             <h3 className="text-lg font-semibold text-text">{combo.name}</h3>
-            <Chip size="sm" color={combo.isActive ? 'success' : 'default'} variant="flat">
+            <Chip
+              size="sm"
+              color={combo.isActive ? 'success' : 'default'}
+              variant="flat"
+            >
               {combo.isActive ? 'Activo' : 'Inactivo'}
             </Chip>
           </div>
         </div>
         <div className="flex gap-2">
-          <Button isIconOnly size="sm" variant="flat" onPress={() => onEdit(combo)}>
+          <Button
+            isIconOnly
+            size="sm"
+            variant="flat"
+            onPress={() => onEdit(combo)}
+          >
             <Pencil size={16} />
           </Button>
-          <Button isIconOnly size="sm" variant="flat" color="danger" onPress={() => onDelete(combo)}>
+          <Button
+            isIconOnly
+            size="sm"
+            variant="flat"
+            color="danger"
+            onPress={() => onDelete(combo)}
+          >
             <Trash2 size={16} />
           </Button>
         </div>
       </div>
 
       {combo.description && (
-        <p className="text-sm text-text-muted line-clamp-2">{combo.description}</p>
+        <p className="text-sm text-text-muted line-clamp-2">
+          {combo.description}
+        </p>
       )}
 
       <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium text-text-muted uppercase">Productos incluidos</span>
+        <span className="text-xs font-medium text-text-muted uppercase">
+          Productos incluidos
+        </span>
         <div className="flex flex-wrap gap-2">
           {combo.comboProducts.map((cp) => {
-            const isDecant = cp.productVariation && !cp.productVariation.isFullBottle
+            const isDecant =
+              cp.productVariation && !cp.productVariation.isFullBottle
             return (
               <Chip key={cp.id} size="sm" variant="bordered">
                 {cp.product?.name ?? `Producto #${cp.productId}`}
-                {isDecant && cp.productVariation?.mlSize && ` (${cp.productVariation.mlSize}ml)`}
+                {isDecant &&
+                  cp.productVariation?.mlSize &&
+                  ` (${cp.productVariation.mlSize}ml)`}
                 {cp.productVariation?.isFullBottle && ' (Botella completa)'}
                 {cp.quantity > 1 && ` x${cp.quantity}`}
               </Chip>

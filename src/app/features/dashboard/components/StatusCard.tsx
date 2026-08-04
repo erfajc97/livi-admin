@@ -5,7 +5,12 @@ interface StatusCardProps {
   color: string
 }
 
-export default function StatusCard({ icon: Icon, count, label, color }: StatusCardProps) {
+export default function StatusCard({
+  icon: Icon,
+  count,
+  label,
+  color,
+}: StatusCardProps) {
   return (
     <div className="flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3">
       <div className={`rounded-lg p-2 ${color}`}>

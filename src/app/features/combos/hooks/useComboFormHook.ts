@@ -1,5 +1,10 @@
 import { useState, useCallback } from 'react'
-import type { Combo, ComboFormData, ComboProductRow, CreateComboPayload } from '../types'
+import type {
+  Combo,
+  ComboFormData,
+  ComboProductRow,
+  CreateComboPayload,
+} from '../types'
 
 const INITIAL_FORM: ComboFormData = {
   name: '',
@@ -12,7 +17,11 @@ const INITIAL_FORM: ComboFormData = {
   parentComboId: undefined,
 }
 
-const INITIAL_PRODUCT_ROW: ComboProductRow = { productId: '', productVariationId: '', quantity: '1' }
+const INITIAL_PRODUCT_ROW: ComboProductRow = {
+  productId: '',
+  productVariationId: '',
+  quantity: '1',
+}
 
 /** Borrador de una versión inline (mismo nombre del combo base, otros productos/precio). */
 export interface VersionDraft {
@@ -42,13 +51,18 @@ function mapProducts(rows: ComboProductRow[]) {
 
 export function useComboFormHook() {
   const [formData, setFormData] = useState<ComboFormData>(INITIAL_FORM)
-  const [productRows, setProductRows] = useState<ComboProductRow[]>([{ ...INITIAL_PRODUCT_ROW }])
+  const [productRows, setProductRows] = useState<ComboProductRow[]>([
+    { ...INITIAL_PRODUCT_ROW },
+  ])
   const [versions, setVersions] = useState<VersionDraft[]>([])
   const [removedVersionIds, setRemovedVersionIds] = useState<number[]>([])
 
-  const updateField = useCallback(<K extends keyof ComboFormData>(key: K, value: ComboFormData[K]) => {
-    setFormData((prev) => ({ ...prev, [key]: value }))
-  }, [])
+  const updateField = useCallback(
+    <K extends keyof ComboFormData>(key: K, value: ComboFormData[K]) => {
+      setFormData((prev) => ({ ...prev, [key]: value }))
+    },
+    [],
+  )
 
   const resetForm = useCallback(() => {
     setFormData(INITIAL_FORM)
@@ -74,9 +88,11 @@ export function useComboFormHook() {
     setProductRows(
       combo.comboProducts.map((cp) => ({
         productId: String(cp.productId),
-        productVariationId: cp.productVariationId ? String(cp.productVariationId) : '',
+        productVariationId: cp.productVariationId
+          ? String(cp.productVariationId)
+          : '',
         quantity: String(cp.quantity),
-      }))
+      })),
     )
     setVersions(
       (combo.versions ?? []).map((v) => ({
@@ -85,10 +101,12 @@ export function useComboFormHook() {
         discount: String(v.discount ?? ''),
         productRows: (v.comboProducts ?? []).map((cp) => ({
           productId: String(cp.productId),
-          productVariationId: cp.productVariationId ? String(cp.productVariationId) : '',
+          productVariationId: cp.productVariationId
+            ? String(cp.productVariationId)
+            : '',
           quantity: String(cp.quantity),
         })),
-      }))
+      })),
     )
     setRemovedVersionIds([])
   }, [])
@@ -98,16 +116,19 @@ export function useComboFormHook() {
     setProductRows((prev) => [...prev, { ...INITIAL_PRODUCT_ROW }])
   }, [])
 
-  const updateProductRow = useCallback((index: number, field: keyof ComboProductRow, value: string) => {
-    setProductRows((prev) =>
-      prev.map((row, i) => {
-        if (i !== index) return row
-        const updated = { ...row, [field]: value }
-        if (field === 'productId') updated.productVariationId = ''
-        return updated
-      })
-    )
-  }, [])
+  const updateProductRow = useCallback(
+    (index: number, field: keyof ComboProductRow, value: string) => {
+      setProductRows((prev) =>
+        prev.map((row, i) => {
+          if (i !== index) return row
+          const updated = { ...row, [field]: value }
+          if (field === 'productId') updated.productVariationId = ''
+          return updated
+        }),
+      )
+    },
+    [],
+  )
 
   const removeProductRow = useCallback((index: number) => {
     setProductRows((prev) => prev.filter((_, i) => i !== index))
@@ -115,7 +136,14 @@ export function useComboFormHook() {
 
   // ── Versiones inline ──
   const addVersion = useCallback(() => {
-    setVersions((prev) => [...prev, { finalPrice: '', discount: '', productRows: [{ ...INITIAL_PRODUCT_ROW }] }])
+    setVersions((prev) => [
+      ...prev,
+      {
+        finalPrice: '',
+        discount: '',
+        productRows: [{ ...INITIAL_PRODUCT_ROW }],
+      },
+    ])
   }, [])
 
   const removeVersion = useCallback((index: number) => {
@@ -126,18 +154,35 @@ export function useComboFormHook() {
     })
   }, [])
 
-  const updateVersionField = useCallback((index: number, field: 'finalPrice' | 'discount', value: string) => {
-    setVersions((prev) => prev.map((v, i) => (i === index ? { ...v, [field]: value } : v)))
-  }, [])
+  const updateVersionField = useCallback(
+    (index: number, field: 'finalPrice' | 'discount', value: string) => {
+      setVersions((prev) =>
+        prev.map((v, i) => (i === index ? { ...v, [field]: value } : v)),
+      )
+    },
+    [],
+  )
 
   const addVersionProductRow = useCallback((vIndex: number) => {
     setVersions((prev) =>
-      prev.map((v, i) => (i === vIndex ? { ...v, productRows: [...v.productRows, { ...INITIAL_PRODUCT_ROW }] } : v))
+      prev.map((v, i) =>
+        i === vIndex
+          ? {
+              ...v,
+              productRows: [...v.productRows, { ...INITIAL_PRODUCT_ROW }],
+            }
+          : v,
+      ),
     )
   }, [])
 
   const updateVersionProductRow = useCallback(
-    (vIndex: number, rIndex: number, field: keyof ComboProductRow, value: string) => {
+    (
+      vIndex: number,
+      rIndex: number,
+      field: keyof ComboProductRow,
+      value: string,
+    ) => {
       setVersions((prev) =>
         prev.map((v, i) => {
           if (i !== vIndex) return v
@@ -150,17 +195,27 @@ export function useComboFormHook() {
               return updated
             }),
           }
-        })
+        }),
       )
     },
-    []
+    [],
   )
 
-  const removeVersionProductRow = useCallback((vIndex: number, rIndex: number) => {
-    setVersions((prev) =>
-      prev.map((v, i) => (i === vIndex ? { ...v, productRows: v.productRows.filter((_, ri) => ri !== rIndex) } : v))
-    )
-  }, [])
+  const removeVersionProductRow = useCallback(
+    (vIndex: number, rIndex: number) => {
+      setVersions((prev) =>
+        prev.map((v, i) =>
+          i === vIndex
+            ? {
+                ...v,
+                productRows: v.productRows.filter((_, ri) => ri !== rIndex),
+              }
+            : v,
+        ),
+      )
+    },
+    [],
+  )
 
   const buildPayload = useCallback((): CreateComboPayload => {
     return {
@@ -193,7 +248,7 @@ export function useComboFormHook() {
       }
       return { toCreate, toUpdate, toDelete: removedVersionIds }
     },
-    [versions, removedVersionIds]
+    [versions, removedVersionIds],
   )
 
   return {

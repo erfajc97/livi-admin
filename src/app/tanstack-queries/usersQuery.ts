@@ -8,7 +8,11 @@ export interface UseUsersQueryParams {
   enabled?: boolean
 }
 
-export function useUsersQuery({ page = 1, limit = 10, enabled = true }: UseUsersQueryParams = {}) {
+export function useUsersQuery({
+  page = 1,
+  limit = 10,
+  enabled = true,
+}: UseUsersQueryParams = {}) {
   return useQuery<User[]>({
     queryKey: ['users', { page, limit }],
     queryFn: () => usersService.listUsers(page, limit),

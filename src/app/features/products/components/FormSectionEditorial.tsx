@@ -5,7 +5,10 @@ import type { ProductFormData, ScentSection } from '../types'
 
 interface Props {
   formData: ProductFormData
-  updateField: <K extends keyof ProductFormData>(key: K, value: ProductFormData[K]) => void
+  updateField: <K extends keyof ProductFormData>(
+    key: K,
+    value: ProductFormData[K],
+  ) => void
 }
 
 const inputCls = { label: '!text-text', input: '!text-text' }
@@ -15,14 +18,28 @@ export default function FormSectionEditorial({ formData, updateField }: Props) {
   const setSections = (s: ScentSection[]) => updateField('scentSections', s)
 
   const addSection = () =>
-    setSections([...sections, { title: '', notes: [{ name: '', color: '#C9A87A' }], description: '' }])
+    setSections([
+      ...sections,
+      { title: '', notes: [{ name: '', color: '#C9A87A' }], description: '' },
+    ])
   const updateSection = (i: number, patch: Partial<ScentSection>) =>
     setSections(sections.map((s, idx) => (idx === i ? { ...s, ...patch } : s)))
-  const removeSection = (i: number) => setSections(sections.filter((_, idx) => idx !== i))
+  const removeSection = (i: number) =>
+    setSections(sections.filter((_, idx) => idx !== i))
   const addNote = (i: number) =>
-    updateSection(i, { notes: [...sections[i].notes, { name: '', color: '#C9A87A' }] })
-  const updateNote = (i: number, j: number, patch: Partial<{ name: string; color: string }>) =>
-    updateSection(i, { notes: sections[i].notes.map((n, idx) => (idx === j ? { ...n, ...patch } : n)) })
+    updateSection(i, {
+      notes: [...sections[i].notes, { name: '', color: '#C9A87A' }],
+    })
+  const updateNote = (
+    i: number,
+    j: number,
+    patch: Partial<{ name: string; color: string }>,
+  ) =>
+    updateSection(i, {
+      notes: sections[i].notes.map((n, idx) =>
+        idx === j ? { ...n, ...patch } : n,
+      ),
+    })
   const removeNote = (i: number, j: number) =>
     updateSection(i, { notes: sections[i].notes.filter((_, idx) => idx !== j) })
 
@@ -33,13 +50,21 @@ export default function FormSectionEditorial({ formData, updateField }: Props) {
 
   return (
     <div className="flex flex-col gap-6 rounded-xl border border-border bg-surface p-5">
-      <h3 className="text-sm font-medium uppercase text-text-muted">PDP — Editorial</h3>
+      <h3 className="text-sm font-medium uppercase text-text-muted">
+        PDP — Editorial
+      </h3>
 
       {/* ── Perfil olfativo ── */}
       <div className="flex flex-col gap-4 rounded-lg border border-default-200 p-4">
         <div className="flex items-center justify-between">
           <p className="text-sm font-semibold text-text">Perfil olfativo</p>
-          <Button size="sm" variant="flat" color="primary" startContent={<Plus size={16} />} onPress={addSection}>
+          <Button
+            size="sm"
+            variant="flat"
+            color="primary"
+            startContent={<Plus size={16} />}
+            onPress={addSection}
+          >
             Agregar sección
           </Button>
         </div>
@@ -52,15 +77,28 @@ export default function FormSectionEditorial({ formData, updateField }: Props) {
         />
 
         {sections.length === 0 && (
-          <p className="text-xs text-default-400">Sin secciones. Agrega hasta 3 (salida / corazón / fondo).</p>
+          <p className="text-xs text-default-400">
+            Sin secciones. Agrega hasta 3 (salida / corazón / fondo).
+          </p>
         )}
 
         {sections.map((sec, i) => (
-          <div key={i} className="rounded-lg border border-default-200 bg-bg p-3">
+          <div
+            key={i}
+            className="rounded-lg border border-default-200 bg-bg p-3"
+          >
             <div className="mb-3 flex items-center gap-2">
-              <Chip size="sm" variant="flat">Sección {i + 1}</Chip>
+              <Chip size="sm" variant="flat">
+                Sección {i + 1}
+              </Chip>
               <div className="flex-1" />
-              <Button isIconOnly size="sm" variant="light" color="danger" onPress={() => removeSection(i)}>
+              <Button
+                isIconOnly
+                size="sm"
+                variant="light"
+                color="danger"
+                onPress={() => removeSection(i)}
+              >
                 <Trash2 size={16} />
               </Button>
             </div>
@@ -74,8 +112,15 @@ export default function FormSectionEditorial({ formData, updateField }: Props) {
             />
 
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-xs font-medium uppercase text-text-muted">Notas (color + nombre)</span>
-              <Button size="sm" variant="flat" startContent={<Plus size={14} />} onPress={() => addNote(i)}>
+              <span className="text-xs font-medium uppercase text-text-muted">
+                Notas (color + nombre)
+              </span>
+              <Button
+                size="sm"
+                variant="flat"
+                startContent={<Plus size={14} />}
+                onPress={() => addNote(i)}
+              >
                 Nota
               </Button>
             </div>
@@ -86,7 +131,9 @@ export default function FormSectionEditorial({ formData, updateField }: Props) {
                   <input
                     type="color"
                     value={note.color}
-                    onChange={(e) => updateNote(i, j, { color: e.target.value })}
+                    onChange={(e) =>
+                      updateNote(i, j, { color: e.target.value })
+                    }
                     className="h-9 w-10 shrink-0 cursor-pointer rounded border border-default-200 bg-transparent"
                     title="Color de la nota"
                   />
@@ -109,7 +156,13 @@ export default function FormSectionEditorial({ formData, updateField }: Props) {
                     onValueChange={(v) => updateNote(i, j, { name: v })}
                     classNames={inputCls}
                   />
-                  <Button isIconOnly size="sm" variant="light" color="danger" onPress={() => removeNote(i, j)}>
+                  <Button
+                    isIconOnly
+                    size="sm"
+                    variant="light"
+                    color="danger"
+                    onPress={() => removeNote(i, j)}
+                  >
                     <Trash2 size={14} />
                   </Button>
                 </div>
@@ -213,12 +266,18 @@ export default function FormSectionEditorial({ formData, updateField }: Props) {
           <div className="flex items-center gap-2">
             <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-default-200 bg-bg px-4 py-2 text-sm text-text hover:bg-surface">
               <Upload size={16} />
-              <span>{formData.signatureImageFile ? 'Cambiar archivo' : 'Subir imagen'}</span>
+              <span>
+                {formData.signatureImageFile
+                  ? 'Cambiar archivo'
+                  : 'Subir imagen'}
+              </span>
               <input
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={(e) => updateField('signatureImageFile', e.target.files?.[0] ?? null)}
+                onChange={(e) =>
+                  updateField('signatureImageFile', e.target.files?.[0] ?? null)
+                }
               />
             </label>
             {(formData.signatureImageFile || formData.signatureImageUrl) && (
@@ -244,7 +303,11 @@ export default function FormSectionEditorial({ formData, updateField }: Props) {
           />
           {(formData.signatureImageFile || formData.signatureImageUrl) && (
             <img
-              src={formData.signatureImageFile ? URL.createObjectURL(formData.signatureImageFile) : formData.signatureImageUrl}
+              src={
+                formData.signatureImageFile
+                  ? URL.createObjectURL(formData.signatureImageFile)
+                  : formData.signatureImageUrl
+              }
               alt="Firma"
               className="h-32 w-full rounded-lg object-cover"
             />

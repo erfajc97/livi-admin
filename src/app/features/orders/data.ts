@@ -17,7 +17,13 @@ export const ORDER_STATUS_OPTIONS: Array<{
   { value: 'order_cancelled', label: 'Cancelado', color: 'danger' },
 ]
 
-export const STATUS_LABELS: Record<string, { label: string; color: 'warning' | 'success' | 'primary' | 'danger' | 'default' }> = {
+export const STATUS_LABELS: Record<
+  string,
+  {
+    label: string
+    color: 'warning' | 'success' | 'primary' | 'danger' | 'default'
+  }
+> = {
   order_created: { label: 'Pendiente de pago', color: 'warning' },
   order_received: { label: 'Pagado', color: 'primary' },
   // Legacy orders may still have order_accepted — surface as Pagado for coherence
@@ -29,7 +35,10 @@ export const STATUS_LABELS: Record<string, { label: string; color: 'warning' | '
   order_rejected: { label: 'Rechazado', color: 'danger' },
 }
 
-export const PAYMENT_STATUS_LABELS: Record<string, { label: string; color: 'warning' | 'success' | 'danger' | 'default' }> = {
+export const PAYMENT_STATUS_LABELS: Record<
+  string,
+  { label: string; color: 'warning' | 'success' | 'danger' | 'default' }
+> = {
   pending: { label: 'Pendiente', color: 'warning' },
   paid: { label: 'Pagado', color: 'success' },
   failed: { label: 'Fallido', color: 'danger' },

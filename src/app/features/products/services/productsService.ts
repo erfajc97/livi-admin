@@ -19,20 +19,22 @@ interface CoreApiResponse<T> {
 }
 
 export const productsService = {
-  listProducts: async (filters: ProductFilters = {}): Promise<PaginatedProducts> => {
+  listProducts: async (
+    filters: ProductFilters = {},
+  ): Promise<PaginatedProducts> => {
     const params = new URLSearchParams()
     Object.entries(filters).forEach(([key, value]) => {
       if (value !== undefined && value !== '') params.append(key, String(value))
     })
-    const { data } = await axiosInstance.get<CoreApiResponse<PaginatedProducts>>(
-      `${API_ENDPOINTS.PRODUCTS}?${params.toString()}`
-    )
+    const { data } = await axiosInstance.get<
+      CoreApiResponse<PaginatedProducts>
+    >(`${API_ENDPOINTS.PRODUCTS}?${params.toString()}`)
     return data.data
   },
 
   getProductById: async (id: number): Promise<Product> => {
     const { data } = await axiosInstance.get<CoreApiResponse<Product>>(
-      `${API_ENDPOINTS.PRODUCTS}/${id}?includeVariations=true`
+      `${API_ENDPOINTS.PRODUCTS}/${id}?includeVariations=true`,
     )
     return data.data
   },
@@ -40,15 +42,18 @@ export const productsService = {
   createProduct: async (payload: CreateProductPayload): Promise<Product> => {
     const { data } = await axiosInstance.post<CoreApiResponse<Product>>(
       API_ENDPOINTS.PRODUCTS,
-      payload
+      payload,
     )
     return data.data
   },
 
-  updateProduct: async (id: number, payload: UpdateProductPayload): Promise<Product> => {
+  updateProduct: async (
+    id: number,
+    payload: UpdateProductPayload,
+  ): Promise<Product> => {
     const { data } = await axiosInstance.patch<CoreApiResponse<Product>>(
       `${API_ENDPOINTS.PRODUCTS}/${id}`,
-      payload
+      payload,
     )
     return data.data
   },
@@ -58,14 +63,17 @@ export const productsService = {
   },
 
   listCategories: async (): Promise<Category[]> => {
-    const { data } = await axiosInstance.get<CoreApiResponse<Category[] | { data: Category[] }>>(
-      API_ENDPOINTS.CATEGORIES
-    )
+    const { data } = await axiosInstance.get<
+      CoreApiResponse<Category[] | { data: Category[] }>
+    >(API_ENDPOINTS.CATEGORIES)
     const result = data.data
     return Array.isArray(result) ? result : result.data
   },
 
-  uploadImages: async (productId: number, files: File[]): Promise<ProductImage[]> => {
+  uploadImages: async (
+    productId: number,
+    files: File[],
+  ): Promise<ProductImage[]> => {
     const fd = new FormData()
     files.forEach((file) => fd.append('files', file))
     const { data } = await axiosInstance.post<CoreApiResponse<ProductImage[]>>(
@@ -75,13 +83,15 @@ export const productsService = {
     return data.data
   },
 
-  uploadSignatureImage: async (productId: number, file: File): Promise<{ signatureImageUrl: string }> => {
+  uploadSignatureImage: async (
+    productId: number,
+    file: File,
+  ): Promise<{ signatureImageUrl: string }> => {
     const fd = new FormData()
     fd.append('file', file)
-    const { data } = await axiosInstance.post<CoreApiResponse<{ signatureImageUrl: string }>>(
-      `${API_ENDPOINTS.PRODUCTS}/${productId}/signature-image`,
-      fd,
-    )
+    const { data } = await axiosInstance.post<
+      CoreApiResponse<{ signatureImageUrl: string }>
+    >(`${API_ENDPOINTS.PRODUCTS}/${productId}/signature-image`, fd)
     return data.data
   },
 
@@ -92,20 +102,31 @@ export const productsService = {
     return data.data
   },
 
-  deleteImage: async (productId: number | string, imageId: number | string): Promise<void> => {
+  deleteImage: async (
+    productId: number | string,
+    imageId: number | string,
+  ): Promise<void> => {
     await axiosInstance.delete(
       `${API_ENDPOINTS.PRODUCTS}/${productId}/images/${imageId}`,
     )
   },
 
-  uploadVariationImages: async (variationId: number, files: File[]): Promise<void> => {
+  uploadVariationImages: async (
+    variationId: number,
+    files: File[],
+  ): Promise<void> => {
     const fd = new FormData()
     files.forEach((file) => fd.append('files', file))
     await axiosInstance.post(`/product-variations/${variationId}/images`, fd)
   },
 
-  deleteVariationImage: async (variationId: number | string, imageId: number | string): Promise<void> => {
-    await axiosInstance.delete(`/product-variations/${variationId}/images/${imageId}`)
+  deleteVariationImage: async (
+    variationId: number | string,
+    imageId: number | string,
+  ): Promise<void> => {
+    await axiosInstance.delete(
+      `/product-variations/${variationId}/images/${imageId}`,
+    )
   },
 
   createVariation: async (payload: {
@@ -118,18 +139,21 @@ export const productsService = {
   }): Promise<{ id: number }> => {
     const { data } = await axiosInstance.post<CoreApiResponse<{ id: number }>>(
       '/product-variations',
-      payload
+      payload,
     )
     return data.data
   },
 
-  updateVariation: async (id: number, payload: {
-    name?: string
-    price?: number
-    mlSize?: number
-    isFullBottle?: boolean
-    sku?: string
-  }): Promise<void> => {
+  updateVariation: async (
+    id: number,
+    payload: {
+      name?: string
+      price?: number
+      mlSize?: number
+      isFullBottle?: boolean
+      sku?: string
+    },
+  ): Promise<void> => {
     await axiosInstance.patch(`/product-variations/${id}`, payload)
   },
 
@@ -139,7 +163,10 @@ export const productsService = {
 
   // ── Inventory / Stock ─────────────────────────────
 
-  openBottle: async (productId: number, payload?: { mlRemaining?: number; note?: string }): Promise<Product> => {
+  openBottle: async (
+    productId: number,
+    payload?: { mlRemaining?: number; note?: string },
+  ): Promise<Product> => {
     const { data } = await axiosInstance.post<CoreApiResponse<Product>>(
       `${API_ENDPOINTS.PRODUCTS}/${productId}/open-bottle`,
       payload ?? {},
@@ -147,7 +174,10 @@ export const productsService = {
     return data.data
   },
 
-  adjustMl: async (productId: number, payload: { newOpenMl: number; note?: string }): Promise<Product> => {
+  adjustMl: async (
+    productId: number,
+    payload: { newOpenMl: number; note?: string },
+  ): Promise<Product> => {
     const { data } = await axiosInstance.patch<CoreApiResponse<Product>>(
       `${API_ENDPOINTS.PRODUCTS}/${productId}/adjust-ml`,
       payload,

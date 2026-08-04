@@ -23,7 +23,11 @@ export function useMarcaHook(categoryId: number | null) {
   const [formData, setFormData] = useState<MarcaFormData>(emptyForm)
   const [deleteTarget, setDeleteTarget] = useState<Marca | null>(null)
 
-  const { isOpen: isFormOpen, onOpen: onFormOpen, onOpenChange: onFormOpenChange } = useDisclosure()
+  const {
+    isOpen: isFormOpen,
+    onOpen: onFormOpen,
+    onOpenChange: onFormOpenChange,
+  } = useDisclosure()
   const {
     isOpen: isDeleteOpen,
     onOpen: onDeleteOpen,
@@ -42,7 +46,10 @@ export function useMarcaHook(categoryId: number | null) {
 
   const isSubmitting = createMutation.isPending || updateMutation.isPending
 
-  const onInputChange = (field: keyof MarcaFormData, value: string | boolean) => {
+  const onInputChange = (
+    field: keyof MarcaFormData,
+    value: string | boolean,
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
@@ -82,12 +89,28 @@ export function useMarcaHook(categoryId: number | null) {
     const file = formData.imageFile ?? undefined
     if (editId && categoryId) {
       updateMutation.mutate(
-        { id: editId, data: { name: formData.name, description: formData.description || undefined, isActive: formData.isActive, bajoPedido: formData.bajoPedido }, file },
+        {
+          id: editId,
+          data: {
+            name: formData.name,
+            description: formData.description || undefined,
+            isActive: formData.isActive,
+            bajoPedido: formData.bajoPedido,
+          },
+          file,
+        },
         { onSuccess: () => onFormOpenChange() },
       )
     } else if (categoryId) {
       createMutation.mutate(
-        { name: formData.name, categoryId, description: formData.description || undefined, isActive: formData.isActive, bajoPedido: formData.bajoPedido, file },
+        {
+          name: formData.name,
+          categoryId,
+          description: formData.description || undefined,
+          isActive: formData.isActive,
+          bajoPedido: formData.bajoPedido,
+          file,
+        },
         { onSuccess: () => onFormOpenChange() },
       )
     }

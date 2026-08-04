@@ -1,5 +1,10 @@
 import { Button, Chip, Spinner, Switch } from '@heroui/react'
-import { PlusIcon, PencilIcon, TrashIcon, Image as ImageIcon } from 'lucide-react'
+import {
+  PlusIcon,
+  PencilIcon,
+  TrashIcon,
+  Image as ImageIcon,
+} from 'lucide-react'
 import { usePublicidadNavbarHook } from './hooks/usePublicidadNavbarHook'
 import PublicidadFormModal from './components/PublicidadFormModal'
 import DeleteModal from '@/app/features/banners/components/modals/DeleteModal'
@@ -22,7 +27,11 @@ function PublicidadCard({
       {/* Imagen */}
       <div className="flex h-24 w-32 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface-raised">
         {banner.imageUrl ? (
-          <img src={banner.imageUrl} alt={banner.title} className="h-full w-full object-cover" />
+          <img
+            src={banner.imageUrl}
+            alt={banner.title}
+            className="h-full w-full object-cover"
+          />
         ) : (
           <ImageIcon size={32} className="text-text-muted" />
         )}
@@ -32,23 +41,34 @@ function PublicidadCard({
       <div className="flex min-w-0 flex-1 flex-col justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <h3 className="truncate text-base font-semibold text-text">{banner.title}</h3>
+            <h3 className="truncate text-base font-semibold text-text">
+              {banner.title}
+            </h3>
             <Switch
               size="sm"
               color="warning"
               isSelected={banner.isVisible}
               isDisabled={toggleVisibility.isPending}
               onValueChange={(val) =>
-                toggleVisibility.mutate({ id: String(banner.id), isVisible: val })
+                toggleVisibility.mutate({
+                  id: String(banner.id),
+                  isVisible: val,
+                })
               }
               aria-label="Visibilidad en el mega menú"
             />
-            <Chip size="sm" variant="flat" color={banner.isVisible ? 'success' : 'default'}>
+            <Chip
+              size="sm"
+              variant="flat"
+              color={banner.isVisible ? 'success' : 'default'}
+            >
               {banner.isVisible ? 'Visible' : 'Oculto'}
             </Chip>
           </div>
           {banner.subtitle && (
-            <p className="mt-1 line-clamp-2 text-sm text-text-muted">{banner.subtitle}</p>
+            <p className="mt-1 line-clamp-2 text-sm text-text-muted">
+              {banner.subtitle}
+            </p>
           )}
           {banner.link && (
             <p className="mt-1 truncate text-xs text-text-muted">
@@ -60,7 +80,13 @@ function PublicidadCard({
 
       {/* Acciones */}
       <div className="flex shrink-0 flex-wrap items-start gap-1 self-end sm:self-start">
-        <Button isIconOnly size="sm" variant="light" onPress={() => onEdit(banner)} aria-label="Editar">
+        <Button
+          isIconOnly
+          size="sm"
+          variant="light"
+          onPress={() => onEdit(banner)}
+          aria-label="Editar"
+        >
           <PencilIcon size={16} className="text-text-muted" />
         </Button>
         <Button
@@ -104,7 +130,8 @@ export function PublicidadNavbar() {
             Publicidad navbar
           </h1>
           <p className="mt-1 text-sm text-text-muted">
-            Imagen destacada del mega menú del navbar (panel "Destacado"). Sube imagen, descripción y link.
+            Imagen destacada del mega menú del navbar (panel "Destacado"). Sube
+            imagen, descripción y link.
           </p>
         </div>
         <Button
@@ -126,7 +153,12 @@ export function PublicidadNavbar() {
       ) : banners.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16">
           <p className="text-text-muted">Aún no hay publicidad de navbar.</p>
-          <Button color="warning" variant="flat" className="mt-4" onPress={handleCreateClick}>
+          <Button
+            color="warning"
+            variant="flat"
+            className="mt-4"
+            onPress={handleCreateClick}
+          >
             Crear la primera
           </Button>
         </div>

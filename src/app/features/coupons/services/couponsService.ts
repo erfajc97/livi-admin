@@ -3,7 +3,12 @@ import axiosInstance from '@/app/config/axiosConfig'
 import type { Coupon, CreateCouponPayload, UpdateCouponPayload } from '../types'
 
 function unwrap<T>(data: unknown): T {
-  if (data && typeof data === 'object' && 'statusCode' in data && 'data' in data) {
+  if (
+    data &&
+    typeof data === 'object' &&
+    'statusCode' in data &&
+    'data' in data
+  ) {
     return (data as { data: T }).data
   }
   return data as T
@@ -26,8 +31,14 @@ export const couponsService = {
     return unwrap<Coupon>(data)
   },
 
-  updateCoupon: async (id: string, payload: UpdateCouponPayload): Promise<Coupon> => {
-    const { data } = await axiosInstance.patch(`${API_ENDPOINTS.COUPONS}/${id}`, payload)
+  updateCoupon: async (
+    id: string,
+    payload: UpdateCouponPayload,
+  ): Promise<Coupon> => {
+    const { data } = await axiosInstance.patch(
+      `${API_ENDPOINTS.COUPONS}/${id}`,
+      payload,
+    )
     return unwrap<Coupon>(data)
   },
 

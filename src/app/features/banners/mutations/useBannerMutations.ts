@@ -14,7 +14,10 @@ export const useCreateBannerMutation = () => {
       addToast({ title: 'Banner creado exitosamente', color: 'success' })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al crear el banner', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al crear el banner',
+        color: 'danger',
+      })
     },
   })
 }
@@ -22,15 +25,25 @@ export const useCreateBannerMutation = () => {
 export const useUpdateBannerMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, data, file }: { id: string; data: UpdateBannerPayload; file?: File }) =>
-      bannersService.updateBanner(id, data, file),
+    mutationFn: ({
+      id,
+      data,
+      file,
+    }: {
+      id: string
+      data: UpdateBannerPayload
+      file?: File
+    }) => bannersService.updateBanner(id, data, file),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['banners'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       addToast({ title: 'Banner actualizado exitosamente', color: 'success' })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al actualizar el banner', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al actualizar el banner',
+        color: 'danger',
+      })
     },
   })
 }
@@ -56,7 +69,8 @@ export const useToggleBannerVisibilityMutation = () => {
 export const useReorderBannersMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (orderedIds: number[]) => bannersService.reorderBanners(orderedIds),
+    mutationFn: (orderedIds: number[]) =>
+      bannersService.reorderBanners(orderedIds),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['banners'] })
     },
@@ -77,7 +91,10 @@ export const useDeleteBannerMutation = () => {
       addToast({ title: 'Banner eliminado exitosamente', color: 'success' })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al eliminar el banner', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al eliminar el banner',
+        color: 'danger',
+      })
     },
   })
 }

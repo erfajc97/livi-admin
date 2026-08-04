@@ -39,7 +39,9 @@ export default function OrdersListHeader({
           <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">
             Ordenes
           </h1>
-          <p className="text-xs text-text-muted mt-0.5">{filteredCount} ordenes</p>
+          <p className="text-xs text-text-muted mt-0.5">
+            {filteredCount} ordenes
+          </p>
         </div>
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -47,7 +49,12 @@ export default function OrdersListHeader({
             size="sm"
             variant="flat"
             color="warning"
-            startContent={<RefreshCw size={14} className={reconcileMutation.isPending ? 'animate-spin' : ''} />}
+            startContent={
+              <RefreshCw
+                size={14}
+                className={reconcileMutation.isPending ? 'animate-spin' : ''}
+              />
+            }
             isLoading={reconcileMutation.isPending}
             onPress={() => reconcileMutation.mutate()}
           >

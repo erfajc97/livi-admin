@@ -45,8 +45,7 @@ export function SendCampaignModal({
         <p className="text-text-muted">
           ¿Enviar la campaña{' '}
           <strong className="text-text">&quot;{campaign?.subject}&quot;</strong>{' '}
-          a{' '}
-          <strong className="text-accent">{activeSubscribers}</strong>{' '}
+          a <strong className="text-accent">{activeSubscribers}</strong>{' '}
           suscriptores activos?
         </p>
         <p className="text-sm text-text-muted">

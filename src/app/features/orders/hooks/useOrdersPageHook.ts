@@ -1,6 +1,9 @@
 import { useState, useCallback, useMemo } from 'react'
 import { useOrdersQuery } from '@/app/tanstack-queries/ordersQuery'
-import { useUpdateOrderMutation, useDeleteOrderMutation } from '../mutations/useOrderMutations'
+import {
+  useUpdateOrderMutation,
+  useDeleteOrderMutation,
+} from '../mutations/useOrderMutations'
 import type { Order, OrderStatus } from '../types'
 
 const ITEMS_PER_PAGE = 10
@@ -49,7 +52,7 @@ export function useOrdersPageHook() {
         (o) =>
           o.orderNumber.toLowerCase().includes(q) ||
           (o.userName && o.userName.toLowerCase().includes(q)) ||
-          (o.customerName && o.customerName.toLowerCase().includes(q))
+          (o.customerName && o.customerName.toLowerCase().includes(q)),
       )
     }
 
@@ -127,10 +130,10 @@ export function useOrdersPageHook() {
             setShowStatusModal(false)
             setSelectedOrder(null)
           },
-        }
+        },
       )
     },
-    [selectedOrder, updateMutation]
+    [selectedOrder, updateMutation],
   )
 
   const handleStatusClose = useCallback(() => {

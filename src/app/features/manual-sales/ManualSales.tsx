@@ -58,7 +58,10 @@ export function ManualSales() {
       return
     }
     if (items.length === 0) {
-      addToast({ title: 'Agrega al menos un producto o combo', color: 'warning' })
+      addToast({
+        title: 'Agrega al menos un producto o combo',
+        color: 'warning',
+      })
       return
     }
     const payload = buildPayload()
@@ -70,17 +73,25 @@ export function ManualSales() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent sm:text-3xl">Registrar venta manual</h1>
+      <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent sm:text-3xl">
+        Registrar venta manual
+      </h1>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
         {/* Left column — pickers */}
         <div className="flex flex-col gap-5 lg:col-span-3">
-          <ClientSelector users={users} selectedClient={client} onSelect={setClient} />
+          <ClientSelector
+            users={users}
+            selectedClient={client}
+            onSelect={setClient}
+          />
 
           <div className="rounded-xl border border-border bg-surface p-4 sm:p-5">
             <Tabs
               selectedKey={pickerTab}
-              onSelectionChange={(key) => setPickerTab(key as 'product' | 'combo')}
+              onSelectionChange={(key) =>
+                setPickerTab(key as 'product' | 'combo')
+              }
               color="warning"
               variant="solid"
               classNames={{
@@ -99,7 +110,11 @@ export function ManualSales() {
                 }
               >
                 <div className="pt-4">
-                  <ProductSearch products={allProducts} items={items} onAddItem={handleAdd} />
+                  <ProductSearch
+                    products={allProducts}
+                    items={items}
+                    onAddItem={handleAdd}
+                  />
                 </div>
               </Tab>
               <Tab
@@ -139,11 +154,17 @@ export function ManualSales() {
 
             {hasCombo && (
               <div className="rounded-lg bg-accent/10 border border-accent/20 p-3">
-                <p className="text-xs text-accent font-medium">Los combos ya incluyen descuento aplicado. El descuento adicional aquí aplica al total general.</p>
+                <p className="text-xs text-accent font-medium">
+                  Los combos ya incluyen descuento aplicado. El descuento
+                  adicional aquí aplica al total general.
+                </p>
               </div>
             )}
 
-            <PaymentMethodSelector selected={paymentMethod} onChange={setPaymentMethod} />
+            <PaymentMethodSelector
+              selected={paymentMethod}
+              onChange={setPaymentMethod}
+            />
           </div>
 
           <OrderSummary

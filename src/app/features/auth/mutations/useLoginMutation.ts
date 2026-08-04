@@ -10,7 +10,7 @@ type LoginPayload = {
 }
 
 export const useLoginMutation = () => {
-  const navigate = useNavigate({from: '/login'})
+  const navigate = useNavigate({ from: '/login' })
   return useMutation({
     mutationFn: async (payload: LoginPayload) => {
       const data = await authService.login(payload)
@@ -36,10 +36,12 @@ export const useLoginMutation = () => {
 
       useAuthStore.getState().setToken(token, refreshToken, expiration)
       useAuthStore.getState().setRoles(role)
-      useAuthStore.getState().setUserInfo(
-        `${data.user?.firstName ?? ''} ${data.user?.lastName ?? ''}`.trim(),
-        data.user?.email ?? '',
-      )
+      useAuthStore
+        .getState()
+        .setUserInfo(
+          `${data.user?.firstName ?? ''} ${data.user?.lastName ?? ''}`.trim(),
+          data.user?.email ?? '',
+        )
 
       return data
     },
@@ -48,8 +50,12 @@ export const useLoginMutation = () => {
       navigate({ to: '/' })
     },
     onError: (error: unknown) => {
-      const axiosMsg = (error as { response?: { data?: { message?: string } } })?.response?.data?.message
-      const fallback = error instanceof Error ? error.message : 'Error desconocido al iniciar sesión'
+      const axiosMsg = (error as { response?: { data?: { message?: string } } })
+        ?.response?.data?.message
+      const fallback =
+        error instanceof Error
+          ? error.message
+          : 'Error desconocido al iniciar sesión'
       sonnerResponse(axiosMsg || fallback, 'error')
     },
   })

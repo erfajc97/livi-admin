@@ -5,7 +5,10 @@ import type { TransactionFormData } from '../types'
 interface TransactionFormProps {
   formData: TransactionFormData
   isSubmitting: boolean
-  onUpdateField: <K extends keyof TransactionFormData>(key: K, value: TransactionFormData[K]) => void
+  onUpdateField: <K extends keyof TransactionFormData>(
+    key: K,
+    value: TransactionFormData[K],
+  ) => void
   onSubmit: () => void
 }
 
@@ -15,12 +18,15 @@ export default function TransactionForm({
   onUpdateField,
   onSubmit,
 }: TransactionFormProps) {
-  const categories = formData.type === 'expense' ? EXPENSE_CATEGORIES : INCOME_CATEGORIES
+  const categories =
+    formData.type === 'expense' ? EXPENSE_CATEGORIES : INCOME_CATEGORIES
   const label = formData.type === 'expense' ? 'Egreso' : 'Ingreso'
 
   return (
     <div className="rounded-xl border border-border bg-surface p-6">
-      <h3 className="mb-5 text-base font-semibold text-text">Registrar {label}</h3>
+      <h3 className="mb-5 text-base font-semibold text-text">
+        Registrar {label}
+      </h3>
 
       <div className="flex flex-col gap-4">
         {/* Row 1: Tipo, Monto, Fecha */}
@@ -41,7 +47,13 @@ export default function TransactionForm({
             }}
           >
             {categories.map((cat) => (
-              <SelectItem key={cat} classNames={{ base: 'text-text data-[hover=true]:bg-bg', title: '!text-text' }}>
+              <SelectItem
+                key={cat}
+                classNames={{
+                  base: 'text-text data-[hover=true]:bg-bg',
+                  title: '!text-text',
+                }}
+              >
                 {cat}
               </SelectItem>
             ))}
@@ -103,7 +115,13 @@ export default function TransactionForm({
             }}
           >
             {PAYMENT_METHODS.map((method) => (
-              <SelectItem key={method} classNames={{ base: 'text-text data-[hover=true]:bg-bg', title: '!text-text' }}>
+              <SelectItem
+                key={method}
+                classNames={{
+                  base: 'text-text data-[hover=true]:bg-bg',
+                  title: '!text-text',
+                }}
+              >
                 {method}
               </SelectItem>
             ))}

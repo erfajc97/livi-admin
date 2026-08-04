@@ -1,10 +1,9 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute, redirect, Outlet } from '@tanstack/react-router'
 import { AdminLayout } from '@/app/layout/AdminLayout'
-import { Outlet } from '@tanstack/react-router'
 import NotFoundPage from '@/app/components/NotFound/NotFoundPage'
 
 export const Route = createFileRoute('/_authenticated')({
-   beforeLoad: ({ context }) => {
+  beforeLoad: ({ context }) => {
     if (!context.auth.isLogged()) {
       throw redirect({
         to: '/login',

@@ -1,5 +1,8 @@
 import { useState, useCallback, useMemo } from 'react'
-import { useProductsQuery, useCategoriesQuery } from '@/app/tanstack-queries/productsQuery'
+import {
+  useProductsQuery,
+  useCategoriesQuery,
+} from '@/app/tanstack-queries/productsQuery'
 import { useDeleteProductMutation } from '../mutations/useProductMutations'
 import type { Product, ProductFilters } from '../types'
 

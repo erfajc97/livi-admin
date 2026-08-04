@@ -10,7 +10,7 @@ type Position =
 
 export const sonnerResponse = (
   message: string,
-  type: 'success' | 'error' | 'loading',  
+  type: 'success' | 'error' | 'loading',
   options?: {
     description?: string
     duration?: number

@@ -1,6 +1,12 @@
 import { Button, Spinner } from '@heroui/react'
 import { PlusIcon } from 'lucide-react'
-import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useBlogsPageHook } from './hooks/useBlogsPageHook'
 import BlogCard from './components/BlogCard'

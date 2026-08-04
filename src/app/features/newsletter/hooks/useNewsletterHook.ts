@@ -1,6 +1,10 @@
 import { useState, useCallback } from 'react'
 import { useDisclosure } from '@heroui/react'
-import { useSubscribersQuery, useSubscriberStatsQuery, useCampaignsQuery } from '@/app/tanstack-queries/newsletterQuery'
+import {
+  useSubscribersQuery,
+  useSubscriberStatsQuery,
+  useCampaignsQuery,
+} from '@/app/tanstack-queries/newsletterQuery'
 import {
   useDeleteSubscriberMutation,
   useDeleteCampaignMutation,
@@ -17,7 +21,8 @@ export function useNewsletterHook() {
   const [editingCampaign, setEditingCampaign] = useState<Campaign | null>(null)
 
   // Delete subscriber modal
-  const [deleteSubscriberTarget, setDeleteSubscriberTarget] = useState<Subscriber | null>(null)
+  const [deleteSubscriberTarget, setDeleteSubscriberTarget] =
+    useState<Subscriber | null>(null)
   const {
     isOpen: isDeleteSubscriberOpen,
     onOpen: onDeleteSubscriberOpen,
@@ -25,7 +30,9 @@ export function useNewsletterHook() {
   } = useDisclosure()
 
   // Send campaign modal
-  const [sendCampaignTarget, setSendCampaignTarget] = useState<Campaign | null>(null)
+  const [sendCampaignTarget, setSendCampaignTarget] = useState<Campaign | null>(
+    null,
+  )
   const {
     isOpen: isSendCampaignOpen,
     onOpen: onSendCampaignOpen,
@@ -33,7 +40,9 @@ export function useNewsletterHook() {
   } = useDisclosure()
 
   // Preview modal
-  const [previewCampaignId, setPreviewCampaignId] = useState<number | null>(null)
+  const [previewCampaignId, setPreviewCampaignId] = useState<number | null>(
+    null,
+  )
   const {
     isOpen: isPreviewOpen,
     onOpen: onPreviewOpen,
@@ -52,10 +61,13 @@ export function useNewsletterHook() {
 
   // ─── Subscriber actions ─────────────────────────────
 
-  const handleDeleteSubscriberClick = useCallback((subscriber: Subscriber) => {
-    setDeleteSubscriberTarget(subscriber)
-    onDeleteSubscriberOpen()
-  }, [onDeleteSubscriberOpen])
+  const handleDeleteSubscriberClick = useCallback(
+    (subscriber: Subscriber) => {
+      setDeleteSubscriberTarget(subscriber)
+      onDeleteSubscriberOpen()
+    },
+    [onDeleteSubscriberOpen],
+  )
 
   const handleConfirmDeleteSubscriber = useCallback(() => {
     if (deleteSubscriberTarget) {
@@ -63,7 +75,11 @@ export function useNewsletterHook() {
         onSuccess: () => onDeleteSubscriberOpenChange(),
       })
     }
-  }, [deleteSubscriberTarget, deleteSubscriberMutation, onDeleteSubscriberOpenChange])
+  }, [
+    deleteSubscriberTarget,
+    deleteSubscriberMutation,
+    onDeleteSubscriberOpenChange,
+  ])
 
   // ─── Campaign actions ───────────────────────────────
 
@@ -82,14 +98,20 @@ export function useNewsletterHook() {
     setCampaignView('list')
   }, [])
 
-  const handleDeleteCampaignClick = useCallback((campaign: Campaign) => {
-    deleteCampaignMutation.mutate(campaign.id)
-  }, [deleteCampaignMutation])
+  const handleDeleteCampaignClick = useCallback(
+    (campaign: Campaign) => {
+      deleteCampaignMutation.mutate(campaign.id)
+    },
+    [deleteCampaignMutation],
+  )
 
-  const handleSendCampaignClick = useCallback((campaign: Campaign) => {
-    setSendCampaignTarget(campaign)
-    onSendCampaignOpen()
-  }, [onSendCampaignOpen])
+  const handleSendCampaignClick = useCallback(
+    (campaign: Campaign) => {
+      setSendCampaignTarget(campaign)
+      onSendCampaignOpen()
+    },
+    [onSendCampaignOpen],
+  )
 
   const handleConfirmSendCampaign = useCallback(() => {
     if (sendCampaignTarget) {
@@ -99,10 +121,13 @@ export function useNewsletterHook() {
     }
   }, [sendCampaignTarget, sendCampaignMutation, onSendCampaignOpenChange])
 
-  const handlePreviewCampaign = useCallback((campaignId: number) => {
-    setPreviewCampaignId(campaignId)
-    onPreviewOpen()
-  }, [onPreviewOpen])
+  const handlePreviewCampaign = useCallback(
+    (campaignId: number) => {
+      setPreviewCampaignId(campaignId)
+      onPreviewOpen()
+    },
+    [onPreviewOpen],
+  )
 
   return {
     // Tab state

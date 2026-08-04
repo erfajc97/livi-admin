@@ -27,11 +27,7 @@ export function DeleteSubscriberModal({
           <Button variant="flat" onPress={() => onOpenChange(false)}>
             Cancelar
           </Button>
-          <Button
-            color="danger"
-            onPress={onConfirm}
-            isLoading={isDeleting}
-          >
+          <Button color="danger" onPress={onConfirm} isLoading={isDeleting}>
             Eliminar
           </Button>
         </div>

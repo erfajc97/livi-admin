@@ -1,6 +1,14 @@
 import { useState } from 'react'
 import { Button, Input, Chip } from '@heroui/react'
-import { Plus, Edit2, Trash2, X, Save, CreditCard, AlertTriangle } from 'lucide-react'
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  X,
+  Save,
+  CreditCard,
+  AlertTriangle,
+} from 'lucide-react'
 import { CustomModalNextUI } from '@/app/components/UI/customModalNextUI/CustomModalNextUI'
 import { usePaymentMethodsQuery } from '@/app/tanstack-queries/financeQuery'
 import {
@@ -51,7 +59,13 @@ export default function PaymentMethodsManager() {
   const handleSaveEdit = () => {
     if (editId === null || !editName.trim()) return
     updateMutation.mutate(
-      { id: editId, payload: { name: editName.trim(), detail: editDetail.trim() || undefined } },
+      {
+        id: editId,
+        payload: {
+          name: editName.trim(),
+          detail: editDetail.trim() || undefined,
+        },
+      },
       { onSuccess: cancelEdit },
     )
   }
@@ -72,9 +86,13 @@ export default function PaymentMethodsManager() {
       <div className="mb-4 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <CreditCard size={16} className="text-accent" />
-          <h3 className="text-sm font-heading font-bold uppercase tracking-wide text-text">Métodos de pago</h3>
+          <h3 className="text-sm font-heading font-bold uppercase tracking-wide text-text">
+            Métodos de pago
+          </h3>
         </div>
-        <Chip size="sm" variant="flat" color="default">{methods.length}</Chip>
+        <Chip size="sm" variant="flat" color="default">
+          {methods.length}
+        </Chip>
       </div>
 
       {/* Create form */}
@@ -84,14 +102,20 @@ export default function PaymentMethodsManager() {
           value={newName}
           onValueChange={setNewName}
           size="sm"
-          classNames={{ input: '!text-text', inputWrapper: 'bg-surface border-border' }}
+          classNames={{
+            input: '!text-text',
+            inputWrapper: 'bg-surface border-border',
+          }}
         />
         <Input
           placeholder="Detalle (ej: cuenta corriente 2200xxxx)"
           value={newDetail}
           onValueChange={setNewDetail}
           size="sm"
-          classNames={{ input: '!text-text', inputWrapper: 'bg-surface border-border' }}
+          classNames={{
+            input: '!text-text',
+            inputWrapper: 'bg-surface border-border',
+          }}
         />
         <Button
           color="warning"
@@ -109,7 +133,9 @@ export default function PaymentMethodsManager() {
       {isLoading ? (
         <p className="text-sm text-text-muted text-center py-4">Cargando...</p>
       ) : methods.length === 0 ? (
-        <p className="text-sm text-text-muted text-center py-4">No hay métodos de pago. Agrega uno arriba.</p>
+        <p className="text-sm text-text-muted text-center py-4">
+          No hay métodos de pago. Agrega uno arriba.
+        </p>
       ) : (
         <div className="flex flex-col gap-2">
           {methods.map((m) => (
@@ -124,20 +150,37 @@ export default function PaymentMethodsManager() {
                     onValueChange={setEditName}
                     size="sm"
                     placeholder="Nombre"
-                    classNames={{ input: '!text-text', inputWrapper: 'bg-surface border-border' }}
+                    classNames={{
+                      input: '!text-text',
+                      inputWrapper: 'bg-surface border-border',
+                    }}
                   />
                   <Input
                     value={editDetail}
                     onValueChange={setEditDetail}
                     size="sm"
                     placeholder="Detalle"
-                    classNames={{ input: '!text-text', inputWrapper: 'bg-surface border-border' }}
+                    classNames={{
+                      input: '!text-text',
+                      inputWrapper: 'bg-surface border-border',
+                    }}
                   />
                   <div className="flex gap-1 shrink-0">
-                    <Button isIconOnly size="sm" color="success" onPress={handleSaveEdit} isLoading={updateMutation.isPending}>
+                    <Button
+                      isIconOnly
+                      size="sm"
+                      color="success"
+                      onPress={handleSaveEdit}
+                      isLoading={updateMutation.isPending}
+                    >
                       <Save size={14} />
                     </Button>
-                    <Button isIconOnly size="sm" variant="flat" onPress={cancelEdit}>
+                    <Button
+                      isIconOnly
+                      size="sm"
+                      variant="flat"
+                      onPress={cancelEdit}
+                    >
                       <X size={14} />
                     </Button>
                   </div>
@@ -146,19 +189,51 @@ export default function PaymentMethodsManager() {
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-semibold text-text">{m.name}</span>
-                      {!m.isActive && <Chip size="sm" variant="flat" color="default" className="h-5 text-[10px]">Inactivo</Chip>}
+                      <span className="text-sm font-semibold text-text">
+                        {m.name}
+                      </span>
+                      {!m.isActive && (
+                        <Chip
+                          size="sm"
+                          variant="flat"
+                          color="default"
+                          className="h-5 text-[10px]"
+                        >
+                          Inactivo
+                        </Chip>
+                      )}
                     </div>
-                    {m.detail && <p className="text-xs text-text-muted mt-0.5 break-words">{m.detail}</p>}
+                    {m.detail && (
+                      <p className="text-xs text-text-muted mt-0.5 break-words">
+                        {m.detail}
+                      </p>
+                    )}
                   </div>
                   <div className="flex gap-1 shrink-0 self-end sm:self-auto">
-                    <Button isIconOnly size="sm" variant="flat" onPress={() => handleToggleActive(m)}>
+                    <Button
+                      isIconOnly
+                      size="sm"
+                      variant="flat"
+                      onPress={() => handleToggleActive(m)}
+                    >
                       {m.isActive ? <X size={14} /> : <Plus size={14} />}
                     </Button>
-                    <Button isIconOnly size="sm" variant="flat" color="primary" onPress={() => startEdit(m)}>
+                    <Button
+                      isIconOnly
+                      size="sm"
+                      variant="flat"
+                      color="primary"
+                      onPress={() => startEdit(m)}
+                    >
                       <Edit2 size={14} />
                     </Button>
-                    <Button isIconOnly size="sm" variant="flat" color="danger" onPress={() => setDeleteTarget(m)}>
+                    <Button
+                      isIconOnly
+                      size="sm"
+                      variant="flat"
+                      color="danger"
+                      onPress={() => setDeleteTarget(m)}
+                    >
                       <Trash2 size={14} />
                     </Button>
                   </div>
@@ -171,7 +246,9 @@ export default function PaymentMethodsManager() {
 
       <CustomModalNextUI
         isOpen={!!deleteTarget}
-        onOpenChange={(open) => { if (!open) setDeleteTarget(null) }}
+        onOpenChange={(open) => {
+          if (!open) setDeleteTarget(null)
+        }}
         size="sm"
         isDismissable={!deleteMutation.isPending}
         hideCloseButton={deleteMutation.isPending}
@@ -183,10 +260,18 @@ export default function PaymentMethodsManager() {
         }
         footerContent={
           <div className="flex gap-2 justify-end w-full">
-            <Button variant="flat" onPress={() => setDeleteTarget(null)} isDisabled={deleteMutation.isPending}>
+            <Button
+              variant="flat"
+              onPress={() => setDeleteTarget(null)}
+              isDisabled={deleteMutation.isPending}
+            >
               Cancelar
             </Button>
-            <Button color="danger" onPress={confirmDelete} isLoading={deleteMutation.isPending}>
+            <Button
+              color="danger"
+              onPress={confirmDelete}
+              isLoading={deleteMutation.isPending}
+            >
               Eliminar
             </Button>
           </div>
@@ -194,13 +279,15 @@ export default function PaymentMethodsManager() {
       >
         <div className="flex flex-col gap-2 p-2">
           <p className="text-sm text-text">
-            ¿Seguro que deseas eliminar <strong className="text-accent">{deleteTarget?.name}</strong>?
+            ¿Seguro que deseas eliminar{' '}
+            <strong className="text-accent">{deleteTarget?.name}</strong>?
           </p>
           {deleteTarget?.detail && (
             <p className="text-xs text-text-muted">{deleteTarget.detail}</p>
           )}
           <p className="text-xs text-text-muted mt-2">
-            Esta acción no se puede deshacer. Las cuentas registradas con este método conservarán el nombre como texto.
+            Esta acción no se puede deshacer. Las cuentas registradas con este
+            método conservarán el nombre como texto.
           </p>
         </div>
       </CustomModalNextUI>

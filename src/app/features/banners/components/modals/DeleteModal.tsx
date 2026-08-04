@@ -27,7 +27,11 @@ export default function DeleteModal({
       }
       footerContent={
         <div className="flex gap-2">
-          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)}>
+          <Button
+            color="danger"
+            variant="flat"
+            onPress={() => onOpenChange(false)}
+          >
             Cancelar
           </Button>
           <Button color="danger" onPress={onConfirm} isLoading={isDeleting}>

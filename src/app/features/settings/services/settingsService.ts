@@ -12,11 +12,17 @@ interface CoreApiResponse<T> {
 
 export const settingsService = {
   getAll: async (): Promise<Setting[]> => {
-    const { data } = await axiosInstance.get<CoreApiResponse<Setting[]>>(API_ENDPOINTS.SETTINGS)
+    const { data } = await axiosInstance.get<CoreApiResponse<Setting[]>>(
+      API_ENDPOINTS.SETTINGS,
+    )
     return data.data
   },
 
-  update: async (key: string, value: string, description?: string): Promise<Setting> => {
+  update: async (
+    key: string,
+    value: string,
+    description?: string,
+  ): Promise<Setting> => {
     const { data } = await axiosInstance.put<CoreApiResponse<Setting>>(
       `${API_ENDPOINTS.SETTINGS}/${key}`,
       { value, description },

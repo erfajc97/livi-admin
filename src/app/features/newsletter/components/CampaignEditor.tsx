@@ -23,7 +23,12 @@ const emptyForm: CreateCampaignPayload = {
   imageUrl: '',
 }
 
-export function CampaignEditor({ campaign, onBack, onSend, onPreview }: CampaignEditorProps) {
+export function CampaignEditor({
+  campaign,
+  onBack,
+  onSend,
+  onPreview,
+}: CampaignEditorProps) {
   const [formData, setFormData] = useState<CreateCampaignPayload>(emptyForm)
   const isEditing = !!campaign
 
@@ -70,17 +75,15 @@ export function CampaignEditor({ campaign, onBack, onSend, onPreview }: Campaign
     }
   }
 
-  const isValid = formData.subject.trim() !== '' && formData.heading.trim() !== '' && formData.body.trim() !== ''
+  const isValid =
+    formData.subject.trim() !== '' &&
+    formData.heading.trim() !== '' &&
+    formData.body.trim() !== ''
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-3">
-        <Button
-          isIconOnly
-          size="sm"
-          variant="light"
-          onPress={onBack}
-        >
+        <Button isIconOnly size="sm" variant="light" onPress={onBack}>
           <ArrowLeftIcon size={18} />
         </Button>
         <h2 className="font-heading text-lg font-semibold text-text">
@@ -171,10 +174,7 @@ export function CampaignEditor({ campaign, onBack, onSend, onPreview }: Campaign
             Preview
           </Button>
         )}
-        <Button
-          variant="flat"
-          onPress={onBack}
-        >
+        <Button variant="flat" onPress={onBack}>
           Cancelar
         </Button>
         <Button

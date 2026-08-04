@@ -19,30 +19,51 @@ export default function OrderHistoryTable({ orders }: OrderHistoryTableProps) {
   if (orders.length === 0) {
     return (
       <div className="rounded-xl border border-border bg-surface p-6">
-        <h3 className="font-heading text-sm font-bold text-text uppercase tracking-wider mb-3">Historial de ordenes</h3>
-        <p className="text-sm text-text-muted text-center py-6">No hay ordenes registradas para este producto.</p>
+        <h3 className="font-heading text-sm font-bold text-text uppercase tracking-wider mb-3">
+          Historial de ordenes
+        </h3>
+        <p className="text-sm text-text-muted text-center py-6">
+          No hay ordenes registradas para este producto.
+        </p>
       </div>
     )
   }
 
   return (
     <div className="rounded-xl border border-border bg-surface p-6">
-      <h3 className="font-heading text-sm font-bold text-text uppercase tracking-wider mb-4">Historial de ordenes</h3>
+      <h3 className="font-heading text-sm font-bold text-text uppercase tracking-wider mb-4">
+        Historial de ordenes
+      </h3>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border text-left">
-              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase">Orden</th>
-              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase">Estado</th>
-              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase">Tipo</th>
-              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase text-right">Cant.</th>
-              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase text-right">Stock afectado</th>
-              <th className="py-2 text-xs text-text-muted font-bold uppercase">Fecha</th>
+              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase">
+                Orden
+              </th>
+              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase">
+                Estado
+              </th>
+              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase">
+                Tipo
+              </th>
+              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase text-right">
+                Cant.
+              </th>
+              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase text-right">
+                Stock afectado
+              </th>
+              <th className="py-2 text-xs text-text-muted font-bold uppercase">
+                Fecha
+              </th>
             </tr>
           </thead>
           <tbody>
             {orders.map((item, i) => {
-              const status = STATUS_LABELS[item.orderStatus] ?? { label: item.orderStatus, class: 'bg-gray-100 text-gray-600' }
+              const status = STATUS_LABELS[item.orderStatus] ?? {
+                label: item.orderStatus,
+                class: 'bg-gray-100 text-gray-600',
+              }
               const date = new Date(item.orderCreatedAt)
 
               // Coherent stock summary: full bottle = N botellas, decant = N×ml = total ml
@@ -53,10 +74,17 @@ export default function OrderHistoryTable({ orders }: OrderHistoryTableProps) {
                   : '—'
 
               return (
-                <tr key={`${item.orderId}-${i}`} className="border-b border-border/50 hover:bg-surface-raised/50 transition-colors">
-                  <td className="py-3 pr-3 font-mono font-bold text-text text-xs">{item.orderNumber}</td>
+                <tr
+                  key={`${item.orderId}-${i}`}
+                  className="border-b border-border/50 hover:bg-surface-raised/50 transition-colors"
+                >
+                  <td className="py-3 pr-3 font-mono font-bold text-text text-xs">
+                    {item.orderNumber}
+                  </td>
                   <td className="py-3 pr-3">
-                    <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${status.class}`}>
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-xs font-semibold ${status.class}`}
+                    >
                       {status.label}
                     </span>
                   </td>
@@ -65,10 +93,17 @@ export default function OrderHistoryTable({ orders }: OrderHistoryTableProps) {
                       ? `Botella completa${item.mlSize ? ` (${item.mlSize}ml)` : ''}`
                       : `Decant ${item.mlSize}ml${item.variationName ? ` · ${item.variationName}` : ''}`}
                   </td>
-                  <td className="py-3 pr-3 text-right text-text font-bold">{item.quantity}</td>
-                  <td className="py-3 pr-3 text-right text-text-muted">{stockSummary}</td>
+                  <td className="py-3 pr-3 text-right text-text font-bold">
+                    {item.quantity}
+                  </td>
+                  <td className="py-3 pr-3 text-right text-text-muted">
+                    {stockSummary}
+                  </td>
                   <td className="py-3 text-text-muted text-xs">
-                    {date.toLocaleDateString('es-EC', { day: '2-digit', month: 'short' })}
+                    {date.toLocaleDateString('es-EC', {
+                      day: '2-digit',
+                      month: 'short',
+                    })}
                   </td>
                 </tr>
               )

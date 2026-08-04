@@ -13,23 +13,31 @@ interface CoreApiResponse<T> {
 export const usersService = {
   listUsers: async (page = 1, limit = 10): Promise<User[]> => {
     const { data } = await axiosInstance.get<CoreApiResponse<User[]>>(
-      `${API_ENDPOINTS.USERS}?page=${page}&limit=${limit}`
+      `${API_ENDPOINTS.USERS}?page=${page}&limit=${limit}`,
     )
     return data.data
   },
 
   getUserById: async (id: string): Promise<User> => {
-    const { data } = await axiosInstance.get<CoreApiResponse<User>>(`${API_ENDPOINTS.USERS}/${id}`)
+    const { data } = await axiosInstance.get<CoreApiResponse<User>>(
+      `${API_ENDPOINTS.USERS}/${id}`,
+    )
     return data.data
   },
 
   createUser: async (payload: CreateUserPayload): Promise<User> => {
-    const { data } = await axiosInstance.post<CoreApiResponse<User>>(API_ENDPOINTS.USERS, payload)
+    const { data } = await axiosInstance.post<CoreApiResponse<User>>(
+      API_ENDPOINTS.USERS,
+      payload,
+    )
     return data.data
   },
 
   updateUser: async (id: string, payload: UpdateUserPayload): Promise<User> => {
-    const { data } = await axiosInstance.patch<CoreApiResponse<User>>(`${API_ENDPOINTS.USERS}/${id}`, payload)
+    const { data } = await axiosInstance.patch<CoreApiResponse<User>>(
+      `${API_ENDPOINTS.USERS}/${id}`,
+      payload,
+    )
     return data.data
   },
 

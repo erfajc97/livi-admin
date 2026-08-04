@@ -26,8 +26,12 @@ export function Users() {
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent sm:text-3xl">Usuarios</h1>
-          <p className="text-sm text-text-muted mt-1">Gestiona los usuarios del sistema</p>
+          <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent sm:text-3xl">
+            Usuarios
+          </h1>
+          <p className="text-sm text-text-muted mt-1">
+            Gestiona los usuarios del sistema
+          </p>
         </div>
         <Button
           color="primary"

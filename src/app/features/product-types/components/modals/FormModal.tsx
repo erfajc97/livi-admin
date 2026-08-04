@@ -9,7 +9,10 @@ interface FormModalProps {
   isThereId: boolean
   isSubmitting: boolean
   formData: ProductTypeFormData
-  onInputChange: (field: keyof ProductTypeFormData, value: string | boolean) => void
+  onInputChange: (
+    field: keyof ProductTypeFormData,
+    value: string | boolean,
+  ) => void
   onSubmit: () => void
 }
 
@@ -34,7 +37,11 @@ export default function FormModal({
       }
       footerContent={
         <div className="flex gap-2">
-          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)}>
+          <Button
+            color="danger"
+            variant="flat"
+            onPress={() => onOpenChange(false)}
+          >
             Cancelar
           </Button>
           <Button

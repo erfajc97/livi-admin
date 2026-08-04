@@ -11,10 +11,21 @@ interface BannerCardProps {
   onDelete: (banner: Banner) => void
 }
 
-export default function BannerCard({ banner, onEdit, onDelete }: BannerCardProps) {
+export default function BannerCard({
+  banner,
+  onEdit,
+  onDelete,
+}: BannerCardProps) {
   const toggleVisibility = useToggleBannerVisibilityMutation()
 
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id: banner.id,
   })
 
@@ -67,7 +78,10 @@ export default function BannerCard({ banner, onEdit, onDelete }: BannerCardProps
               isSelected={banner.isVisible}
               isDisabled={toggleVisibility.isPending}
               onValueChange={(val) =>
-                toggleVisibility.mutate({ id: String(banner.id), isVisible: val })
+                toggleVisibility.mutate({
+                  id: String(banner.id),
+                  isVisible: val,
+                })
               }
               aria-label="Visibilidad en landing"
             />
@@ -80,7 +94,9 @@ export default function BannerCard({ banner, onEdit, onDelete }: BannerCardProps
             </Chip>
           </div>
           {banner.subtitle && (
-            <p className="mt-1 line-clamp-2 text-sm text-text-muted">{banner.subtitle}</p>
+            <p className="mt-1 line-clamp-2 text-sm text-text-muted">
+              {banner.subtitle}
+            </p>
           )}
           {banner.link && (
             <p className="mt-1 truncate text-xs text-text-muted">

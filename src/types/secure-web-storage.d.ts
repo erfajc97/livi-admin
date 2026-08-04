@@ -1,1 +1,1 @@
-declare module 'secure-web-storage';
+declare module 'secure-web-storage'

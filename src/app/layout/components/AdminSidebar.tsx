@@ -1,5 +1,4 @@
-import { Button } from '@heroui/react'
-import { addToast } from '@heroui/react'
+import { Button, addToast } from '@heroui/react'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { LogOut, X } from 'lucide-react'
 import { useAuthStore } from '@/app/store/auth/authStore'
@@ -16,7 +15,11 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
   const handleLogout = () => {
     removeToken()
-    addToast({ title: 'Sesión cerrada', description: 'Has salido del panel.', color: 'default' })
+    addToast({
+      title: 'Sesión cerrada',
+      description: 'Has salido del panel.',
+      color: 'default',
+    })
     void navigate({ to: '/login' })
   }
 

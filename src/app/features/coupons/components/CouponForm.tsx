@@ -14,7 +14,10 @@ interface CouponFormProps {
   onInputChange: (field: keyof CouponFormData, value: string | boolean) => void
 }
 
-export default function CouponForm({ formData, onInputChange }: CouponFormProps) {
+export default function CouponForm({
+  formData,
+  onInputChange,
+}: CouponFormProps) {
   return (
     <div className="flex flex-col gap-4">
       <Input
@@ -56,7 +59,11 @@ export default function CouponForm({ formData, onInputChange }: CouponFormProps)
 
       {formData.type !== 'free_shipping' && (
         <Input
-          label={formData.type === 'percentage' ? 'Porcentaje de descuento (%)' : 'Monto de descuento ($)'}
+          label={
+            formData.type === 'percentage'
+              ? 'Porcentaje de descuento (%)'
+              : 'Monto de descuento ($)'
+          }
           labelPlacement="outside"
           placeholder={formData.type === 'percentage' ? 'Ej: 15' : 'Ej: 5.00'}
           type="number"
@@ -106,7 +113,9 @@ export default function CouponForm({ formData, onInputChange }: CouponFormProps)
       <div className="flex flex-col gap-3 rounded-lg border border-border p-4">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-text">Uso único por cliente</p>
+            <p className="text-sm font-medium text-text">
+              Uso único por cliente
+            </p>
             <p className="text-xs text-text-muted">
               {formData.singleUsePerCustomer
                 ? 'Cada cliente solo puede usar este cupón 1 vez'

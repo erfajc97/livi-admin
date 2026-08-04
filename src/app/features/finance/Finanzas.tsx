@@ -1,6 +1,13 @@
 import { useState } from 'react'
 import { Button, Spinner } from '@heroui/react'
-import { BarChart3, CreditCard, Receipt, TrendingUp, TrendingDown, DollarSign } from 'lucide-react'
+import {
+  BarChart3,
+  CreditCard,
+  Receipt,
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+} from 'lucide-react'
 import { useFinanceDashboardHook } from './hooks/useFinanceDashboardHook'
 import { useFinanceManagementHook } from './hooks/useFinanceManagementHook'
 import FinanceResumenTab from './components/FinanceResumenTab'
@@ -27,7 +34,9 @@ export function Finanzas() {
         <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">
           Finanzas
         </h1>
-        <p className="text-sm text-text-muted">Control de ingresos, egresos y cuentas por pagar</p>
+        <p className="text-sm text-text-muted">
+          Control de ingresos, egresos y cuentas por pagar
+        </p>
       </div>
 
       {/* Tab navigation */}

@@ -44,7 +44,9 @@ export default function BlogForm({
 
       {/* Image upload */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-text">Imagen destacada</label>
+        <label className="text-sm font-medium text-text">
+          Imagen destacada
+        </label>
         <div className="flex items-start gap-3">
           {imagePreview && (
             <div className="relative h-32 w-48 overflow-hidden rounded-lg border border-border">

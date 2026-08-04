@@ -1,6 +1,14 @@
 import { useState } from 'react'
-import type { Category, CategoryFormData, CreateCategoryPayload, UpdateCategoryPayload } from '../types'
-import { useCreateCategoryMutation, useUpdateCategoryMutation } from '../mutations/useCategoryMutations'
+import type {
+  Category,
+  CategoryFormData,
+  CreateCategoryPayload,
+  UpdateCategoryPayload,
+} from '../types'
+import {
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+} from '../mutations/useCategoryMutations'
 
 const emptyForm: CategoryFormData = {
   name: '',
@@ -14,7 +22,10 @@ interface UseCategoryFormHookParams {
   onSuccess: () => void
 }
 
-export function useCategoryFormHook({ id, onSuccess }: UseCategoryFormHookParams) {
+export function useCategoryFormHook({
+  id,
+  onSuccess,
+}: UseCategoryFormHookParams) {
   const [formData, setFormData] = useState<CategoryFormData>(emptyForm)
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
@@ -25,7 +36,10 @@ export function useCategoryFormHook({ id, onSuccess }: UseCategoryFormHookParams
   const isThereId = Boolean(id)
   const isSubmitting = createMutation.isPending || updateMutation.isPending
 
-  const onInputChange = (field: keyof CategoryFormData, value: string | boolean) => {
+  const onInputChange = (
+    field: keyof CategoryFormData,
+    value: string | boolean,
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
@@ -63,7 +77,10 @@ export function useCategoryFormHook({ id, onSuccess }: UseCategoryFormHookParams
         isActive: formData.isActive,
         bajoPedido: formData.bajoPedido,
       }
-      updateMutation.mutate({ id, data: payload, file: imageFile ?? undefined }, { onSuccess })
+      updateMutation.mutate(
+        { id, data: payload, file: imageFile ?? undefined },
+        { onSuccess },
+      )
     } else {
       const payload: CreateCategoryPayload = {
         name: formData.name,
@@ -71,7 +88,10 @@ export function useCategoryFormHook({ id, onSuccess }: UseCategoryFormHookParams
         isActive: formData.isActive,
         bajoPedido: formData.bajoPedido,
       }
-      createMutation.mutate({ data: payload, file: imageFile ?? undefined }, { onSuccess })
+      createMutation.mutate(
+        { data: payload, file: imageFile ?? undefined },
+        { onSuccess },
+      )
     }
   }
 

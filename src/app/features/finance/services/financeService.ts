@@ -27,7 +27,7 @@ export const financeService = {
     const params = month ? { month } : {}
     const { data } = await axiosInstance.get<CoreApiResponse<FinanceStats>>(
       API_ENDPOINTS.FINANCE_STATS,
-      { params }
+      { params },
     )
     return data.data
   },
@@ -35,23 +35,28 @@ export const financeService = {
   // Transactions
   getTransactions: async (): Promise<Transaction[]> => {
     const { data } = await axiosInstance.get<CoreApiResponse<Transaction[]>>(
-      API_ENDPOINTS.FINANCE_TRANSACTIONS
+      API_ENDPOINTS.FINANCE_TRANSACTIONS,
     )
     return data.data
   },
 
-  createTransaction: async (payload: CreateTransactionPayload): Promise<Transaction> => {
+  createTransaction: async (
+    payload: CreateTransactionPayload,
+  ): Promise<Transaction> => {
     const { data } = await axiosInstance.post<CoreApiResponse<Transaction>>(
       API_ENDPOINTS.FINANCE_TRANSACTIONS,
-      payload
+      payload,
     )
     return data.data
   },
 
-  updateTransaction: async (id: number, payload: UpdateTransactionPayload): Promise<Transaction> => {
+  updateTransaction: async (
+    id: number,
+    payload: UpdateTransactionPayload,
+  ): Promise<Transaction> => {
     const { data } = await axiosInstance.patch<CoreApiResponse<Transaction>>(
       `${API_ENDPOINTS.FINANCE_TRANSACTIONS}/${id}`,
-      payload
+      payload,
     )
     return data.data
   },
@@ -62,14 +67,16 @@ export const financeService = {
 
   // Bills
   getBills: async (): Promise<Bill[]> => {
-    const { data } = await axiosInstance.get<CoreApiResponse<Bill[]>>(API_ENDPOINTS.FINANCE_BILLS)
+    const { data } = await axiosInstance.get<CoreApiResponse<Bill[]>>(
+      API_ENDPOINTS.FINANCE_BILLS,
+    )
     return data.data
   },
 
   createBill: async (payload: CreateBillPayload): Promise<Bill> => {
     const { data } = await axiosInstance.post<CoreApiResponse<Bill>>(
       API_ENDPOINTS.FINANCE_BILLS,
-      payload
+      payload,
     )
     return data.data
   },
@@ -77,7 +84,7 @@ export const financeService = {
   updateBill: async (id: number, payload: UpdateBillPayload): Promise<Bill> => {
     const { data } = await axiosInstance.patch<CoreApiResponse<Bill>>(
       `${API_ENDPOINTS.FINANCE_BILLS}/${id}`,
-      payload
+      payload,
     )
     return data.data
   },
@@ -94,7 +101,9 @@ export const financeService = {
     return data.data
   },
 
-  createPaymentMethod: async (payload: CreatePaymentMethodPayload): Promise<PaymentMethod> => {
+  createPaymentMethod: async (
+    payload: CreatePaymentMethodPayload,
+  ): Promise<PaymentMethod> => {
     const { data } = await axiosInstance.post<CoreApiResponse<PaymentMethod>>(
       API_ENDPOINTS.FINANCE_PAYMENT_METHODS,
       payload,
@@ -102,7 +111,10 @@ export const financeService = {
     return data.data
   },
 
-  updatePaymentMethod: async (id: number, payload: UpdatePaymentMethodPayload): Promise<PaymentMethod> => {
+  updatePaymentMethod: async (
+    id: number,
+    payload: UpdatePaymentMethodPayload,
+  ): Promise<PaymentMethod> => {
     const { data } = await axiosInstance.patch<CoreApiResponse<PaymentMethod>>(
       `${API_ENDPOINTS.FINANCE_PAYMENT_METHODS}/${id}`,
       payload,

@@ -6,18 +6,28 @@ export const blogsService = {
   async getAll(): Promise<BlogPost[]> {
     const { data } = await axiosInstance.get(API_ENDPOINTS.BLOG)
     // Backend wrapper: { statusCode, data: [...] }
-    return Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : []
+    return Array.isArray(data)
+      ? data
+      : Array.isArray(data?.data)
+        ? data.data
+        : []
   },
 
   async getById(id: string): Promise<BlogPost> {
-    const { data } = await axiosInstance.get<BlogPost>(`${API_ENDPOINTS.BLOG}/${id}`)
+    const { data } = await axiosInstance.get<BlogPost>(
+      `${API_ENDPOINTS.BLOG}/${id}`,
+    )
     return data
   },
 
   async create(formData: FormData): Promise<BlogPost> {
-    const { data } = await axiosInstance.post<BlogPost>(API_ENDPOINTS.BLOG, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
+    const { data } = await axiosInstance.post<BlogPost>(
+      API_ENDPOINTS.BLOG,
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      },
+    )
     return data
   },
 

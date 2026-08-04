@@ -27,8 +27,8 @@ export default function DeleteOrderModal({
       <div className="flex flex-col gap-4 p-4">
         <p className="text-text-muted">
           ¿Estás seguro de que deseas eliminar la orden{' '}
-          <span className="font-semibold text-accent">{orderNumber}</span>? Esta acción no se puede
-          deshacer.
+          <span className="font-semibold text-accent">{orderNumber}</span>? Esta
+          acción no se puede deshacer.
         </p>
 
         <div className="flex justify-end gap-2">

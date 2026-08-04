@@ -8,14 +8,22 @@ interface FormSectionVariationsProps {
   totalMl: number
   productName: string
   onAdd: () => void
-  onUpdate: (index: number, field: keyof VariationRow, value: string | boolean) => void
+  onUpdate: (
+    index: number,
+    field: keyof VariationRow,
+    value: string | boolean,
+  ) => void
   onRemove: (index: number) => void
   onAddImages: (varIndex: number, files: File[]) => void
   onRemoveNewImage: (varIndex: number, imgIndex: number) => void
   onRemoveExistingImage: (varIndex: number, imageId: number) => void
 }
 
-const inputClasses = { label: '!text-text', input: '!text-text', inputWrapper: 'bg-background border-border' }
+const inputClasses = {
+  label: '!text-text',
+  input: '!text-text',
+  inputWrapper: 'bg-background border-border',
+}
 
 export default function FormSectionVariations({
   variations,
@@ -28,14 +36,23 @@ export default function FormSectionVariations({
   onRemoveNewImage,
   onRemoveExistingImage,
 }: FormSectionVariationsProps) {
-  const totalVariationMl = variations.reduce((sum, v) => sum + (Number(v.mlSize) || 0), 0)
+  const totalVariationMl = variations.reduce(
+    (sum, v) => sum + (Number(v.mlSize) || 0),
+    0,
+  )
   const mlExceeded = totalMl > 0 && totalVariationMl > totalMl
 
   return (
     <div className="rounded-xl border border-border bg-surface p-5">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-lg font-semibold text-text">Decants / Variantes</h3>
-        <Button size="sm" color="warning" variant="flat" startContent={<Plus size={14} />} onPress={onAdd}>
+        <Button
+          size="sm"
+          color="warning"
+          variant="flat"
+          startContent={<Plus size={14} />}
+          onPress={onAdd}
+        >
           Agregar variante
         </Button>
       </div>
@@ -45,22 +62,27 @@ export default function FormSectionVariations({
         <div className="mb-4">
           <div className="flex items-center justify-between text-xs mb-1.5">
             <span className="text-text-muted">ML usados en variantes</span>
-            <span className={mlExceeded ? 'text-red-400 font-bold' : 'text-text'}>
+            <span
+              className={mlExceeded ? 'text-red-400 font-bold' : 'text-text'}
+            >
               {totalVariationMl} / {totalMl} ml
             </span>
           </div>
           <div className="h-2 w-full rounded-full bg-background overflow-hidden">
             <div
               className={`h-full rounded-full transition-all ${mlExceeded ? 'bg-red-500' : 'bg-accent'}`}
-              style={{ width: `${Math.min((totalVariationMl / totalMl) * 100, 100)}%` }}
+              style={{
+                width: `${Math.min((totalVariationMl / totalMl) * 100, 100)}%`,
+              }}
             />
           </div>
           {mlExceeded && (
             <div className="mt-2 flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/30 px-3 py-2">
               <AlertTriangle size={14} className="text-red-400 shrink-0" />
               <p className="text-xs text-red-400">
-                Las variantes suman <strong>{totalVariationMl}ml</strong> pero la botella es de <strong>{totalMl}ml</strong>.
-                Reduce los ML de las variantes para no exceder la capacidad de la botella.
+                Las variantes suman <strong>{totalVariationMl}ml</strong> pero
+                la botella es de <strong>{totalMl}ml</strong>. Reduce los ML de
+                las variantes para no exceder la capacidad de la botella.
               </p>
             </div>
           )}
@@ -68,7 +90,9 @@ export default function FormSectionVariations({
       )}
 
       {variations.length === 0 ? (
-        <p className="text-sm text-text-muted">No hay variantes configuradas.</p>
+        <p className="text-sm text-text-muted">
+          No hay variantes configuradas.
+        </p>
       ) : (
         <div className="flex flex-col gap-4">
           {variations.map((v, i) => (
@@ -94,7 +118,11 @@ interface VariationCardProps {
   variation: VariationRow
   index: number
   productName: string
-  onUpdate: (index: number, field: keyof VariationRow, value: string | boolean) => void
+  onUpdate: (
+    index: number,
+    field: keyof VariationRow,
+    value: string | boolean,
+  ) => void
   onRemove: (index: number) => void
   onAddImages: (varIndex: number, files: File[]) => void
   onRemoveNewImage: (varIndex: number, imgIndex: number) => void
@@ -112,12 +140,16 @@ function VariationCard({
   onRemoveExistingImage,
 }: VariationCardProps) {
   const fileRef = useRef<HTMLInputElement>(null)
-  const newImagePreviews = (variation.imageFiles ?? []).map((f) => URL.createObjectURL(f))
+  const newImagePreviews = (variation.imageFiles ?? []).map((f) =>
+    URL.createObjectURL(f),
+  )
   const mlSize = variation.mlSize || ''
 
   // Auto-generate name and SKU from product name + ml
   const autoName = mlSize ? `${productName} - ${mlSize}ml` : ''
-  const autoSku = mlSize ? `${productName.replace(/\s+/g, '-').toLowerCase()}-${mlSize}ml` : ''
+  const autoSku = mlSize
+    ? `${productName.replace(/\s+/g, '-').toLowerCase()}-${mlSize}ml`
+    : ''
 
   // If user hasn't manually typed a name/sku, show the auto-generated one as placeholder
   const displayName = variation.name || autoName
@@ -126,8 +158,16 @@ function VariationCard({
   return (
     <div className="rounded-lg border border-border/50 bg-bg p-4">
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-sm font-medium text-text">Variante {index + 1}</span>
-        <Button isIconOnly size="sm" variant="light" color="danger" onPress={() => onRemove(index)}>
+        <span className="text-sm font-medium text-text">
+          Variante {index + 1}
+        </span>
+        <Button
+          isIconOnly
+          size="sm"
+          variant="light"
+          color="danger"
+          onPress={() => onRemove(index)}
+        >
           <Trash2 size={16} />
         </Button>
       </div>
@@ -161,7 +201,9 @@ function VariationCard({
           value={variation.name}
           onValueChange={(val) => onUpdate(index, 'name', val)}
           classNames={inputClasses}
-          description={!variation.name && autoName ? `Auto: ${autoName}` : undefined}
+          description={
+            !variation.name && autoName ? `Auto: ${autoName}` : undefined
+          }
         />
       </div>
 
@@ -197,11 +239,16 @@ function VariationCard({
           />
         </div>
 
-        {((variation.existingImages?.length ?? 0) > 0 || newImagePreviews.length > 0) && (
+        {((variation.existingImages?.length ?? 0) > 0 ||
+          newImagePreviews.length > 0) && (
           <div className="mt-2 flex flex-wrap gap-2">
             {(variation.existingImages ?? []).map((img) => (
               <div key={img.id} className="group relative">
-                <img src={img.url} alt="" className="h-16 w-16 rounded object-cover" />
+                <img
+                  src={img.url}
+                  alt=""
+                  className="h-16 w-16 rounded object-cover"
+                />
                 <Button
                   isIconOnly
                   size="sm"
@@ -216,7 +263,11 @@ function VariationCard({
             ))}
             {newImagePreviews.map((preview, imgIdx) => (
               <div key={`new-${imgIdx}`} className="group relative">
-                <img src={preview} alt="" className="h-16 w-16 rounded object-cover" />
+                <img
+                  src={preview}
+                  alt=""
+                  className="h-16 w-16 rounded object-cover"
+                />
                 <Button
                   isIconOnly
                   size="sm"

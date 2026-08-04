@@ -12,7 +12,10 @@ interface CoreApiResponse<T> {
 
 export const authService = {
   login: async (payload: LoginPayload): Promise<LoginResponse> => {
-    const { data } = await axiosInstance.post<CoreApiResponse<LoginResponse>>(API_ENDPOINTS.LOGIN, payload)
+    const { data } = await axiosInstance.post<CoreApiResponse<LoginResponse>>(
+      API_ENDPOINTS.LOGIN,
+      payload,
+    )
     return data.data
   },
 }

@@ -4,12 +4,18 @@ import { Plus, DollarSign } from 'lucide-react'
 import { useCreateTransactionMutation } from '../mutations/useFinanceMutations'
 import { usePaymentMethodsQuery } from '@/app/tanstack-queries/financeQuery'
 
-const INCOME_CATEGORIES = ['Venta Directa', 'Servicios', 'Reembolso', 'Otro'] as const
+const INCOME_CATEGORIES = [
+  'Venta Directa',
+  'Servicios',
+  'Reembolso',
+  'Otro',
+] as const
 
 export default function OtherIncomeForm() {
   const [amount, setAmount] = useState('')
   const [description, setDescription] = useState('')
-  const [category, setCategory] = useState<typeof INCOME_CATEGORIES[number]>('Otro')
+  const [category, setCategory] =
+    useState<(typeof INCOME_CATEGORIES)[number]>('Otro')
   const [date, setDate] = useState(new Date().toISOString().split('T')[0])
   const [paymentMethod, setPaymentMethod] = useState('Efectivo')
 
@@ -45,7 +51,9 @@ export default function OtherIncomeForm() {
     <div className="rounded-xl border border-green-500/30 bg-surface p-4 sm:p-5">
       <div className="mb-4 flex items-center gap-2">
         <DollarSign size={16} className="text-green-500" />
-        <h3 className="text-sm font-heading font-bold uppercase tracking-wide text-text">Registrar otro ingreso</h3>
+        <h3 className="text-sm font-heading font-bold uppercase tracking-wide text-text">
+          Registrar otro ingreso
+        </h3>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
@@ -57,16 +65,24 @@ export default function OtherIncomeForm() {
           onValueChange={setAmount}
           startContent={<span className="text-text-muted text-xs">$</span>}
           size="sm"
-          classNames={{ label: '!text-text', input: '!text-text', inputWrapper: 'bg-bg border-border' }}
+          classNames={{
+            label: '!text-text',
+            input: '!text-text',
+            inputWrapper: 'bg-bg border-border',
+          }}
         />
 
         <select
           value={category}
-          onChange={(e) => setCategory(e.target.value as typeof INCOME_CATEGORIES[number])}
+          onChange={(e) =>
+            setCategory(e.target.value as (typeof INCOME_CATEGORIES)[number])
+          }
           className="rounded-medium border border-border bg-bg px-3 py-2 text-sm text-text"
         >
           {INCOME_CATEGORIES.map((c) => (
-            <option key={c} value={c}>{c}</option>
+            <option key={c} value={c}>
+              {c}
+            </option>
           ))}
         </select>
 
@@ -75,9 +91,13 @@ export default function OtherIncomeForm() {
           onChange={(e) => setPaymentMethod(e.target.value)}
           className="rounded-medium border border-border bg-bg px-3 py-2 text-sm text-text"
         >
-          {paymentMethods.filter((pm) => pm.isActive).map((pm) => (
-            <option key={pm.id} value={pm.name}>{pm.name}</option>
-          ))}
+          {paymentMethods
+            .filter((pm) => pm.isActive)
+            .map((pm) => (
+              <option key={pm.id} value={pm.name}>
+                {pm.name}
+              </option>
+            ))}
           {paymentMethods.length === 0 && <option>Efectivo</option>}
         </select>
 
@@ -87,7 +107,11 @@ export default function OtherIncomeForm() {
           value={date}
           onValueChange={setDate}
           size="sm"
-          classNames={{ label: '!text-text', input: '!text-text', inputWrapper: 'bg-bg border-border' }}
+          classNames={{
+            label: '!text-text',
+            input: '!text-text',
+            inputWrapper: 'bg-bg border-border',
+          }}
         />
 
         <Input
@@ -96,7 +120,11 @@ export default function OtherIncomeForm() {
           value={description}
           onValueChange={setDescription}
           size="sm"
-          classNames={{ label: '!text-text', input: '!text-text', inputWrapper: 'bg-bg border-border' }}
+          classNames={{
+            label: '!text-text',
+            input: '!text-text',
+            inputWrapper: 'bg-bg border-border',
+          }}
           className="sm:col-span-2 lg:col-span-1"
         />
       </div>

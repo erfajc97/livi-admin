@@ -1,6 +1,14 @@
 import { useState } from 'react'
-import type { ProductType, ProductTypeFormData, CreateProductTypePayload, UpdateProductTypePayload } from '../types'
-import { useCreateProductTypeMutation, useUpdateProductTypeMutation } from '../mutations/useProductTypeMutations'
+import type {
+  ProductType,
+  ProductTypeFormData,
+  CreateProductTypePayload,
+  UpdateProductTypePayload,
+} from '../types'
+import {
+  useCreateProductTypeMutation,
+  useUpdateProductTypeMutation,
+} from '../mutations/useProductTypeMutations'
 
 const emptyForm: ProductTypeFormData = {
   name: '',
@@ -13,7 +21,10 @@ interface UseProductTypeFormHookParams {
   onSuccess: () => void
 }
 
-export function useProductTypeFormHook({ id, onSuccess }: UseProductTypeFormHookParams) {
+export function useProductTypeFormHook({
+  id,
+  onSuccess,
+}: UseProductTypeFormHookParams) {
   const [formData, setFormData] = useState<ProductTypeFormData>(emptyForm)
 
   const createMutation = useCreateProductTypeMutation()
@@ -22,7 +33,10 @@ export function useProductTypeFormHook({ id, onSuccess }: UseProductTypeFormHook
   const isThereId = Boolean(id)
   const isSubmitting = createMutation.isPending || updateMutation.isPending
 
-  const onInputChange = (field: keyof ProductTypeFormData, value: string | boolean) => {
+  const onInputChange = (
+    field: keyof ProductTypeFormData,
+    value: string | boolean,
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 

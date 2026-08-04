@@ -42,7 +42,11 @@ export default function ProductListView({
 }: ProductListViewProps) {
   return (
     <div className="flex flex-col gap-5">
-      <ProductListHeader search={search} onSearchChange={onSearchChange} onCreate={onCreate} />
+      <ProductListHeader
+        search={search}
+        onSearchChange={onSearchChange}
+        onCreate={onCreate}
+      />
 
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
@@ -50,9 +54,17 @@ export default function ProductListView({
         </div>
       ) : (
         <>
-          <ProductTable products={products} onEdit={onEdit} onDelete={onDeleteClick} />
+          <ProductTable
+            products={products}
+            onEdit={onEdit}
+            onDelete={onDeleteClick}
+          />
           {totalPages > 1 && (
-            <CustomPagination pages={totalPages} page={currentPage} setPage={onPageChange} />
+            <CustomPagination
+              pages={totalPages}
+              page={currentPage}
+              setPage={onPageChange}
+            />
           )}
         </>
       )}

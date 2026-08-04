@@ -12,7 +12,10 @@ interface CampaignsListProps {
   onPreview: (campaignId: number) => void
 }
 
-const statusConfig: Record<Campaign['status'], { color: 'warning' | 'success' | 'danger'; label: string }> = {
+const statusConfig: Record<
+  Campaign['status'],
+  { color: 'warning' | 'success' | 'danger'; label: string }
+> = {
   draft: { color: 'warning', label: 'Borrador' },
   sent: { color: 'success', label: 'Enviada' },
   failed: { color: 'danger', label: 'Fallida' },
@@ -81,7 +84,9 @@ export function CampaignsList({
                 </Chip>
               </div>
 
-              <p className="text-sm text-text-muted line-clamp-2">{campaign.heading}</p>
+              <p className="text-sm text-text-muted line-clamp-2">
+                {campaign.heading}
+              </p>
 
               <div className="mt-auto flex items-center gap-2 text-xs text-text-muted">
                 {campaign.status === 'sent' && campaign.sentAt && (

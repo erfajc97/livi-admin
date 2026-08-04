@@ -24,10 +24,15 @@ export default function FinanceReminders({
           <div className="flex items-center gap-3">
             <AlertCircle size={18} className="text-error" />
             <span className="text-sm text-text">
-              {overdueCount} Cuenta{overdueCount > 1 ? 's' : ''} Vencida{overdueCount > 1 ? 's' : ''} Total: ${overdueTotal.toFixed(2)}
+              {overdueCount} Cuenta{overdueCount > 1 ? 's' : ''} Vencida
+              {overdueCount > 1 ? 's' : ''} Total: ${overdueTotal.toFixed(2)}
             </span>
           </div>
-          <button type="button" onClick={() => setShowOverdue(false)} className="text-text-muted hover:text-text">
+          <button
+            type="button"
+            onClick={() => setShowOverdue(false)}
+            className="text-text-muted hover:text-text"
+          >
             <X size={16} />
           </button>
         </div>
@@ -38,10 +43,15 @@ export default function FinanceReminders({
           <div className="flex items-center gap-3">
             <AlertTriangle size={18} className="text-warning" />
             <span className="text-sm text-text">
-              Tienes {upcomingCount} Cuenta{upcomingCount > 1 ? 's' : ''} Próxima{upcomingCount > 1 ? 's' : ''} a vencer
+              Tienes {upcomingCount} Cuenta{upcomingCount > 1 ? 's' : ''}{' '}
+              Próxima{upcomingCount > 1 ? 's' : ''} a vencer
             </span>
           </div>
-          <button type="button" onClick={() => setShowUpcoming(false)} className="text-text-muted hover:text-text">
+          <button
+            type="button"
+            onClick={() => setShowUpcoming(false)}
+            className="text-text-muted hover:text-text"
+          >
             <X size={16} />
           </button>
         </div>

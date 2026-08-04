@@ -21,10 +21,17 @@ export default function FinanceWelcomeBanner({
       </div>
       <div className="relative flex items-center justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">{title}</h1>
+          <h1 className="font-heading text-2xl font-semibold uppercase tracking-wide text-accent">
+            {title}
+          </h1>
           <p className="mt-1 text-sm text-text-muted">{subtitle}</p>
         </div>
-        <Button color="danger" variant="solid" onPress={onButtonPress} className="font-semibold">
+        <Button
+          color="danger"
+          variant="solid"
+          onPress={onButtonPress}
+          className="font-semibold"
+        >
           {buttonLabel}
         </Button>
       </div>

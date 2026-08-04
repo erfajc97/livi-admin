@@ -8,7 +8,10 @@ interface PaymentMethodSelectorProps {
 
 const METHODS: PaymentMethod[] = ['Efectivo', 'Transferencia', 'Tarjeta']
 
-export default function PaymentMethodSelector({ selected, onChange }: PaymentMethodSelectorProps) {
+export default function PaymentMethodSelector({
+  selected,
+  onChange,
+}: PaymentMethodSelectorProps) {
   return (
     <div className="flex flex-col gap-3">
       <h3 className="text-base font-semibold text-text">Método de Pago</h3>

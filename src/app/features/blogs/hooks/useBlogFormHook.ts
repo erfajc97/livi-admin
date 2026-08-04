@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import type { BlogPost } from '../types'
-import { useCreateBlogMutation, useUpdateBlogMutation } from '../mutations/useBlogMutations'
+import {
+  useCreateBlogMutation,
+  useUpdateBlogMutation,
+} from '../mutations/useBlogMutations'
 
 export interface BlogFormData {
   title: string
@@ -30,7 +33,10 @@ export function useBlogFormHook({ id, onSuccess }: UseBlogFormHookParams) {
   const isThereId = Boolean(id)
   const isSubmitting = createMutation.isPending || updateMutation.isPending
 
-  const onInputChange = (field: keyof BlogFormData, value: string | boolean) => {
+  const onInputChange = (
+    field: keyof BlogFormData,
+    value: string | boolean,
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 

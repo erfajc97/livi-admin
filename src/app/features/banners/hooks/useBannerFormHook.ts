@@ -1,7 +1,16 @@
 import { useState } from 'react'
 import { addToast } from '@heroui/react'
-import type { Banner, BannerFormData, BannerType, CreateBannerPayload, UpdateBannerPayload } from '../types'
-import { useCreateBannerMutation, useUpdateBannerMutation } from '../mutations/useBannerMutations'
+import type {
+  Banner,
+  BannerFormData,
+  BannerType,
+  CreateBannerPayload,
+  UpdateBannerPayload,
+} from '../types'
+import {
+  useCreateBannerMutation,
+  useUpdateBannerMutation,
+} from '../mutations/useBannerMutations'
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024
@@ -24,8 +33,14 @@ interface UseBannerFormHookParams {
   defaultType?: BannerType
 }
 
-export function useBannerFormHook({ id, onSuccess, defaultType = 'hero' }: UseBannerFormHookParams) {
-  const [formData, setFormData] = useState<BannerFormData>(() => buildEmptyForm(defaultType))
+export function useBannerFormHook({
+  id,
+  onSuccess,
+  defaultType = 'hero',
+}: UseBannerFormHookParams) {
+  const [formData, setFormData] = useState<BannerFormData>(() =>
+    buildEmptyForm(defaultType),
+  )
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
@@ -35,18 +50,27 @@ export function useBannerFormHook({ id, onSuccess, defaultType = 'hero' }: UseBa
   const isThereId = Boolean(id)
   const isSubmitting = createMutation.isPending || updateMutation.isPending
 
-  const onInputChange = (field: keyof BannerFormData, value: string | boolean) => {
+  const onInputChange = (
+    field: keyof BannerFormData,
+    value: string | boolean,
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
   const onImageChange = (file: File | null) => {
     if (file) {
       if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-        addToast({ title: 'Formato no permitido. Usa JPG, PNG o WEBP.', color: 'danger' })
+        addToast({
+          title: 'Formato no permitido. Usa JPG, PNG o WEBP.',
+          color: 'danger',
+        })
         return
       }
       if (file.size > MAX_IMAGE_SIZE) {
-        addToast({ title: 'La imagen no debe superar los 5 MB.', color: 'danger' })
+        addToast({
+          title: 'La imagen no debe superar los 5 MB.',
+          color: 'danger',
+        })
         return
       }
     }
@@ -96,10 +120,16 @@ export function useBannerFormHook({ id, onSuccess, defaultType = 'hero' }: UseBa
 
     if (isThereId && id) {
       const payload: UpdateBannerPayload = { title: formData.title, ...base }
-      updateMutation.mutate({ id, data: payload, file: imageFile ?? undefined }, { onSuccess })
+      updateMutation.mutate(
+        { id, data: payload, file: imageFile ?? undefined },
+        { onSuccess },
+      )
     } else {
       const payload: CreateBannerPayload = { title: formData.title, ...base }
-      createMutation.mutate({ data: payload, file: imageFile ?? undefined }, { onSuccess })
+      createMutation.mutate(
+        { data: payload, file: imageFile ?? undefined },
+        { onSuccess },
+      )
     }
   }
 

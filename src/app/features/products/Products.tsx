@@ -36,7 +36,10 @@ export function Products() {
 
   return (
     <div className="flex flex-col gap-6">
-      <WelcomeBanner userName={userName} subtitle="Gestión de productos NönDecants" />
+      <WelcomeBanner
+        userName={userName}
+        subtitle="Gestión de productos NönDecants"
+      />
 
       <ProductListView
         products={products}

@@ -12,7 +12,11 @@ interface CreateComboPayloadWithFile {
   discount?: number
   isActive?: boolean
   parentComboId?: number
-  products: { productId: number; productVariationId?: number; quantity: number }[]
+  products: {
+    productId: number
+    productVariationId?: number
+    quantity: number
+  }[]
 }
 
 interface UpdateComboPayloadWithFile extends Partial<CreateComboPayloadWithFile> {}
@@ -20,13 +24,17 @@ interface UpdateComboPayloadWithFile extends Partial<CreateComboPayloadWithFile>
 export function useCreateComboMutation() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (payload: CreateComboPayloadWithFile) => combosService.createCombo(payload),
+    mutationFn: (payload: CreateComboPayloadWithFile) =>
+      combosService.createCombo(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['combos'] })
       addToast({ title: 'Combo creado exitosamente', color: 'success' })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al crear el combo', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al crear el combo',
+        color: 'danger',
+      })
     },
   })
 }
@@ -34,14 +42,22 @@ export function useCreateComboMutation() {
 export function useUpdateComboMutation() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UpdateComboPayloadWithFile }) =>
-      combosService.updateCombo(id, data),
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: number
+      data: UpdateComboPayloadWithFile
+    }) => combosService.updateCombo(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['combos'] })
       addToast({ title: 'Combo actualizado exitosamente', color: 'success' })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al actualizar el combo', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al actualizar el combo',
+        color: 'danger',
+      })
     },
   })
 }
@@ -55,7 +71,10 @@ export function useDeleteComboMutation() {
       addToast({ title: 'Combo eliminado exitosamente', color: 'success' })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al eliminar el combo', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al eliminar el combo',
+        color: 'danger',
+      })
     },
   })
 }

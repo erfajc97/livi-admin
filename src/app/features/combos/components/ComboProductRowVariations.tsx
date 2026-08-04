@@ -8,7 +8,11 @@ import type { ComboProductRow } from '../types'
 interface ComboProductRowVariationsProps {
   row: ComboProductRow
   index: number
-  updateProductRow: (index: number, field: keyof ComboProductRow, value: string) => void
+  updateProductRow: (
+    index: number,
+    field: keyof ComboProductRow,
+    value: string,
+  ) => void
   removeProductRow: (index: number) => void
   canRemove: boolean
 }
@@ -23,7 +27,7 @@ export default function ComboProductRowVariations({
   const productId = row.productId ? parseInt(row.productId, 10) : 0
   const { data: product, isLoading: isLoadingProduct } = useProductByIdQuery(
     productId,
-    productId > 0
+    productId > 0,
   )
 
   const variations = product?.variations ?? []

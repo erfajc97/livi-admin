@@ -11,8 +11,11 @@ interface MovimientosTableProps {
   transactions: Transaction[]
 }
 
-export default function MovimientosTable({ transactions }: MovimientosTableProps) {
-  const { search, page, totalPages, paginated, handleSearch, setPage } = useMovimientosHook(transactions)
+export default function MovimientosTable({
+  transactions,
+}: MovimientosTableProps) {
+  const { search, page, totalPages, paginated, handleSearch, setPage } =
+    useMovimientosHook(transactions)
 
   const renderCell = useCallback((item: Transaction, columnKey: string) => {
     switch (columnKey) {
@@ -28,7 +31,11 @@ export default function MovimientosTable({ transactions }: MovimientosTableProps
         )
       case 'type':
         return (
-          <Chip size="sm" variant="flat" color={item.type === 'income' ? 'success' : 'danger'}>
+          <Chip
+            size="sm"
+            variant="flat"
+            color={item.type === 'income' ? 'success' : 'danger'}
+          >
             {item.type === 'income' ? 'Ingreso' : 'Egreso'}
           </Chip>
         )
@@ -38,18 +45,29 @@ export default function MovimientosTable({ transactions }: MovimientosTableProps
         return <span className="text-text">{item.paymentMethod || '—'}</span>
       case 'amount':
         return (
-          <span className={`font-semibold ${item.type === 'income' ? 'text-green-500' : 'text-red-500'}`}>
-            {item.type === 'income' ? '+' : '-'}${Number(item.amount).toFixed(2)}
+          <span
+            className={`font-semibold ${item.type === 'income' ? 'text-green-500' : 'text-red-500'}`}
+          >
+            {item.type === 'income' ? '+' : '-'}$
+            {Number(item.amount).toFixed(2)}
           </span>
         )
       case 'status':
         return (
-          <Chip size="sm" variant="flat" color={item.status === 'Pagado' ? 'success' : 'warning'}>
+          <Chip
+            size="sm"
+            variant="flat"
+            color={item.status === 'Pagado' ? 'success' : 'warning'}
+          >
             {item.status}
           </Chip>
         )
       case 'description':
-        return <span className="text-sm text-text-muted">{item.description || '—'}</span>
+        return (
+          <span className="text-sm text-text-muted">
+            {item.description || '—'}
+          </span>
+        )
       default:
         return '—'
     }
@@ -79,7 +97,11 @@ export default function MovimientosTable({ transactions }: MovimientosTableProps
           renderCell={renderCell}
           emptyContent="No hay movimientos registrados"
           bottomContent={
-            <CustomPagination page={page} pages={totalPages} setPage={setPage} />
+            <CustomPagination
+              page={page}
+              pages={totalPages}
+              setPage={setPage}
+            />
           }
         />
       </div>

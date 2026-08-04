@@ -21,7 +21,8 @@ export const useDeleteSubscriberMutation = () => {
 export const useCreateCampaignMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (data: CreateCampaignPayload) => newsletterService.createCampaign(data),
+    mutationFn: (data: CreateCampaignPayload) =>
+      newsletterService.createCampaign(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['newsletter', 'campaigns'] })
       addToast({ title: 'Campaña creada exitosamente', color: 'success' })

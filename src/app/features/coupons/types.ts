@@ -1,5 +1,8 @@
 export type CouponType = 'fixed_amount' | 'percentage' | 'free_shipping'
-export type CouponScope = 'all_products' | 'specific_products' | 'specific_categories'
+export type CouponScope =
+  | 'all_products'
+  | 'specific_products'
+  | 'specific_categories'
 
 export interface Coupon {
   id: string | number

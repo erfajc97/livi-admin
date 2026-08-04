@@ -6,11 +6,19 @@ const inputClasses = { label: '!text-text' }
 interface CategoryFormProps {
   formData: CategoryFormData
   imagePreview: string | null
-  onInputChange: (field: keyof CategoryFormData, value: string | boolean) => void
+  onInputChange: (
+    field: keyof CategoryFormData,
+    value: string | boolean,
+  ) => void
   onImageChange: (file: File | null) => void
 }
 
-export default function CategoryForm({ formData, imagePreview, onInputChange, onImageChange }: CategoryFormProps) {
+export default function CategoryForm({
+  formData,
+  imagePreview,
+  onInputChange,
+  onImageChange,
+}: CategoryFormProps) {
   return (
     <div className="flex flex-col gap-4">
       <Input
@@ -34,9 +42,15 @@ export default function CategoryForm({ formData, imagePreview, onInputChange, on
       />
 
       <div>
-        <label className="mb-2 block text-sm text-text">Imagen de la categoría</label>
+        <label className="mb-2 block text-sm text-text">
+          Imagen de la categoría
+        </label>
         {imagePreview && (
-          <img src={imagePreview} alt="Preview" className="mb-2 h-28 w-auto rounded-lg object-cover" />
+          <img
+            src={imagePreview}
+            alt="Preview"
+            className="mb-2 h-28 w-auto rounded-lg object-cover"
+          />
         )}
         <input
           type="file"
@@ -61,7 +75,9 @@ export default function CategoryForm({ formData, imagePreview, onInputChange, on
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-text">Bajo pedido</p>
-          <p className="text-xs text-text-muted">Aparece en la sección Bajo Pedido</p>
+          <p className="text-xs text-text-muted">
+            Aparece en la sección Bajo Pedido
+          </p>
         </div>
         <Switch
           isSelected={formData.bajoPedido}

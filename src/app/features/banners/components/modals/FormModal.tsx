@@ -41,7 +41,12 @@ export default function FormModal({
       }
       footerContent={
         <div className="flex gap-2">
-          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)} isDisabled={isSubmitting}>
+          <Button
+            color="danger"
+            variant="flat"
+            onPress={() => onOpenChange(false)}
+            isDisabled={isSubmitting}
+          >
             Cancelar
           </Button>
           {/* El texto es opcional: lo único imprescindible al crear es la

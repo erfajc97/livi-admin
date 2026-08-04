@@ -1,7 +1,4 @@
-import {
-  Outlet,
-  createRootRouteWithContext,
-} from '@tanstack/react-router'
+import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 // import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 // import { TanStackDevtools } from '@tanstack/react-devtools'
 import { HeroUIProvider, ToastProvider } from '@heroui/react'
@@ -27,11 +24,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       errorDetail={error instanceof Error ? error.message : String(error)}
     />
   ),
-  notFoundComponent: () => <NotFoundPage text="Página no encontrada" codeError={404} />,
+  notFoundComponent: () => (
+    <NotFoundPage text="Página no encontrada" codeError={404} />
+  ),
 })
 
 function RootComponent() {
-
   return (
     <HeroUIProvider className="dark text-text bg-bg min-h-screen flex flex-col">
       <div className="flex-1 flex flex-col">
@@ -53,6 +51,6 @@ function RootComponent() {
           TanStackQueryDevtools,
         ]}
       /> */}
-      </HeroUIProvider>
+    </HeroUIProvider>
   )
 }

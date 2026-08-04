@@ -23,11 +23,17 @@ export default function DeleteModal({
       onOpenChange={onOpenChange}
       size="md"
       headerContent={
-        <h3 className="text-lg font-semibold text-text">Eliminar tipo de producto</h3>
+        <h3 className="text-lg font-semibold text-text">
+          Eliminar tipo de producto
+        </h3>
       }
       footerContent={
         <div className="flex gap-2">
-          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)}>
+          <Button
+            color="danger"
+            variant="flat"
+            onPress={() => onOpenChange(false)}
+          >
             Cancelar
           </Button>
           <Button color="danger" onPress={onConfirm} isLoading={isDeleting}>

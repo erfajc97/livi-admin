@@ -8,14 +8,14 @@ import {
   Spinner,
   Card,
   CardBody,
-} from '@heroui/react';
-import { useSectionProductsHook } from '../hooks/useSectionProductsHook';
-import type { LandingSection } from '../types';
+} from '@heroui/react'
+import { useSectionProductsHook } from '../hooks/useSectionProductsHook'
+import type { LandingSection } from '../types'
 
 interface ProductsManagementModalProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  section: LandingSection | null;
+  isOpen: boolean
+  onOpenChange: (open: boolean) => void
+  section: LandingSection | null
 }
 
 export function ProductsManagementModal({
@@ -33,7 +33,7 @@ export function ProductsManagementModal({
     handleRemoveProduct,
     isAddingProduct,
     isRemovingProduct,
-  } = useSectionProductsHook(section, isOpen);
+  } = useSectionProductsHook(section, isOpen)
 
   return (
     <Modal
@@ -46,8 +46,12 @@ export function ProductsManagementModal({
         {() => (
           <>
             <ModalHeader className="flex flex-col gap-1 border-b border-border">
-              <span className="font-heading text-xl font-bold text-text">Gestionar Productos</span>
-              <span className="text-sm text-text-muted font-normal">{section?.title}</span>
+              <span className="font-heading text-xl font-bold text-text">
+                Gestionar Productos
+              </span>
+              <span className="text-sm text-text-muted font-normal">
+                {section?.title}
+              </span>
             </ModalHeader>
             <ModalBody className="pb-6">
               {/* Productos actuales en la sección */}
@@ -62,7 +66,11 @@ export function ProductsManagementModal({
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {sectionProducts.map((product) => (
-                      <Card key={product.id} shadow="sm" className="border border-border">
+                      <Card
+                        key={product.id}
+                        shadow="sm"
+                        className="border border-border"
+                      >
                         <CardBody className="flex flex-row items-center justify-between gap-2 p-3">
                           <div className="flex items-center gap-3 flex-1 min-w-0">
                             {product.imageUrl && (
@@ -129,7 +137,11 @@ export function ProductsManagementModal({
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-96 overflow-y-auto pr-2">
                     {filteredProductsToAdd.map((product) => (
-                      <Card key={product.id} shadow="sm" className="border border-border">
+                      <Card
+                        key={product.id}
+                        shadow="sm"
+                        className="border border-border"
+                      >
                         <CardBody className="flex flex-row items-center justify-between gap-2 p-3">
                           <div className="flex items-center gap-3 flex-1 min-w-0">
                             {product.imageUrl && (
@@ -168,5 +180,5 @@ export function ProductsManagementModal({
         )}
       </ModalContent>
     </Modal>
-  );
+  )
 }

@@ -1,18 +1,28 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { addToast } from '@heroui/react'
 import { productTypesService } from '../services/productTypesService'
-import type { CreateProductTypePayload, UpdateProductTypePayload } from '../types'
+import type {
+  CreateProductTypePayload,
+  UpdateProductTypePayload,
+} from '../types'
 
 export const useCreateProductTypeMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (data: CreateProductTypePayload) => productTypesService.create(data),
+    mutationFn: (data: CreateProductTypePayload) =>
+      productTypesService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['product-types'] })
-      addToast({ title: 'Tipo de producto creado exitosamente', color: 'success' })
+      addToast({
+        title: 'Tipo de producto creado exitosamente',
+        color: 'success',
+      })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al crear el tipo', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al crear el tipo',
+        color: 'danger',
+      })
     },
   })
 }
@@ -20,14 +30,25 @@ export const useCreateProductTypeMutation = () => {
 export const useUpdateProductTypeMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UpdateProductTypePayload }) =>
-      productTypesService.update(id, data),
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: number
+      data: UpdateProductTypePayload
+    }) => productTypesService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['product-types'] })
-      addToast({ title: 'Tipo de producto actualizado exitosamente', color: 'success' })
+      addToast({
+        title: 'Tipo de producto actualizado exitosamente',
+        color: 'success',
+      })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al actualizar el tipo', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al actualizar el tipo',
+        color: 'danger',
+      })
     },
   })
 }
@@ -56,10 +77,16 @@ export const useDeleteProductTypeMutation = () => {
     mutationFn: (id: number) => productTypesService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['product-types'] })
-      addToast({ title: 'Tipo de producto eliminado exitosamente', color: 'success' })
+      addToast({
+        title: 'Tipo de producto eliminado exitosamente',
+        color: 'success',
+      })
     },
     onError: (error: Error) => {
-      addToast({ title: error.message ?? 'Error al eliminar el tipo', color: 'danger' })
+      addToast({
+        title: error.message ?? 'Error al eliminar el tipo',
+        color: 'danger',
+      })
     },
   })
 }

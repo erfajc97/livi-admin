@@ -12,7 +12,9 @@ interface CoreApiResponse<T> {
 
 export const dashboardService = {
   getStats: async (): Promise<DashboardStats> => {
-    const { data } = await axiosInstance.get<CoreApiResponse<DashboardStats>>(API_ENDPOINTS.DASHBOARD_STATS)
+    const { data } = await axiosInstance.get<CoreApiResponse<DashboardStats>>(
+      API_ENDPOINTS.DASHBOARD_STATS,
+    )
     return data.data
   },
 }

@@ -10,7 +10,10 @@ interface FormModalProps {
   isSubmitting: boolean
   formData: CategoryFormData
   imagePreview: string | null
-  onInputChange: (field: keyof CategoryFormData, value: string | boolean) => void
+  onInputChange: (
+    field: keyof CategoryFormData,
+    value: string | boolean,
+  ) => void
   onImageChange: (file: File | null) => void
   onSubmit: () => void
 }
@@ -41,7 +44,12 @@ export default function FormModal({
       }
       footerContent={
         <div className="flex gap-2">
-          <Button color="danger" variant="flat" onPress={() => onOpenChange(false)} isDisabled={isSubmitting}>
+          <Button
+            color="danger"
+            variant="flat"
+            onPress={() => onOpenChange(false)}
+            isDisabled={isSubmitting}
+          >
             Cancelar
           </Button>
           <Button

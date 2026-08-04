@@ -13,14 +13,23 @@ export function useCreateTransactionMutation() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (payload: CreateTransactionPayload) => financeService.createTransaction(payload),
+    mutationFn: (payload: CreateTransactionPayload) =>
+      financeService.createTransaction(payload),
     onSuccess: () => {
-      addToast({ title: 'Movimiento registrado', description: 'Se registró correctamente.', color: 'success' })
+      addToast({
+        title: 'Movimiento registrado',
+        description: 'Se registró correctamente.',
+        color: 'success',
+      })
       void queryClient.invalidateQueries({ queryKey: ['finance-stats'] })
       void queryClient.invalidateQueries({ queryKey: ['finance-transactions'] })
     },
     onError: () => {
-      addToast({ title: 'Error', description: 'No se pudo registrar el movimiento.', color: 'danger' })
+      addToast({
+        title: 'Error',
+        description: 'No se pudo registrar el movimiento.',
+        color: 'danger',
+      })
     },
   })
 }
@@ -36,7 +45,11 @@ export function useDeleteTransactionMutation() {
       void queryClient.invalidateQueries({ queryKey: ['finance-transactions'] })
     },
     onError: () => {
-      addToast({ title: 'Error', description: 'No se pudo eliminar.', color: 'danger' })
+      addToast({
+        title: 'Error',
+        description: 'No se pudo eliminar.',
+        color: 'danger',
+      })
     },
   })
 }
@@ -45,14 +58,19 @@ export function useCreateBillMutation() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (payload: CreateBillPayload) => financeService.createBill(payload),
+    mutationFn: (payload: CreateBillPayload) =>
+      financeService.createBill(payload),
     onSuccess: () => {
       addToast({ title: 'Cuenta registrada', color: 'success' })
       void queryClient.invalidateQueries({ queryKey: ['finance-stats'] })
       void queryClient.invalidateQueries({ queryKey: ['finance-bills'] })
     },
     onError: () => {
-      addToast({ title: 'Error', description: 'No se pudo registrar la cuenta.', color: 'danger' })
+      addToast({
+        title: 'Error',
+        description: 'No se pudo registrar la cuenta.',
+        color: 'danger',
+      })
     },
   })
 }
@@ -69,7 +87,11 @@ export function useUpdateBillMutation() {
       void queryClient.invalidateQueries({ queryKey: ['finance-bills'] })
     },
     onError: () => {
-      addToast({ title: 'Error', description: 'No se pudo actualizar.', color: 'danger' })
+      addToast({
+        title: 'Error',
+        description: 'No se pudo actualizar.',
+        color: 'danger',
+      })
     },
   })
 }
@@ -85,7 +107,11 @@ export function useDeleteBillMutation() {
       void queryClient.invalidateQueries({ queryKey: ['finance-bills'] })
     },
     onError: () => {
-      addToast({ title: 'Error', description: 'No se pudo eliminar.', color: 'danger' })
+      addToast({
+        title: 'Error',
+        description: 'No se pudo eliminar.',
+        color: 'danger',
+      })
     },
   })
 }
@@ -93,25 +119,45 @@ export function useDeleteBillMutation() {
 export function useCreatePaymentMethodMutation() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (payload: CreatePaymentMethodPayload) => financeService.createPaymentMethod(payload),
+    mutationFn: (payload: CreatePaymentMethodPayload) =>
+      financeService.createPaymentMethod(payload),
     onSuccess: () => {
       addToast({ title: 'Método de pago creado', color: 'success' })
-      void queryClient.invalidateQueries({ queryKey: ['finance-payment-methods'] })
+      void queryClient.invalidateQueries({
+        queryKey: ['finance-payment-methods'],
+      })
     },
-    onError: () => addToast({ title: 'Error', description: 'No se pudo crear el método de pago.', color: 'danger' }),
+    onError: () =>
+      addToast({
+        title: 'Error',
+        description: 'No se pudo crear el método de pago.',
+        color: 'danger',
+      }),
   })
 }
 
 export function useUpdatePaymentMethodMutation() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, payload }: { id: number; payload: UpdatePaymentMethodPayload }) =>
-      financeService.updatePaymentMethod(id, payload),
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: number
+      payload: UpdatePaymentMethodPayload
+    }) => financeService.updatePaymentMethod(id, payload),
     onSuccess: () => {
       addToast({ title: 'Método de pago actualizado', color: 'success' })
-      void queryClient.invalidateQueries({ queryKey: ['finance-payment-methods'] })
+      void queryClient.invalidateQueries({
+        queryKey: ['finance-payment-methods'],
+      })
     },
-    onError: () => addToast({ title: 'Error', description: 'No se pudo actualizar.', color: 'danger' }),
+    onError: () =>
+      addToast({
+        title: 'Error',
+        description: 'No se pudo actualizar.',
+        color: 'danger',
+      }),
   })
 }
 
@@ -121,8 +167,15 @@ export function useDeletePaymentMethodMutation() {
     mutationFn: (id: number) => financeService.deletePaymentMethod(id),
     onSuccess: () => {
       addToast({ title: 'Método de pago eliminado', color: 'success' })
-      void queryClient.invalidateQueries({ queryKey: ['finance-payment-methods'] })
+      void queryClient.invalidateQueries({
+        queryKey: ['finance-payment-methods'],
+      })
     },
-    onError: () => addToast({ title: 'Error', description: 'No se pudo eliminar.', color: 'danger' }),
+    onError: () =>
+      addToast({
+        title: 'Error',
+        description: 'No se pudo eliminar.',
+        color: 'danger',
+      }),
   })
 }

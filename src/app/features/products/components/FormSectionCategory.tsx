@@ -4,7 +4,10 @@ import type { ProductFormData } from '../types'
 
 interface FormSectionCategoryProps {
   formData: ProductFormData
-  updateField: <K extends keyof ProductFormData>(key: K, value: ProductFormData[K]) => void
+  updateField: <K extends keyof ProductFormData>(
+    key: K,
+    value: ProductFormData[K],
+  ) => void
 }
 
 const selectClasses = {
@@ -16,10 +19,15 @@ const selectClasses = {
 
 const itemClasses = { base: 'text-text', title: '!text-text' }
 
-export default function FormSectionCategory({ formData, updateField }: FormSectionCategoryProps) {
+export default function FormSectionCategory({
+  formData,
+  updateField,
+}: FormSectionCategoryProps) {
   const { data: categories = [] } = useCategoriesQuery()
 
-  const selectedCategory = categories.find((c) => String(c.id) === formData.categoryId)
+  const selectedCategory = categories.find(
+    (c) => String(c.id) === formData.categoryId,
+  )
   const marcas = selectedCategory?.marcas ?? []
 
   return (
@@ -40,7 +48,9 @@ export default function FormSectionCategory({ formData, updateField }: FormSecti
           isRequired
         >
           {categories.map((c) => (
-            <SelectItem key={String(c.id)} classNames={itemClasses}>{c.name}</SelectItem>
+            <SelectItem key={String(c.id)} classNames={itemClasses}>
+              {c.name}
+            </SelectItem>
           ))}
         </Select>
 
@@ -56,7 +66,9 @@ export default function FormSectionCategory({ formData, updateField }: FormSecti
           isRequired
         >
           {marcas.map((s) => (
-            <SelectItem key={String(s.id)} classNames={itemClasses}>{s.name}</SelectItem>
+            <SelectItem key={String(s.id)} classNames={itemClasses}>
+              {s.name}
+            </SelectItem>
           ))}
         </Select>
       </div>
