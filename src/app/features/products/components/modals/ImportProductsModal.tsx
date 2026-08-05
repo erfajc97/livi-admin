@@ -146,6 +146,23 @@ interface ParsedRow {
   missing: string[]
 }
 
+/** Pares "variacion N" + "precio variacion N" → [{ mlSize, price }] (pares incompletos se ignoran) */
+const toVariants = (
+  raw: Record<string, unknown>,
+): Array<{ mlSize: number; price: number }> | undefined => {
+  const out: Array<{ mlSize: number; price: number }> = []
+  for (let n = 1; n <= 10; n++) {
+    const ml = toNumber(pick(raw, `variacion_${n}`, `variante_${n}`, `variacion${n}`))
+    const price = toNumber(
+      pick(raw, `precio_variacion_${n}`, `precio_variante_${n}`, `precio_variacion${n}`),
+    )
+    if (ml == null && price == null) continue
+    if (ml == null || price == null) continue
+    out.push({ mlSize: ml, price })
+  }
+  return out.length > 0 ? out : undefined
+}
+
 interface ImportResult {
   row: number
   name?: string
@@ -229,6 +246,7 @@ function parseWorkbook(data: ArrayBuffer): ParsedRow[] {
         signatureDescription: pick(raw, 'descripcion_firma', 'descripcion_de_la_firma')
           ? String(pick(raw, 'descripcion_firma', 'descripcion_de_la_firma')).trim()
           : undefined,
+        variants: toVariants(raw),
       }
 
       // Limpiar undefined para no pisar defaults del backend
@@ -429,6 +447,7 @@ export default function ImportProductsModal({ isOpen, onOpenChange }: ImportProd
                           <th className="px-3 py-2">Cat.</th>
                           <th className="px-3 py-2">Marca</th>
                           <th className="px-3 py-2">Stock</th>
+                          <th className="px-3 py-2">Decants</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border">
@@ -441,6 +460,13 @@ export default function ImportProductsModal({ isOpen, onOpenChange }: ImportProd
                             <td className="px-3 py-1.5 text-text">{String(r.product.categoryId ?? r.product.category ?? '—')}</td>
                             <td className="px-3 py-1.5 text-text">{String(r.product.marcaId ?? r.product.marca ?? '—')}</td>
                             <td className="px-3 py-1.5 text-text">{String(r.product.stock ?? 0)}</td>
+                            <td className="px-3 py-1.5 text-text">
+                              {Array.isArray(r.product.variants) && r.product.variants.length > 0
+                                ? (r.product.variants as Array<{ mlSize: number }>)
+                                    .map((v) => `${v.mlSize}ml`)
+                                    .join(' · ')
+                                : '—'}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
