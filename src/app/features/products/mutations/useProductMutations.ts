@@ -38,6 +38,18 @@ export function useUpdateProductMutation() {
   })
 }
 
+/**
+ * Mensaje real de la API. Axios deja en `error.message` un "Request failed with
+ * status code 409" que no le dice nada al admin: el motivo (por ejemplo, que el
+ * producto tiene pedidos) viaja en la respuesta.
+ */
+function apiErrorMessage(error: unknown, fallback: string): string {
+  const message = (error as { response?: { data?: { message?: string | string[] } } })
+    ?.response?.data?.message
+  if (Array.isArray(message)) return message.join(' · ')
+  return message || fallback
+}
+
 export function useDeleteProductMutation() {
   const queryClient = useQueryClient()
   return useMutation({
@@ -46,10 +58,11 @@ export function useDeleteProductMutation() {
       queryClient.invalidateQueries({ queryKey: ['products'] })
       addToast({ title: 'Producto eliminado exitosamente', color: 'success' })
     },
-    onError: (error: Error) => {
+    onError: (error: unknown) => {
       addToast({
-        title: error.message ?? 'Error al eliminar el producto',
+        title: apiErrorMessage(error, 'Error al eliminar el producto'),
         color: 'danger',
+        timeout: 8000,
       })
     },
   })
