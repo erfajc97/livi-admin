@@ -66,10 +66,14 @@ export default function FormSectionInventory({
   const hasOpenBottle = openMl > 0
   const canOpenBottle = stock >= 1 && !hasOpenBottle
 
-  // Get unique ml sizes from variations
+  // Get unique ml sizes from decant variations (las que se sirven de la
+  // botella abierta; sellada/original no descuentan ml)
   const variationMlSizes = [
     ...new Set(
-      variations.map((v) => Number(v.mlSize) || 0).filter((ml) => ml > 0),
+      variations
+        .filter((v) => v.presentationType === 'decant')
+        .map((v) => Number(v.mlSize) || 0)
+        .filter((ml) => ml > 0),
     ),
   ].sort((a, b) => a - b)
 

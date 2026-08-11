@@ -72,14 +72,16 @@ export function validateProductForm(
       errors.push(`Variante ${pos}: el precio debe ser mayor a 0.`)
   })
 
-  // Una variante no puede pedir más ml de los que trae la botella.
+  // Solo los decants consumen ml de la botella abierta; las presentaciones
+  // sellada/original se manejan por unidades (stock), no por ml de botella.
   const variationMl = variations.reduce(
-    (sum, v) => sum + (Number(v.mlSize) || 0),
+    (sum, v) =>
+      v.presentationType === 'decant' ? sum + (Number(v.mlSize) || 0) : sum,
     0,
   )
   if (totalMl > 0 && variationMl > totalMl) {
     errors.push(
-      `Las variantes suman ${variationMl} ml y la botella es de ${totalMl} ml: reduce los ML.`,
+      `Los decants suman ${variationMl} ml y la botella es de ${totalMl} ml: reduce los ML.`,
     )
   }
 

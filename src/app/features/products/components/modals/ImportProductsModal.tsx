@@ -146,11 +146,12 @@ interface ParsedRow {
   missing: string[]
 }
 
-/** Pares "variacion N" + "precio variacion N" → [{ mlSize, price }] (pares incompletos se ignoran) */
+/** Pares "variacion N" + "precio variacion N" → [{ mlSize, price, presentationType }] (pares incompletos se ignoran).
+ *  Las variantes importadas siempre nacen como 'decant' (default histórico). */
 const toVariants = (
   raw: Record<string, unknown>,
-): Array<{ mlSize: number; price: number }> | undefined => {
-  const out: Array<{ mlSize: number; price: number }> = []
+): Array<{ mlSize: number; price: number; presentationType: 'decant' }> | undefined => {
+  const out: Array<{ mlSize: number; price: number; presentationType: 'decant' }> = []
   for (let n = 1; n <= 10; n++) {
     const ml = toNumber(pick(raw, `variacion_${n}`, `variante_${n}`, `variacion${n}`))
     const price = toNumber(
@@ -158,7 +159,7 @@ const toVariants = (
     )
     if (ml == null && price == null) continue
     if (ml == null || price == null) continue
-    out.push({ mlSize: ml, price })
+    out.push({ mlSize: ml, price, presentationType: 'decant' })
   }
   return out.length > 0 ? out : undefined
 }

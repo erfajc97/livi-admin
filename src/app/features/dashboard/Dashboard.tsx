@@ -12,7 +12,7 @@ export function Dashboard() {
     <div className="flex flex-col gap-6 p-6">
       <WelcomeBanner
         userName={userName}
-        subtitle="Panel de administración NönDecants"
+        subtitle="Panel de administración NonDecants"
         useBgImage
       />
 

@@ -158,6 +158,7 @@ export default function ProductFormView({
             price: v.price ? Number(v.price) : undefined,
             mlSize,
             isFullBottle: false,
+            presentationType: v.presentationType,
             sku,
           })
         } catch {
@@ -172,6 +173,7 @@ export default function ProductFormView({
             price: v.price ? Number(v.price) : undefined,
             mlSize,
             isFullBottle: false,
+            presentationType: v.presentationType,
             sku,
           })
           // Update the local variation with the new id for image uploads

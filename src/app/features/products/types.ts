@@ -16,6 +16,14 @@ export type Concentration =
 
 export type Projection = 'DISCRETA' | 'MODERADA' | 'ALTA'
 
+/**
+ * Tipo de presentación de una variante:
+ * - decant: decant fraccionado de la botella abierta (default)
+ * - sellada: botella sellada
+ * - original: presentación original (50ml, 100ml, etc.)
+ */
+export type PresentationType = 'decant' | 'sellada' | 'original'
+
 /* ── Category / Marca ──────────────────────────── */
 
 export interface Category {
@@ -73,6 +81,7 @@ export interface ProductVariation {
   price?: number
   mlSize: number
   isFullBottle: boolean
+  presentationType?: PresentationType
   availableQuantity?: number
   sku?: string
   name?: string
@@ -235,6 +244,7 @@ export interface VariationRow {
   price: string
   mlSize: string
   sku: string
+  presentationType: PresentationType
   imageFiles?: File[]
   existingImages?: ProductImage[]
 }

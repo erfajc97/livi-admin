@@ -46,7 +46,7 @@ export default function WelcomeBanner({
           </h1>
           <p className="mt-1 text-sm text-text-muted">{subtitle}</p>
         </div>
-        <img src={logo} alt="NönDecants" className="hidden h-10 sm:block" />
+        <img src={logo} alt="NonDecants" className="hidden h-10 sm:block" />
       </div>
     </div>
   )

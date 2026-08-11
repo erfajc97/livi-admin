@@ -1,5 +1,11 @@
 import type { Column } from '@/app/components/UI/table-nextui/CustomTableNextUi'
-import type { Gender, TimeOfDay, Concentration, Projection } from './types'
+import type {
+  Gender,
+  TimeOfDay,
+  Concentration,
+  Projection,
+  PresentationType,
+} from './types'
 
 export const productColumns: Column[] = [
   { key: 'imageUrl', name: '' },
@@ -41,6 +47,13 @@ export const PROJECTIONS: { value: Projection; label: string }[] = [
   { value: 'MODERADA', label: 'Moderada' },
   { value: 'ALTA', label: 'Alta' },
 ]
+
+export const PRESENTATION_TYPES: { value: PresentationType; label: string }[] =
+  [
+    { value: 'decant', label: 'Decant' },
+    { value: 'sellada', label: 'Sellada' },
+    { value: 'original', label: 'Presentación original' },
+  ]
 
 // ── PDP editorial: opciones predefinidas ──
 // Vocabulario de perfumería: familias olfativas, texturas, temperamento y

@@ -35,7 +35,7 @@ export function Combos() {
     <div className="flex flex-col gap-6 p-6">
       <WelcomeBanner
         userName={userName}
-        subtitle="Gestión de combos NönDecants"
+        subtitle="Gestión de combos NonDecants"
       />
 
       <ComboListView

@@ -99,6 +99,7 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
           price: v.price ? String(v.price) : '',
           mlSize: v.mlSize ? String(v.mlSize) : '',
           sku: v.sku ?? '',
+          presentationType: v.presentationType ?? 'decant',
           existingImages: v.images,
         })),
     )
@@ -143,7 +144,7 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
   const addVariation = useCallback(() => {
     setVariations((prev) => [
       ...prev,
-      { name: '', price: '', mlSize: '', sku: '' },
+      { name: '', price: '', mlSize: '', sku: '', presentationType: 'decant' },
     ])
   }, [])
 

@@ -1,7 +1,8 @@
 import { useRef } from 'react'
-import { Button, Input } from '@heroui/react'
+import { Button, Input, Select, SelectItem } from '@heroui/react'
 import { Plus, Trash2, ImageIcon, X, AlertTriangle } from 'lucide-react'
-import type { VariationRow } from '../types'
+import { PRESENTATION_TYPES } from '../data'
+import type { PresentationType, VariationRow } from '../types'
 
 interface FormSectionVariationsProps {
   variations: VariationRow[]
@@ -36,8 +37,11 @@ export default function FormSectionVariations({
   onRemoveNewImage,
   onRemoveExistingImage,
 }: FormSectionVariationsProps) {
+  // Solo los decants consumen ml de la botella abierta; sellada/original
+  // se manejan por unidades (stock), no por ml.
   const totalVariationMl = variations.reduce(
-    (sum, v) => sum + (Number(v.mlSize) || 0),
+    (sum, v) =>
+      v.presentationType === 'decant' ? sum + (Number(v.mlSize) || 0) : sum,
     0,
   )
   const mlExceeded = totalMl > 0 && totalVariationMl > totalMl
@@ -45,7 +49,9 @@ export default function FormSectionVariations({
   return (
     <div className="rounded-xl border border-border bg-surface p-5">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-text">Decants / Variantes</h3>
+        <h3 className="text-lg font-semibold text-text">
+          Variantes / Presentaciones
+        </h3>
         <Button
           size="sm"
           color="warning"
@@ -61,7 +67,7 @@ export default function FormSectionVariations({
       {variations.length > 0 && totalMl > 0 && (
         <div className="mb-4">
           <div className="flex items-center justify-between text-xs mb-1.5">
-            <span className="text-text-muted">ML usados en variantes</span>
+            <span className="text-text-muted">ML usados en decants</span>
             <span
               className={mlExceeded ? 'text-red-400 font-bold' : 'text-text'}
             >
@@ -80,9 +86,9 @@ export default function FormSectionVariations({
             <div className="mt-2 flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/30 px-3 py-2">
               <AlertTriangle size={14} className="text-red-400 shrink-0" />
               <p className="text-xs text-red-400">
-                Las variantes suman <strong>{totalVariationMl}ml</strong> pero
+                Los decants suman <strong>{totalVariationMl}ml</strong> pero
                 la botella es de <strong>{totalMl}ml</strong>. Reduce los ML de
-                las variantes para no exceder la capacidad de la botella.
+                los decants para no exceder la capacidad de la botella.
               </p>
             </div>
           )}
@@ -172,9 +178,33 @@ function VariationCard({
         </Button>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <Select
+          label="Tipo de presentación"
+          size="sm"
+          selectedKeys={[variation.presentationType]}
+          disallowEmptySelection
+          onSelectionChange={(keys) => {
+            const val =
+              (Array.from(keys)[0] as PresentationType) ?? 'decant'
+            onUpdate(index, 'presentationType', val)
+          }}
+          classNames={{
+            label: '!text-text',
+            value: '!text-text',
+            trigger: 'bg-background border-border',
+          }}
+        >
+          {PRESENTATION_TYPES.map((t) => (
+            <SelectItem key={t.value}>{t.label}</SelectItem>
+          ))}
+        </Select>
         <Input
-          label="ML del decant"
+          label={
+            variation.presentationType === 'decant'
+              ? 'ML del decant'
+              : 'ML de la presentación'
+          }
           placeholder="10"
           size="sm"
           type="number"

@@ -8,6 +8,7 @@ import type {
   PaginatedProducts,
   ProductFilters,
   Category,
+  PresentationType,
 } from '../types'
 
 interface CoreApiResponse<T> {
@@ -135,6 +136,7 @@ export const productsService = {
     price?: number
     mlSize: number
     isFullBottle?: boolean
+    presentationType?: PresentationType
     sku?: string
   }): Promise<{ id: number }> => {
     const { data } = await axiosInstance.post<CoreApiResponse<{ id: number }>>(
@@ -151,6 +153,7 @@ export const productsService = {
       price?: number
       mlSize?: number
       isFullBottle?: boolean
+      presentationType?: PresentationType
       sku?: string
     },
   ): Promise<void> => {
