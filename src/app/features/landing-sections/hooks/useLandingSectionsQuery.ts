@@ -18,14 +18,28 @@ export function useLandingSectionQuery(id: number | null) {
   })
 }
 
-export function useAvailableProductsQuery(enabled: boolean = true) {
+/**
+ * Productos que se pueden agregar a una sección.
+ *
+ * Antes traía 100 y filtraba en el navegador: con el catálogo actual los
+ * productos del final simplemente no aparecían al buscarlos. Ahora la búsqueda
+ * viaja al backend —el límite por página es 100— así que se llega a cualquier
+ * producto escribiendo su nombre.
+ */
+export function useAvailableProductsQuery(
+  enabled: boolean = true,
+  search: string = '',
+) {
+  const term = search.trim()
   return useQuery({
-    queryKey: ['products', 'available'],
+    queryKey: ['products', 'available', term],
     queryFn: () =>
       landingSectionsService.getAvailableProducts({
         limit: 100,
         isActive: true,
+        ...(term ? { search: term } : {}),
       }),
     enabled,
+    placeholderData: (prev) => prev,
   })
 }

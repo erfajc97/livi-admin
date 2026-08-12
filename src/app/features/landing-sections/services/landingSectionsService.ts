@@ -82,13 +82,13 @@ export const landingSectionsService = {
   getAvailableProducts: async (params?: {
     limit?: number
     isActive?: boolean
+    /** Búsqueda del lado del servidor: el catálogo no cabe en una sola página. */
+    search?: string
   }): Promise<Product[]> => {
     try {
-      console.log('🔍 Fetching products with params:', params)
       const { data } = await axiosInstance.get(API_ENDPOINTS.PRODUCTS, {
         params,
       })
-      console.log('📦 Products response:', data)
 
       // Extraer productos según la estructura de respuesta del backend
       // Puede venir como: { data: { content: [...] } } o { data: [...] } o directamente [...]
@@ -110,11 +110,9 @@ export const landingSectionsService = {
         result = []
       }
 
-      const products = Array.isArray(result) ? result : []
-      console.log('✅ Processed products:', products.length)
-      return products
+      return Array.isArray(result) ? result : []
     } catch (error) {
-      console.error('❌ Error fetching products:', error)
+      console.error('Error al listar productos para la sección:', error)
       return []
     }
   },

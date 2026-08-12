@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAvailableProductsQuery } from './useLandingSectionsQuery'
 import {
   useAddProductMutation,
@@ -11,23 +11,25 @@ export function useSectionProductsHook(
   isModalOpen: boolean = true,
 ) {
   const [searchTerm, setSearchTerm] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+
+  // La búsqueda va al backend: sin esto, los productos fuera de la primera
+  // página del catálogo no aparecían nunca en el buscador de la sección.
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchTerm), 300)
+    return () => clearTimeout(timer)
+  }, [searchTerm])
+
   const { data: availableProducts = [], isLoading: isLoadingProducts } =
-    useAvailableProductsQuery(isModalOpen)
+    useAvailableProductsQuery(isModalOpen, debouncedSearch)
   const addProductMutation = useAddProductMutation()
   const removeProductMutation = useRemoveProductMutation()
 
   const sectionProductIds = section?.products?.map((p) => p.id) || []
 
-  // Productos disponibles para agregar (que no están en la sección)
-  const productsToAdd = Array.isArray(availableProducts)
+  // Productos disponibles para agregar (los que aún no están en la sección)
+  const filteredProductsToAdd = Array.isArray(availableProducts)
     ? availableProducts.filter((p) => !sectionProductIds.includes(p.id))
-    : []
-
-  // Filtrar por búsqueda
-  const filteredProductsToAdd = Array.isArray(productsToAdd)
-    ? productsToAdd.filter((p) =>
-        p.name?.toLowerCase().includes(searchTerm.toLowerCase()),
-      )
     : []
 
   const handleAddProduct = async (productId: number) => {
