@@ -26,7 +26,8 @@ interface ProductFormProps {
   ) => void
   addImageFiles: (files: File[]) => void
   removeNewImage: (index: number) => void
-  removeExistingImage: (imageId: number) => void
+  removeExistingImage: (imageId: number | string) => void
+  moveExistingImage: (imageId: number | string, direction: -1 | 1) => void
   addVariation: () => void
   updateVariation: (
     index: number,
@@ -55,6 +56,7 @@ export default function ProductForm({
   addImageFiles,
   removeNewImage,
   removeExistingImage,
+  moveExistingImage,
   addVariation,
   updateVariation,
   removeVariation,
@@ -107,6 +109,7 @@ export default function ProductForm({
             onAddFiles={addImageFiles}
             onRemoveNew={removeNewImage}
             onRemoveExisting={removeExistingImage}
+            onMoveExisting={moveExistingImage}
           />
           <FormSectionEditorial formData={formData} updateField={updateField} />
           <FormSectionVariations

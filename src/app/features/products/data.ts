@@ -48,11 +48,15 @@ export const PROJECTIONS: { value: Projection; label: string }[] = [
   { value: 'ALTA', label: 'Alta' },
 ]
 
+/**
+ * Solo dos tipos: o es un decant o es un frasco sellado. "Presentación original"
+ * salió del formulario porque significaba lo mismo que sellada y confundía; los
+ * registros viejos que la tengan se muestran como sellada.
+ */
 export const PRESENTATION_TYPES: { value: PresentationType; label: string }[] =
   [
     { value: 'decant', label: 'Decant' },
     { value: 'sellada', label: 'Sellada' },
-    { value: 'original', label: 'Presentación original' },
   ]
 
 // ── PDP editorial: opciones predefinidas ──

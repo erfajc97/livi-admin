@@ -75,6 +75,17 @@ export default function ProductFormView({
           /* ignore */
         }
       }
+
+      // Guardar el orden de la galería: la posición en pantalla es la que vale.
+      for (let i = 0; i < formHook.existingImages.length; i++) {
+        const img = formHook.existingImages[i]
+        if (Number(img.displayOrder) === i) continue
+        try {
+          await productsService.updateImageOrder(productId, img.id, i)
+        } catch {
+          /* ignore */
+        }
+      }
     }
 
     // Sync variations: create new, update existing, delete removed
@@ -157,7 +168,8 @@ export default function ProductFormView({
             name,
             price: v.price ? Number(v.price) : undefined,
             mlSize,
-            isFullBottle: false,
+            // `isFullBottle` lo deriva el backend del tipo elegido: mandarlo en
+            // false convertía cualquier "sellada" en decant.
             presentationType: v.presentationType,
             sku,
           })
@@ -172,7 +184,8 @@ export default function ProductFormView({
             name,
             price: v.price ? Number(v.price) : undefined,
             mlSize,
-            isFullBottle: false,
+            // `isFullBottle` lo deriva el backend del tipo elegido: mandarlo en
+            // false convertía cualquier "sellada" en decant.
             presentationType: v.presentationType,
             sku,
           })
@@ -259,6 +272,7 @@ export default function ProductFormView({
       addImageFiles={formHook.addImageFiles}
       removeNewImage={formHook.removeNewImage}
       removeExistingImage={formHook.removeExistingImage}
+      moveExistingImage={formHook.moveExistingImage}
       addVariation={formHook.addVariation}
       updateVariation={formHook.updateVariation}
       removeVariation={formHook.removeVariation}

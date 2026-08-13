@@ -182,7 +182,10 @@ function VariationCard({
         <Select
           label="Tipo de presentación"
           size="sm"
-          selectedKeys={[variation.presentationType]}
+          // 'original' es legado: se muestra como sellada, que es lo que es
+          selectedKeys={[
+            variation.presentationType === 'decant' ? 'decant' : 'sellada',
+          ]}
           disallowEmptySelection
           onSelectionChange={(keys) => {
             const val =

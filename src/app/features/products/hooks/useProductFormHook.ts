@@ -141,6 +141,25 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
     )
   }, [])
 
+  /**
+   * Mueve una imagen dentro de la galería. La primera es la que se ve en la
+   * card y en la ficha; la segunda, la del hover. El orden definitivo se guarda
+   * al enviar el formulario.
+   */
+  const moveExistingImage = useCallback(
+    (imageId: number | string, direction: -1 | 1) => {
+      setExistingImages((prev) => {
+        const index = prev.findIndex((img) => String(img.id) === String(imageId))
+        const target = index + direction
+        if (index < 0 || target < 0 || target >= prev.length) return prev
+        const next = [...prev]
+        ;[next[index], next[target]] = [next[target], next[index]]
+        return next
+      })
+    },
+    [],
+  )
+
   const addVariation = useCallback(() => {
     setVariations((prev) => [
       ...prev,
@@ -271,6 +290,7 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
     addImageFiles,
     removeNewImage,
     removeExistingImage,
+    moveExistingImage,
     addVariation,
     updateVariation,
     removeVariation,

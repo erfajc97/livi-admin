@@ -112,6 +112,18 @@ export const productsService = {
     )
   },
 
+  /** Posición de la imagen en la galería: 0 es la principal. */
+  updateImageOrder: async (
+    productId: number | string,
+    imageId: number | string,
+    displayOrder: number,
+  ): Promise<void> => {
+    await axiosInstance.patch(
+      `${API_ENDPOINTS.PRODUCTS}/${productId}/images/${imageId}`,
+      { displayOrder },
+    )
+  },
+
   uploadVariationImages: async (
     variationId: number,
     files: File[],
