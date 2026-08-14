@@ -1,5 +1,11 @@
 import { useState, useMemo } from 'react'
-import { Autocomplete, AutocompleteItem, Button, Spinner } from '@heroui/react'
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Button,
+  Spinner,
+  addToast,
+} from '@heroui/react'
 import { Search } from 'lucide-react'
 import axiosInstance from '@/app/config/axiosConfig'
 import { API_ENDPOINTS } from '@/app/api/endpoints'
@@ -45,6 +51,12 @@ export default function ProductSearch({
       if (variations.length > 0) {
         setSelectedProduct(fullProduct)
       } else {
+        // Sin formatos activos no hay nada que elegir: se agrega el producto
+        // base, pero avisando —si no, parece que el selector se saltó solo—.
+        addToast({
+          title: `${fullProduct.name} no tiene formatos activos: se agrega el producto base`,
+          color: 'warning',
+        })
         onAddItem({
           productId: fullProduct.id,
           productVariationId: 0,
@@ -54,18 +66,15 @@ export default function ProductSearch({
           price: fullProduct.price,
         })
       }
-    } catch {
-      const product = products.find((p) => p.id === productId)
-      if (product) {
-        onAddItem({
-          productId: product.id,
-          productVariationId: 0,
-          productName: product.name,
-          variationLabel: 'Base',
-          imageUrl: product.imageUrl,
-          price: product.price,
-        })
-      }
+    } catch (error: any) {
+      // Antes se agregaba el producto sin variante en silencio y la venta salía
+      // con el formato equivocado sin que nadie lo notara.
+      addToast({
+        title:
+          error?.response?.data?.message ||
+          'No se pudieron cargar los formatos del producto. Intenta de nuevo.',
+        color: 'danger',
+      })
     } finally {
       setLoadingVariations(false)
     }

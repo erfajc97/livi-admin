@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { Button, Spinner } from '@heroui/react'
-import { ArrowLeft, Scissors } from 'lucide-react'
+import { useQueryClient } from '@tanstack/react-query'
+import { ArrowLeft, Pencil, Scissors } from 'lucide-react'
 import { useOpenBottleMutation } from '@/app/features/products/mutations/useProductMutations'
 import InventoryStockCards from './InventoryStockCards'
 import BottleEventsTimeline from './BottleEventsTimeline'
 import OrderHistoryTable from './OrderHistoryTable'
 import OpenBottleModal from '@/app/features/products/components/modals/OpenBottleModal'
+import AdjustOpenMlModal from './AdjustOpenMlModal'
 import type { InventoryDetail } from '../types'
 
 interface InventoryDetailViewProps {
@@ -20,7 +22,9 @@ export default function InventoryDetailView({
   onBack,
 }: InventoryDetailViewProps) {
   const [openBottleModal, setOpenBottleModal] = useState(false)
+  const [adjustModal, setAdjustModal] = useState(false)
   const openBottleMutation = useOpenBottleMutation()
+  const queryClient = useQueryClient()
 
   if (isLoading) {
     return (
@@ -69,9 +73,22 @@ export default function InventoryDetailView({
         </div>
         <div className="self-start sm:self-auto sm:shrink-0">
           {hasOpenBottle ? (
-            <p className="text-xs text-blue-400 px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20">
-              Botella abierta: {inventory.openBottleMlRemaining}ml restantes
-            </p>
+            /* Editable: si se rompe o se derrama, el conteo tiene que poder
+               corregirse sin tocar la base a mano. */
+            <div className="flex items-center gap-2">
+              <p className="text-xs text-blue-400 px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                Botella abierta: {inventory.openBottleMlRemaining}ml restantes
+              </p>
+              <Button
+                size="sm"
+                variant="flat"
+                startContent={<Pencil size={14} />}
+                onPress={() => setAdjustModal(true)}
+                className="h-10"
+              >
+                Ajustar
+              </Button>
+            </div>
           ) : (
             <Button
               size="sm"
@@ -118,6 +135,21 @@ export default function InventoryDetailView({
           )
         }}
       />
+
+      {adjustModal && (
+        <AdjustOpenMlModal
+          isOpen={adjustModal}
+          productId={product.id}
+          productName={product.name}
+          currentMl={Number(inventory.openBottleMlRemaining)}
+          totalMl={Number(inventory.totalMl)}
+          onClose={() => setAdjustModal(false)}
+          onAdjusted={() => {
+            queryClient.invalidateQueries({ queryKey: ['inventory'] })
+            queryClient.invalidateQueries({ queryKey: ['products'] })
+          }}
+        />
+      )}
     </div>
   )
 }
