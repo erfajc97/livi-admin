@@ -42,6 +42,20 @@ export interface UpdateUserPayload {
   preferredDeliveryMethod?: string
 }
 
+export interface ResetPasswordPayload {
+  /** Si se omite, el backend genera una contraseña temporal. */
+  password?: string
+  /** Enviar la contraseña nueva al correo del usuario (por defecto sí). */
+  notify?: boolean
+}
+
+export interface ResetPasswordResult {
+  email: string
+  /** Solo llega en esta respuesta: después queda hasheada. */
+  password: string
+  notified: boolean
+}
+
 export interface UserFormProps {
   user?: User
   isLoading?: boolean

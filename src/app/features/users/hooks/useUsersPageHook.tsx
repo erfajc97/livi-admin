@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { Button, Chip, useDisclosure } from '@heroui/react'
-import { PencilIcon, TrashIcon } from 'lucide-react'
+import { KeyRoundIcon, PencilIcon, TrashIcon } from 'lucide-react'
 import { useUsersTableHook } from './useUsersTableHook'
 import useUserFormHook from './useUserFormHook'
 import type { User } from '../types'
@@ -14,6 +14,12 @@ export function useUsersPageHook() {
     onOpenChange: onDeleteOpenChange,
   } = useDisclosure()
   const [deleteTarget, setDeleteTarget] = useState<User | null>(null)
+  const {
+    isOpen: isResetOpen,
+    onOpen: onResetOpen,
+    onOpenChange: onResetOpenChange,
+  } = useDisclosure()
+  const [resetTarget, setResetTarget] = useState<User | null>(null)
 
   const tableHook = useUsersTableHook()
   const { handleToEditForm, resetForm, ...formHook } = useUserFormHook({
@@ -36,6 +42,11 @@ export function useUsersPageHook() {
     handleToEditForm(user)
     setId(user.id)
     onOpen()
+  }
+
+  const handleResetClick = (user: User) => {
+    setResetTarget(user)
+    onResetOpen()
   }
 
   const handleDeleteClick = (user: User) => {
@@ -158,6 +169,20 @@ export function useUsersPageHook() {
             <PencilIcon size={16} className="text-text-muted" />
           </Button>
         )
+      case 'password':
+        return (
+          <Button
+            isIconOnly
+            size="sm"
+            variant="light"
+            radius="full"
+            title="Restablecer contraseña"
+            aria-label={`Restablecer contraseña de ${item.email}`}
+            onPress={() => handleResetClick(item)}
+          >
+            <KeyRoundIcon size={16} className="text-text-muted" />
+          </Button>
+        )
       case 'delete':
         return (
           <Button
@@ -182,9 +207,12 @@ export function useUsersPageHook() {
     formHook,
     renderCell,
     deleteTarget,
+    resetTarget,
     isOpen,
     isDeleteOpen,
     onDeleteOpenChange,
+    isResetOpen,
+    onResetOpenChange,
     handleCreateClick,
     handleFormModalOpenChange,
   }

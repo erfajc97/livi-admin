@@ -1,6 +1,12 @@
 import { API_ENDPOINTS } from '@/app/api/endpoints'
 import axiosInstance from '@/app/config/axiosConfig'
-import type { CreateUserPayload, UpdateUserPayload, User } from '../types'
+import type {
+  CreateUserPayload,
+  ResetPasswordPayload,
+  ResetPasswordResult,
+  UpdateUserPayload,
+  User,
+} from '../types'
 
 interface CoreApiResponse<T> {
   statusCode: number
@@ -38,6 +44,16 @@ export const usersService = {
       `${API_ENDPOINTS.USERS}/${id}`,
       payload,
     )
+    return data.data
+  },
+
+  resetPassword: async (
+    id: string,
+    payload: ResetPasswordPayload,
+  ): Promise<ResetPasswordResult> => {
+    const { data } = await axiosInstance.patch<
+      CoreApiResponse<ResetPasswordResult>
+    >(`${API_ENDPOINTS.USERS}/${id}/password`, payload)
     return data.data
   },
 

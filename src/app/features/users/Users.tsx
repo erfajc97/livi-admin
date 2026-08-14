@@ -4,6 +4,7 @@ import { CustomTableNextUi } from '@/app/components/UI/table-nextui/CustomTableN
 import { CustomPagination } from '@/app/components/UI/table-nextui/CustomPagination'
 import FormModal from './components/modals/FormModal'
 import DeleteModal from './components/modals/DeleteModal'
+import ResetPasswordModal from './components/modals/ResetPasswordModal'
 import { useUsersPageHook } from './hooks/useUsersPageHook'
 import { columns } from './data'
 import type { User } from './types'
@@ -15,9 +16,12 @@ export function Users() {
     formHook,
     renderCell,
     deleteTarget,
+    resetTarget,
     isOpen,
     isDeleteOpen,
     onDeleteOpenChange,
+    isResetOpen,
+    onResetOpenChange,
     handleCreateClick,
     handleFormModalOpenChange,
   } = useUsersPageHook()
@@ -67,6 +71,12 @@ export function Users() {
         isLoading={formHook.isLoading}
         onInputChange={formHook.handleInputChange}
         onSubmit={() => formHook.handleSubmit({ id })}
+      />
+
+      <ResetPasswordModal
+        isOpen={isResetOpen}
+        onOpenChange={onResetOpenChange}
+        user={resetTarget}
       />
 
       <DeleteModal

@@ -16,5 +16,6 @@ export const columns: Column[] = [
   { key: 'emailVerified', name: 'EMAIL OK', align: 'center' },
   { key: 'createdAt', name: 'REGISTRADO' },
   { key: 'edit', name: '', align: 'center' },
+  { key: 'password', name: '', align: 'center' },
   { key: 'delete', name: '', align: 'center' },
 ]
