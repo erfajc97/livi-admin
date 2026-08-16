@@ -10,26 +10,35 @@ import SaleItemsList from './components/SaleItemsList'
 import OrderInfoHeader from './components/OrderInfoHeader'
 import DiscountSection from './components/DiscountSection'
 import PaymentMethodSelector from './components/PaymentMethodSelector'
+import DeliveryMethodSelector from './components/DeliveryMethodSelector'
 import OrderSummary from './components/OrderSummary'
 import type { ManualSaleItem } from './types'
 
 export function ManualSales() {
   const {
+    clientMode,
     client,
+    customer,
     items,
     discountType,
     discountValue,
     paymentMethod,
+    deliveryMethod,
+    needsShipment,
     users,
     allProducts,
     subtotal,
     discountAmount,
     total,
     orderNumber,
+    customerError,
+    setClientMode,
     setClient,
+    setCustomerField,
     setDiscountType,
     setDiscountValue,
     setPaymentMethod,
+    setDeliveryMethod,
     addItem,
     updateItemQuantity,
     removeItem,
@@ -53,8 +62,8 @@ export function ManualSales() {
   }
 
   const handleSubmit = () => {
-    if (!client) {
-      addToast({ title: 'Selecciona un cliente primero', color: 'warning' })
+    if (customerError) {
+      addToast({ title: customerError, color: 'warning' })
       return
     }
     if (items.length === 0) {
@@ -81,9 +90,14 @@ export function ManualSales() {
         {/* Left column — pickers */}
         <div className="flex flex-col gap-5 lg:col-span-3">
           <ClientSelector
+            mode={clientMode}
+            onModeChange={setClientMode}
             users={users}
             selectedClient={client}
             onSelect={setClient}
+            customer={customer}
+            onCustomerChange={setCustomerField}
+            requiresAddress={needsShipment}
           />
 
           <div className="rounded-xl border border-border bg-surface p-4 sm:p-5">
@@ -164,6 +178,11 @@ export function ManualSales() {
             <PaymentMethodSelector
               selected={paymentMethod}
               onChange={setPaymentMethod}
+            />
+
+            <DeliveryMethodSelector
+              selected={deliveryMethod}
+              onChange={setDeliveryMethod}
             />
           </div>
 

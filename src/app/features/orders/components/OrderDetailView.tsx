@@ -227,6 +227,10 @@ export default function OrderDetailView({
                   Guardar
                 </Button>
               </div>
+              <p className="mt-2 text-xs text-text-muted">
+                Al guardar la guía el pedido pasa a "Enviado" y al cliente le
+                llega el correo con su número de tracking.
+              </p>
             </div>
           )}
 
@@ -307,6 +311,11 @@ export default function OrderDetailView({
             <p className="text-xs text-text-muted">
               {order.customerPhone || '—'}
             </p>
+            {order.customerCedula && (
+              <p className="text-xs text-text-muted">
+                C.I. {order.customerCedula}
+              </p>
+            )}
           </div>
 
           <div className="rounded-xl border border-border bg-surface p-4">
@@ -323,8 +332,12 @@ export default function OrderDetailView({
                 {order.shippingAddress}
               </p>
             )}
-            {order.shippingCity && (
-              <p className="text-xs text-text-muted">{order.shippingCity}</p>
+            {(order.shippingCity || order.shippingProvince) && (
+              <p className="text-xs text-text-muted">
+                {[order.shippingCity, order.shippingProvince]
+                  .filter(Boolean)
+                  .join(', ')}
+              </p>
             )}
             {order.trackingCode && (
               <p className="text-xs text-accent mt-1">

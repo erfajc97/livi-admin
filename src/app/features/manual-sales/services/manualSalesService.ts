@@ -1,6 +1,10 @@
 import axiosInstance from '@/app/config/axiosConfig'
 import { API_ENDPOINTS } from '@/app/api/endpoints'
-import type { OrderResponse, ManualSaleClient } from '../types'
+import type {
+  OrderResponse,
+  ManualSaleClient,
+  ManualSalePayload,
+} from '../types'
 
 interface CoreApiResponse<T> {
   statusCode: number
@@ -18,17 +22,9 @@ export const manualSalesService = {
     return data.data
   },
 
-  createManualOrder: async (payload: {
-    userId: number
-    items: Array<{
-      productId?: number
-      productVariationId?: number
-      quantity: number
-    }>
-    paymentMethod?: string
-    discountAmount?: number
-    notes?: string
-  }): Promise<OrderResponse> => {
+  createManualOrder: async (
+    payload: ManualSalePayload,
+  ): Promise<OrderResponse> => {
     const { data } = await axiosInstance.post<CoreApiResponse<OrderResponse>>(
       `${API_ENDPOINTS.ORDERS}/manual`,
       payload,

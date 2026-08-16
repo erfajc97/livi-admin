@@ -6,7 +6,13 @@ interface PaymentMethodSelectorProps {
   onChange: (method: PaymentMethod) => void
 }
 
-const METHODS: PaymentMethod[] = ['Efectivo', 'Transferencia', 'Tarjeta']
+// Código (lo que guarda la orden) → texto que ve el admin. El correo traduce
+// el mismo código, así que ambos lados dicen lo mismo.
+const METHODS: Array<{ value: PaymentMethod; label: string }> = [
+  { value: 'EFECTIVO', label: 'Efectivo' },
+  { value: 'TRANSFERENCIA', label: 'Transferencia' },
+  { value: 'TARJETA', label: 'Tarjeta' },
+]
 
 export default function PaymentMethodSelector({
   selected,
@@ -18,13 +24,13 @@ export default function PaymentMethodSelector({
       <div className="flex flex-wrap gap-2">
         {METHODS.map((method) => (
           <Button
-            key={method}
-            variant={selected === method ? 'solid' : 'bordered'}
-            color={selected === method ? 'warning' : 'default'}
-            onPress={() => onChange(method)}
+            key={method.value}
+            variant={selected === method.value ? 'solid' : 'bordered'}
+            color={selected === method.value ? 'warning' : 'default'}
+            onPress={() => onChange(method.value)}
             size="sm"
           >
-            {method}
+            {method.label}
           </Button>
         ))}
       </div>

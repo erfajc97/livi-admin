@@ -4,18 +4,47 @@ import { manualSalesService } from '../services/manualSalesService'
 import { useProductsQuery } from '@/app/tanstack-queries/productsQuery'
 import type {
   ManualSaleClient,
+  ManualSaleCustomerForm,
   ManualSaleItem,
+  ManualSalePayload,
+  ClientMode,
+  DeliveryMethod,
   DiscountType,
   PaymentMethod,
 } from '../types'
 
+const EMPTY_CUSTOMER: ManualSaleCustomerForm = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  cedula: '',
+  city: '',
+  province: '',
+  address: '',
+}
+
 export function useManualSaleHook() {
+  // El canal de redes vende sobre todo a gente que no está registrada, así que
+  // el formulario de cliente nuevo es el modo por defecto.
+  const [clientMode, setClientMode] = useState<ClientMode>('new')
   const [client, setClient] = useState<ManualSaleClient | null>(null)
+  const [customer, setCustomer] =
+    useState<ManualSaleCustomerForm>(EMPTY_CUSTOMER)
   const [items, setItems] = useState<ManualSaleItem[]>([])
   const [discountType, setDiscountType] = useState<DiscountType>('per_product')
   const [discountValue, setDiscountValue] = useState('0.00')
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('Efectivo')
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('EFECTIVO')
+  const [deliveryMethod, setDeliveryMethod] =
+    useState<DeliveryMethod>('ENTREGA_PERSONAL')
   const [notes, setNotes] = useState('')
+
+  const setCustomerField = useCallback(
+    (field: keyof ManualSaleCustomerForm, value: string) => {
+      setCustomer((prev) => ({ ...prev, [field]: value }))
+    },
+    [],
+  )
 
   const { data: users = [] } = useQuery({
     queryKey: ['users'],
@@ -84,14 +113,38 @@ export function useManualSaleHook() {
 
   const resetForm = useCallback(() => {
     setClient(null)
+    setCustomer(EMPTY_CUSTOMER)
     setItems([])
     setDiscountType('per_product')
     setDiscountValue('0.00')
-    setPaymentMethod('Efectivo')
+    setPaymentMethod('EFECTIVO')
+    setDeliveryMethod('ENTREGA_PERSONAL')
     setNotes('')
   }, [])
 
-  const buildPayload = useCallback(() => {
+  const needsShipment = deliveryMethod.startsWith('SERVIENTREGA')
+
+  /**
+   * Qué falta para poder registrar la venta. Con envío la dirección no es
+   * opcional: sin ella no hay a dónde despachar ni qué poner en el correo.
+   */
+  const customerError = useMemo(() => {
+    if (clientMode === 'existing') {
+      return client ? null : 'Selecciona un cliente'
+    }
+    if (!customer.firstName.trim()) return 'Falta el nombre del cliente'
+    if (!customer.email.trim()) return 'Falta el correo del cliente'
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email.trim())) {
+      return 'El correo del cliente no es válido'
+    }
+    if (needsShipment && !customer.address.trim()) {
+      return 'Falta la dirección de envío'
+    }
+    if (needsShipment && !customer.city.trim()) return 'Falta la ciudad'
+    return null
+  }, [clientMode, client, customer, needsShipment])
+
+  const buildPayload = useCallback((): ManualSalePayload => {
     // Expand combos into individual order items; regular items pass through
     const expandedItems = items.flatMap((i) => {
       if (i.comboId && i.comboProducts && i.comboProducts.length > 0) {
@@ -112,24 +165,53 @@ export function useManualSaleHook() {
       ]
     })
 
+    const trimmed = (value: string) => value.trim() || undefined
+
     return {
-      userId: client!.id,
+      ...(clientMode === 'existing'
+        ? { userId: client!.id }
+        : {
+            customer: {
+              firstName: customer.firstName.trim(),
+              lastName: trimmed(customer.lastName),
+              email: customer.email.trim(),
+              phone: trimmed(customer.phone),
+              cedula: trimmed(customer.cedula),
+              city: trimmed(customer.city),
+              province: trimmed(customer.province),
+              address: trimmed(customer.address),
+            },
+          }),
       items: expandedItems,
       paymentMethod,
+      deliveryMethod,
       discountAmount: discountAmount > 0 ? discountAmount : undefined,
       notes: notes ? `[Venta manual] ${notes}` : '[Venta manual]',
     }
-  }, [client, items, paymentMethod, discountAmount, notes])
+  }, [
+    clientMode,
+    client,
+    customer,
+    items,
+    paymentMethod,
+    deliveryMethod,
+    discountAmount,
+    notes,
+  ])
 
-  const canSubmit = !!client && items.length > 0
+  const canSubmit = !customerError && items.length > 0
 
   return {
     // State
+    clientMode,
     client,
+    customer,
     items,
     discountType,
     discountValue,
     paymentMethod,
+    deliveryMethod,
+    needsShipment,
     notes,
     users,
     allProducts,
@@ -138,11 +220,15 @@ export function useManualSaleHook() {
     total,
     orderNumber,
     canSubmit,
+    customerError,
     // Setters
+    setClientMode,
     setClient,
+    setCustomerField,
     setDiscountType,
     setDiscountValue,
     setPaymentMethod,
+    setDeliveryMethod,
     setNotes,
     // Item handlers
     addItem,

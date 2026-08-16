@@ -36,12 +36,14 @@ export interface Order {
   customerName?: string
   customerEmail?: string
   customerPhone?: string
+  customerCedula?: string
   deliveryMethod?: string
   paymentMethod?: string
   paymentStatus?: string
   paymentReference?: string
   shippingAddress?: string
   shippingCity?: string
+  shippingProvince?: string
   trackingCode?: string
   transferReceiptUrl?: string
   notes?: string
