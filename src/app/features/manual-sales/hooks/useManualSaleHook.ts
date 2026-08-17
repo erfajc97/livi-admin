@@ -1,7 +1,8 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { manualSalesService } from '../services/manualSalesService'
 import { useProductsQuery } from '@/app/tanstack-queries/productsQuery'
+import { getDeliveryCost } from '../data'
 import type {
   ManualSaleClient,
   ManualSaleCustomerForm,
@@ -51,8 +52,26 @@ export function useManualSaleHook() {
     queryFn: () => manualSalesService.searchUsers(),
   })
 
-  const { data: paginatedProducts } = useProductsQuery({ limit: 100 })
+  // Búsqueda de productos contra el servidor. Antes se traían los primeros 100
+  // y se filtraban en el navegador: con el catálogo actual (200+) los productos
+  // más viejos —los que ya salieron en pedidos— nunca aparecían en el buscador.
+  const [productSearch, setProductSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(productSearch.trim()), 300)
+    return () => clearTimeout(timer)
+  }, [productSearch])
+
+  const { data: paginatedProducts, isFetching: productsLoading } =
+    useProductsQuery({
+      limit: 50,
+      ...(debouncedSearch ? { search: debouncedSearch } : {}),
+      sortBy: 'name',
+      sortOrder: 'ASC',
+    })
   const allProducts = paginatedProducts?.data ?? []
+  const productsTotal = paginatedProducts?.total ?? 0
 
   // Stable key: combos identified by comboId, products by variationId, base products by productId
   const itemKey = (i: {
@@ -101,9 +120,14 @@ export function useManualSaleHook() {
     return val // fixed or per_product
   }, [subtotal, discountType, discountValue])
 
+  const deliveryCost = useMemo(
+    () => getDeliveryCost(deliveryMethod),
+    [deliveryMethod],
+  )
+
   const total = useMemo(
-    () => Math.max(0, subtotal - discountAmount),
-    [subtotal, discountAmount],
+    () => Math.max(0, subtotal - discountAmount) + deliveryCost,
+    [subtotal, discountAmount, deliveryCost],
   )
 
   const orderNumber = useMemo(() => {
@@ -215,8 +239,12 @@ export function useManualSaleHook() {
     notes,
     users,
     allProducts,
+    productsLoading,
+    productsTotal,
+    productSearch,
     subtotal,
     discountAmount,
+    deliveryCost,
     total,
     orderNumber,
     canSubmit,
@@ -225,6 +253,7 @@ export function useManualSaleHook() {
     setClientMode,
     setClient,
     setCustomerField,
+    setProductSearch,
     setDiscountType,
     setDiscountValue,
     setPaymentMethod,

@@ -30,7 +30,7 @@ const deliveryMethods = [
   { key: 'ENTREGA_PERSONAL', label: 'Entrega personal Plaza Tía (Gratis)' },
   { key: 'RETIRO_PIWU', label: 'Retiro en Piwu Market — $2' },
   { key: 'SERVIENTREGA_GYE', label: 'Servientrega GYE — $3' },
-  { key: 'SERVIENTREGA_NACIONAL', label: 'Servientrega Nacional — $7' },
+  { key: 'SERVIENTREGA_NACIONAL', label: 'Servientrega Nacional — $6.50' },
 ]
 
 const ic = { label: '!text-text' }

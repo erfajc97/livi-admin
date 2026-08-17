@@ -27,14 +27,19 @@ export function ManualSales() {
     needsShipment,
     users,
     allProducts,
+    productsLoading,
+    productsTotal,
+    productSearch,
     subtotal,
     discountAmount,
+    deliveryCost,
     total,
     orderNumber,
     customerError,
     setClientMode,
     setClient,
     setCustomerField,
+    setProductSearch,
     setDiscountType,
     setDiscountValue,
     setPaymentMethod,
@@ -127,6 +132,10 @@ export function ManualSales() {
                   <ProductSearch
                     products={allProducts}
                     items={items}
+                    searchTerm={productSearch}
+                    onSearchChange={setProductSearch}
+                    isLoading={productsLoading}
+                    totalMatches={productsTotal}
                     onAddItem={handleAdd}
                   />
                 </div>
@@ -189,6 +198,7 @@ export function ManualSales() {
           <OrderSummary
             subtotal={subtotal}
             discountAmount={discountAmount}
+            deliveryCost={deliveryCost}
             total={total}
             itemCount={items.reduce((sum, i) => sum + i.quantity, 0)}
             isSubmitting={createMutation.isPending}

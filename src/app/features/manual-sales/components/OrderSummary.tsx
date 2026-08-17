@@ -3,6 +3,7 @@ import { Button } from '@heroui/react'
 interface OrderSummaryProps {
   subtotal: number
   discountAmount: number
+  deliveryCost?: number
   total: number
   itemCount?: number
   isSubmitting: boolean
@@ -12,6 +13,7 @@ interface OrderSummaryProps {
 export default function OrderSummary({
   subtotal,
   discountAmount,
+  deliveryCost = 0,
   total,
   itemCount = 0,
   isSubmitting,
@@ -42,6 +44,13 @@ export default function OrderSummary({
             </span>
           </div>
         )}
+
+        <div className="flex justify-between text-sm">
+          <span className="text-text-muted">Envío</span>
+          <span className="text-text font-medium">
+            {deliveryCost === 0 ? 'Gratis' : `$${deliveryCost.toFixed(2)}`}
+          </span>
+        </div>
 
         <div className="border-t border-border pt-2 mt-1">
           <div className="flex justify-between items-baseline">

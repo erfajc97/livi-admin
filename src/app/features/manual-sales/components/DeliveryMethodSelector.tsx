@@ -1,17 +1,11 @@
 import { Button } from '@heroui/react'
+import { DELIVERY_METHODS } from '../data'
 import type { DeliveryMethod } from '../types'
 
 interface DeliveryMethodSelectorProps {
   selected: DeliveryMethod
   onChange: (method: DeliveryMethod) => void
 }
-
-const METHODS: Array<{ value: DeliveryMethod; label: string }> = [
-  { value: 'ENTREGA_PERSONAL', label: 'Entrega personal' },
-  { value: 'RETIRO_PIWU', label: 'Retiro en Piwu' },
-  { value: 'SERVIENTREGA_GYE', label: 'Servientrega GYE' },
-  { value: 'SERVIENTREGA_NACIONAL', label: 'Servientrega nacional' },
-]
 
 export default function DeliveryMethodSelector({
   selected,
@@ -23,7 +17,7 @@ export default function DeliveryMethodSelector({
     <div className="flex flex-col gap-3">
       <h3 className="text-base font-semibold text-text">Entrega</h3>
       <div className="flex flex-wrap gap-2">
-        {METHODS.map((method) => (
+        {DELIVERY_METHODS.map((method) => (
           <Button
             key={method.value}
             variant={selected === method.value ? 'solid' : 'bordered'}
@@ -31,7 +25,7 @@ export default function DeliveryMethodSelector({
             onPress={() => onChange(method.value)}
             size="sm"
           >
-            {method.label}
+            {method.label} · {method.cost === 0 ? 'Gratis' : `$${method.cost.toFixed(2)}`}
           </Button>
         ))}
       </div>

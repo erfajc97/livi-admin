@@ -1,18 +1,11 @@
 import { Button } from '@heroui/react'
+import { PAYMENT_METHODS as METHODS } from '../data'
 import type { PaymentMethod } from '../types'
 
 interface PaymentMethodSelectorProps {
   selected: PaymentMethod
   onChange: (method: PaymentMethod) => void
 }
-
-// Código (lo que guarda la orden) → texto que ve el admin. El correo traduce
-// el mismo código, así que ambos lados dicen lo mismo.
-const METHODS: Array<{ value: PaymentMethod; label: string }> = [
-  { value: 'EFECTIVO', label: 'Efectivo' },
-  { value: 'TRANSFERENCIA', label: 'Transferencia' },
-  { value: 'TARJETA', label: 'Tarjeta' },
-]
 
 export default function PaymentMethodSelector({
   selected,

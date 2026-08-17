@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import {
   Autocomplete,
   AutocompleteItem,
@@ -15,30 +15,33 @@ import type { ManualSaleItem } from '../types'
 interface ProductSearchProps {
   products: Product[]
   items: ManualSaleItem[]
+  /** Término de búsqueda: la consulta la hace el hook contra el servidor. */
+  searchTerm: string
+  onSearchChange: (term: string) => void
+  isLoading?: boolean
+  /** Cuántos productos coinciden en total, para avisar si hay más que los listados. */
+  totalMatches?: number
   onAddItem: (item: Omit<ManualSaleItem, 'quantity'>) => void
 }
 
 export default function ProductSearch({
   products,
+  searchTerm,
+  onSearchChange,
+  isLoading = false,
+  totalMatches = 0,
   onAddItem,
 }: ProductSearchProps) {
-  const [searchTerm, setSearchTerm] = useState('')
   const [selectedKey, setSelectedKey] = useState<React.Key | null>(null)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [loadingVariations, setLoadingVariations] = useState(false)
 
-  const filteredProducts = useMemo(() => {
-    if (!searchTerm) return products.slice(0, 50)
-    const lower = searchTerm.toLowerCase()
-    return products
-      .filter((p) => p.name.toLowerCase().includes(lower))
-      .slice(0, 50)
-  }, [products, searchTerm])
+  const hiddenMatches = Math.max(0, totalMatches - products.length)
 
   const handleSelectProduct = async (key: React.Key | null) => {
     if (!key) return
     const productId = Number(key)
-    setSearchTerm('')
+    onSearchChange('')
     setSelectedKey(null) // reset so the same product can be picked again later
     setLoadingVariations(true)
     try {
@@ -106,9 +109,10 @@ export default function ProductSearch({
         placeholder="Buscar producto por nombre o marca"
         startContent={<Search size={18} className="text-text-muted" />}
         inputValue={searchTerm}
-        onInputChange={setSearchTerm}
+        onInputChange={onSearchChange}
+        isLoading={isLoading}
         selectedKey={selectedKey as any}
-        items={filteredProducts}
+        items={products}
         onSelectionChange={handleSelectProduct}
         defaultFilter={() => true}
         allowsCustomValue
@@ -155,6 +159,13 @@ export default function ProductSearch({
           </AutocompleteItem>
         )}
       </Autocomplete>
+
+      {hiddenMatches > 0 && (
+        <p className="text-xs text-text-muted">
+          Se muestran {products.length} de {totalMatches} coincidencias. Escribe
+          más letras para afinar la búsqueda.
+        </p>
+      )}
 
       {loadingVariations && (
         <div className="flex items-center justify-center py-6">
