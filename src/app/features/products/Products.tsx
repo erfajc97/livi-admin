@@ -15,6 +15,7 @@ export function Products() {
     isLoading,
     selectedProduct,
     showDeleteModal,
+    deleteConflict,
     deleteMutation,
     handleSearch,
     handlePageChange,
@@ -23,6 +24,7 @@ export function Products() {
     handleBackToList,
     handleDeleteClick,
     handleDeleteConfirm,
+    handleDeleteForce,
     handleDeleteClose,
   } = useProductsPageHook()
 
@@ -55,6 +57,8 @@ export function Products() {
         onEdit={handleEdit}
         onDeleteClick={handleDeleteClick}
         onDeleteConfirm={handleDeleteConfirm}
+        onDeleteForce={handleDeleteForce}
+        deleteConflict={deleteConflict}
         onDeleteClose={handleDeleteClose}
         onPageChange={handlePageChange}
       />

@@ -147,6 +147,8 @@ export function useOrdersPageHook() {
     totalPages,
     paginatedOrders,
     filteredCount: filteredOrders.length,
+    // Sin filtrar: el reset borra TODAS, no solo las que se ven en pantalla.
+    totalOrders: allOrders.length,
     isLoading,
     dateFilter,
     statusFilter,

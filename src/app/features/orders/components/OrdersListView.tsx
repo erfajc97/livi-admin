@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import OrdersListHeader from './OrdersListHeader'
 import OrdersTable from './OrdersTable'
 import DeleteOrderModal from './modals/DeleteOrderModal'
+import ResetOrdersModal from './modals/ResetOrdersModal'
 import EditOrderStatusModal from './modals/EditOrderStatusModal'
 import type { Order, OrderStatus } from '../types'
 import type { DateFilter } from '../hooks/useOrdersPageHook'
@@ -12,6 +14,7 @@ interface OrdersListViewProps {
   page: number
   totalPages: number
   filteredCount: number
+  totalOrders: number
   dateFilter: DateFilter
   statusFilter: string
   selectedOrder: Order | null
@@ -39,6 +42,7 @@ export default function OrdersListView({
   page,
   totalPages,
   filteredCount,
+  totalOrders,
   dateFilter,
   statusFilter,
   selectedOrder,
@@ -58,6 +62,8 @@ export default function OrdersListView({
   onStatusClose,
   onRowClick,
 }: OrdersListViewProps) {
+  const [showResetModal, setShowResetModal] = useState(false)
+
   return (
     <div className="flex flex-col gap-6 p-6">
       <OrdersListHeader
@@ -68,6 +74,8 @@ export default function OrdersListView({
         statusFilter={statusFilter}
         onStatusFilter={onStatusFilter}
         filteredCount={filteredCount}
+        totalOrders={totalOrders}
+        onReset={() => setShowResetModal(true)}
       />
 
       <OrdersTable
@@ -79,6 +87,12 @@ export default function OrdersListView({
         onEditStatus={onEditStatus}
         onDelete={onDelete}
         onRowClick={onRowClick}
+      />
+
+      <ResetOrdersModal
+        isOpen={showResetModal}
+        onOpenChange={setShowResetModal}
+        ordersCount={totalOrders}
       />
 
       <DeleteOrderModal

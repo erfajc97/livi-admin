@@ -59,8 +59,15 @@ export const productsService = {
     return data.data
   },
 
-  deleteProduct: async (id: number): Promise<void> => {
-    await axiosInstance.delete(`${API_ENDPOINTS.PRODUCTS}/${id}`)
+  /**
+   * `force` borra el producto aunque tenga pedidos: los ítems del pedido se
+   * desvinculan conservando precio y cantidad, así el total del pedido no
+   * cambia. Sin `force` el backend responde 409 si el producto ya se vendió.
+   */
+  deleteProduct: async (id: number, force = false): Promise<void> => {
+    await axiosInstance.delete(
+      `${API_ENDPOINTS.PRODUCTS}/${id}${force ? '?force=true' : ''}`,
+    )
   },
 
   listCategories: async (): Promise<Category[]> => {

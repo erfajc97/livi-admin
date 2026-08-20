@@ -11,6 +11,7 @@ export function useProductsPageHook() {
   const [search, setSearch] = useState('')
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deleteConflict, setDeleteConflict] = useState<string | null>(null)
   const [view, setView] = useState<'list' | 'create' | 'edit'>('list')
 
   const { data: paginatedData, isLoading } = useProductsQuery(filters)
@@ -63,20 +64,44 @@ export function useProductsPageHook() {
     setShowDeleteModal(true)
   }, [])
 
-  const handleDeleteConfirm = useCallback(() => {
-    if (!selectedProduct) return
-    deleteMutation.mutate(selectedProduct.id, {
-      onSuccess: () => {
-        setShowDeleteModal(false)
-        setSelectedProduct(null)
-      },
-    })
-  }, [selectedProduct, deleteMutation])
-
-  const handleDeleteClose = useCallback(() => {
+  const closeDeleteModal = useCallback(() => {
     setShowDeleteModal(false)
     setSelectedProduct(null)
+    setDeleteConflict(null)
   }, [])
+
+  const handleDeleteConfirm = useCallback(() => {
+    if (!selectedProduct) return
+    deleteMutation.mutate(
+      { id: selectedProduct.id },
+      {
+        onSuccess: closeDeleteModal,
+        onError: (error: unknown) => {
+          // 409 = el producto ya se vendió. No es un fallo: el backend pide
+          // confirmación extra, así que el modal ofrece borrarlo igual.
+          const status = (error as { response?: { status?: number } })?.response
+            ?.status
+          if (status === 409) {
+            setDeleteConflict(
+              (error as { response?: { data?: { message?: string } } })?.response
+                ?.data?.message ?? 'El producto tiene pedidos asociados.',
+            )
+          }
+        },
+      },
+    )
+  }, [selectedProduct, deleteMutation, closeDeleteModal])
+
+  /** Segundo paso tras el 409: borra desvinculando los pedidos. */
+  const handleDeleteForce = useCallback(() => {
+    if (!selectedProduct) return
+    deleteMutation.mutate(
+      { id: selectedProduct.id, force: true },
+      { onSuccess: closeDeleteModal },
+    )
+  }, [selectedProduct, deleteMutation, closeDeleteModal])
+
+  const handleDeleteClose = closeDeleteModal
 
   return {
     // State
@@ -89,6 +114,7 @@ export function useProductsPageHook() {
     isLoading,
     selectedProduct,
     showDeleteModal,
+    deleteConflict,
     deleteMutation,
     // Handlers
     handleSearch,
@@ -98,6 +124,7 @@ export function useProductsPageHook() {
     handleBackToList,
     handleDeleteClick,
     handleDeleteConfirm,
+    handleDeleteForce,
     handleDeleteClose,
   }
 }

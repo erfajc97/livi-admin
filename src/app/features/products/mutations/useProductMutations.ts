@@ -53,10 +53,17 @@ function apiErrorMessage(error: unknown, fallback: string): string {
 export function useDeleteProductMutation() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (id: number) => productsService.deleteProduct(id),
-    onSuccess: () => {
+    mutationFn: ({ id, force }: { id: number; force?: boolean }) =>
+      productsService.deleteProduct(id, force),
+    onSuccess: (_data, { force }) => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
-      addToast({ title: 'Producto eliminado exitosamente', color: 'success' })
+      addToast({
+        title: 'Producto eliminado exitosamente',
+        description: force
+          ? 'Los pedidos que lo incluían conservan precio y cantidad, pero ya no muestran el producto.'
+          : undefined,
+        color: 'success',
+      })
     },
     onError: (error: unknown) => {
       addToast({

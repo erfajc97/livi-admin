@@ -24,6 +24,7 @@ export function Ordenes() {
       page={hook.page}
       totalPages={hook.totalPages}
       filteredCount={hook.filteredCount}
+      totalOrders={hook.totalOrders}
       dateFilter={hook.dateFilter}
       statusFilter={hook.statusFilter}
       selectedOrder={hook.selectedOrder}

@@ -27,6 +27,7 @@ export const API_ENDPOINTS = {
   // Órdenes
   ORDERS: '/orders',
   ORDER: '/orders',
+  ORDERS_RESET: '/orders/reset',
 
   // Finanzas / Pagos
   PAYMENTS: '/payments',

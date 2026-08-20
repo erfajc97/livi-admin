@@ -49,6 +49,11 @@ export default function DeleteModal({
       <p>
         ¿Estás seguro de que deseas eliminar a <strong>{user?.email}</strong>?
       </p>
+      <p className="text-sm text-text-muted">
+        Sus pedidos <strong>no se borran</strong>: pasan a figurar como compra
+        de invitado, con el nombre y correo que ya tenían. Su carrito y sus
+        direcciones sí se eliminan.
+      </p>
       <p className="text-sm text-danger">Esta acción no se puede deshacer.</p>
     </CustomModalNextUI>
   )

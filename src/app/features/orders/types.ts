@@ -65,3 +65,10 @@ export interface UpdateOrderPayload {
   statusNote?: string
   notes?: string
 }
+
+/** Conteos que devuelve el reset masivo de órdenes. */
+export interface ResetOrdersResult {
+  ordersDeleted: number
+  itemsDeleted: number
+  transactionsDeleted: number
+}

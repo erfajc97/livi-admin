@@ -19,6 +19,8 @@ interface ProductListViewProps {
   onEdit: (product: Product) => void
   onDeleteClick: (product: Product) => void
   onDeleteConfirm: () => void
+  onDeleteForce: () => void
+  deleteConflict: string | null
   onDeleteClose: () => void
   onPageChange: (page: number) => void
 }
@@ -37,6 +39,8 @@ export default function ProductListView({
   onEdit,
   onDeleteClick,
   onDeleteConfirm,
+  onDeleteForce,
+  deleteConflict,
   onDeleteClose,
   onPageChange,
 }: ProductListViewProps) {
@@ -74,6 +78,8 @@ export default function ProductListView({
         onClose={onDeleteClose}
         product={selectedProduct}
         onConfirm={onDeleteConfirm}
+        onForce={onDeleteForce}
+        conflict={deleteConflict}
         isDeleting={isDeleting}
       />
     </div>

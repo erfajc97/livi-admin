@@ -1,5 +1,5 @@
 import { Button, Input } from '@heroui/react'
-import { Search, Calendar, Filter, RefreshCw } from 'lucide-react'
+import { Search, Calendar, Filter, RefreshCw, Trash2 } from 'lucide-react'
 import type { DateFilter } from '../hooks/useOrdersPageHook'
 import { ORDER_STATUS_OPTIONS } from '../data'
 import { useReconcilePayphoneMutation } from '../mutations/useOrderMutations'
@@ -12,6 +12,8 @@ interface OrdersListHeaderProps {
   statusFilter: string
   onStatusFilter: (value: string) => void
   filteredCount: number
+  totalOrders: number
+  onReset: () => void
 }
 
 const DATE_FILTERS: { value: DateFilter; label: string }[] = [
@@ -29,6 +31,8 @@ export default function OrdersListHeader({
   statusFilter,
   onStatusFilter,
   filteredCount,
+  totalOrders,
+  onReset,
 }: OrdersListHeaderProps) {
   const reconcileMutation = useReconcilePayphoneMutation()
 
@@ -59,6 +63,17 @@ export default function OrdersListHeader({
             onPress={() => reconcileMutation.mutate()}
           >
             Reconciliar PayPhone
+          </Button>
+
+          <Button
+            size="sm"
+            variant="flat"
+            color="danger"
+            startContent={<Trash2 size={14} />}
+            isDisabled={totalOrders === 0}
+            onPress={onReset}
+          >
+            Resetear órdenes
           </Button>
 
           <Input

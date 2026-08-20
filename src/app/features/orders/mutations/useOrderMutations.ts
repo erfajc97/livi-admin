@@ -72,6 +72,37 @@ export function useReconcilePayphoneMutation() {
   })
 }
 
+export function useResetOrdersMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: () => ordersService.resetAll(),
+    onSuccess: (result) => {
+      addToast({
+        title: 'Órdenes reiniciadas',
+        description:
+          `${result.ordersDeleted} órdenes, ${result.itemsDeleted} items y ` +
+          `${result.transactionsDeleted} transacciones borradas. ` +
+          'El stock descontado no se devuelve: ajústalo en inventario.',
+        color: 'success',
+        timeout: 10000,
+      })
+      void queryClient.invalidateQueries({ queryKey: ['orders'] })
+      void queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
+      void queryClient.invalidateQueries({ queryKey: ['finance'] })
+    },
+    onError: (error: unknown) => {
+      const message = (error as { response?: { data?: { message?: string } } })
+        ?.response?.data?.message
+      addToast({
+        title: 'Error',
+        description: message ?? 'No se pudieron reiniciar las órdenes.',
+        color: 'danger',
+      })
+    },
+  })
+}
+
 export function useDeleteOrderMutation() {
   const queryClient = useQueryClient()
 
