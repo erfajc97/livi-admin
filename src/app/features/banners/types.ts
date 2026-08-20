@@ -6,6 +6,9 @@ export interface Banner {
   subtitle: string | null
   imageUrl: string | null
   imageKey: string | null
+  /** Arte vertical para teléfono. Si es null el front usa `imageUrl`. */
+  mobileImageUrl: string | null
+  mobileImageKey: string | null
   link: string | null
   buttonText: string | null
   type: BannerType

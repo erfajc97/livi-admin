@@ -11,6 +11,7 @@ interface MarcaFormModalProps {
   formData: MarcaFormData
   onInputChange: (field: keyof MarcaFormData, value: string | boolean) => void
   onImageChange: (file: File | null) => void
+  onMobileImageChange: (file: File | null) => void
   onSubmit: () => void
 }
 
@@ -22,6 +23,7 @@ export default function MarcaFormModal({
   formData,
   onInputChange,
   onImageChange,
+  onMobileImageChange,
   onSubmit,
 }: MarcaFormModalProps) {
   return (
@@ -61,6 +63,7 @@ export default function MarcaFormModal({
         formData={formData}
         onInputChange={onInputChange}
         onImageChange={onImageChange}
+        onMobileImageChange={onMobileImageChange}
       />
     </CustomModalNextUI>
   )

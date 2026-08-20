@@ -9,10 +9,12 @@ export const useCreateCategoryMutation = () => {
     mutationFn: ({
       data,
       file,
+      mobileFile,
     }: {
       data: CreateCategoryPayload
       file?: File
-    }) => categoriesService.createCategory(data, file),
+      mobileFile?: File
+    }) => categoriesService.createCategory(data, file, mobileFile),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] })
       addToast({ title: 'Categoría creada exitosamente', color: 'success' })
@@ -33,11 +35,13 @@ export const useUpdateCategoryMutation = () => {
       id,
       data,
       file,
+      mobileFile,
     }: {
       id: number
       data: UpdateCategoryPayload
       file?: File
-    }) => categoriesService.updateCategory(id, data, file),
+      mobileFile?: File
+    }) => categoriesService.updateCategory(id, data, file, mobileFile),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] })
       addToast({

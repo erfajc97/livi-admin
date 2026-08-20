@@ -31,9 +31,14 @@ function unwrap<T>(data: T | CoreApiResponse<T>): T {
 
 const UPLOAD_TIMEOUT_MS = 120_000
 
+/**
+ * `image` es la portada de escritorio y `mobileImage` la vertical de teléfono.
+ * Ambas opcionales: renombrar una categoría no obliga a re-subir nada.
+ */
 function buildFormData(
   payload: Record<string, unknown>,
   file?: File,
+  mobileFile?: File,
 ): FormData {
   const fd = new FormData()
   for (const [key, value] of Object.entries(payload)) {
@@ -43,6 +48,9 @@ function buildFormData(
   }
   if (file) {
     fd.append('image', file)
+  }
+  if (mobileFile) {
+    fd.append('mobileImage', mobileFile)
   }
   return fd
 }
@@ -68,11 +76,13 @@ export const categoriesService = {
   createCategory: async (
     payload: CreateCategoryPayload,
     file?: File,
+    mobileFile?: File,
   ): Promise<Category> => {
-    if (file) {
+    if (file || mobileFile) {
       const fd = buildFormData(
         payload as unknown as Record<string, unknown>,
         file,
+        mobileFile,
       )
       const { data } = await axiosInstance.post(API_ENDPOINTS.CATEGORIES, fd, {
         timeout: UPLOAD_TIMEOUT_MS,
@@ -87,8 +97,9 @@ export const categoriesService = {
     id: number,
     payload: UpdateCategoryPayload,
     file?: File,
+    mobileFile?: File,
   ): Promise<Category> => {
-    if (!file) {
+    if (!file && !mobileFile) {
       const { data } = await axiosInstance.patch(
         `${API_ENDPOINTS.CATEGORIES}/${id}`,
         payload,
@@ -98,6 +109,7 @@ export const categoriesService = {
     const fd = buildFormData(
       payload as unknown as Record<string, unknown>,
       file,
+      mobileFile,
     )
     const { data } = await axiosInstance.patch(
       `${API_ENDPOINTS.CATEGORIES}/${id}`,
@@ -127,11 +139,16 @@ export const marcasService = {
     return []
   },
 
-  create: async (payload: CreateMarcaPayload, file?: File): Promise<Marca> => {
-    if (file) {
+  create: async (
+    payload: CreateMarcaPayload,
+    file?: File,
+    mobileFile?: File,
+  ): Promise<Marca> => {
+    if (file || mobileFile) {
       const fd = buildFormData(
         payload as unknown as Record<string, unknown>,
         file,
+        mobileFile,
       )
       const { data } = await axiosInstance.post(API_ENDPOINTS.MARCAS, fd, {
         timeout: UPLOAD_TIMEOUT_MS,
@@ -146,11 +163,13 @@ export const marcasService = {
     id: number,
     payload: UpdateMarcaPayload,
     file?: File,
+    mobileFile?: File,
   ): Promise<Marca> => {
-    if (file) {
+    if (file || mobileFile) {
       const fd = buildFormData(
         payload as unknown as Record<string, unknown>,
         file,
+        mobileFile,
       )
       const { data } = await axiosInstance.patch(
         `${API_ENDPOINTS.MARCAS}/${id}`,

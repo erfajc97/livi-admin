@@ -6,8 +6,15 @@ import type { CreateBannerPayload, UpdateBannerPayload } from '../types'
 export const useCreateBannerMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ data, file }: { data: CreateBannerPayload; file?: File }) =>
-      bannersService.createBanner(data, file),
+    mutationFn: ({
+      data,
+      file,
+      mobileFile,
+    }: {
+      data: CreateBannerPayload
+      file?: File
+      mobileFile?: File
+    }) => bannersService.createBanner(data, file, mobileFile),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['banners'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
@@ -29,11 +36,13 @@ export const useUpdateBannerMutation = () => {
       id,
       data,
       file,
+      mobileFile,
     }: {
       id: string
       data: UpdateBannerPayload
       file?: File
-    }) => bannersService.updateBanner(id, data, file),
+      mobileFile?: File
+    }) => bannersService.updateBanner(id, data, file, mobileFile),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['banners'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })

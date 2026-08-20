@@ -5,6 +5,9 @@ export interface Category {
   slug: string | null
   imageUrl: string | null
   imageKey: string | null
+  /** Portada vertical para teléfono. Si es null el front usa `imageUrl`. */
+  mobileImageUrl: string | null
+  mobileImageKey: string | null
   isActive: boolean
   bajoPedido: boolean
   createdAt: string
@@ -19,6 +22,9 @@ export interface Marca {
   slug: string | null
   imageUrl: string | null
   imageKey: string | null
+  /** Portada vertical para teléfono. Si es null el front usa `imageUrl`. */
+  mobileImageUrl: string | null
+  mobileImageKey: string | null
   isActive: boolean
   bajoPedido: boolean
   categoryId: number
@@ -52,6 +58,8 @@ export interface MarcaFormData {
   bajoPedido: boolean
   imageFile: File | null
   imagePreview: string | null
+  mobileImageFile: File | null
+  mobileImagePreview: string | null
 }
 
 export interface CreateMarcaPayload {

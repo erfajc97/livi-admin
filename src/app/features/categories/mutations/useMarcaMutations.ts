@@ -6,8 +6,12 @@ import type { CreateMarcaPayload, UpdateMarcaPayload } from '../types'
 export const useCreateMarcaMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ file, ...data }: CreateMarcaPayload & { file?: File }) =>
-      marcasService.create(data, file),
+    mutationFn: ({
+      file,
+      mobileFile,
+      ...data
+    }: CreateMarcaPayload & { file?: File; mobileFile?: File }) =>
+      marcasService.create(data, file, mobileFile),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['categories'] })
       queryClient.invalidateQueries({
@@ -31,11 +35,13 @@ export const useUpdateMarcaMutation = () => {
       id,
       data,
       file,
+      mobileFile,
     }: {
       id: number
       data: UpdateMarcaPayload
       file?: File
-    }) => marcasService.update(id, data, file),
+      mobileFile?: File
+    }) => marcasService.update(id, data, file, mobileFile),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] })
       queryClient.invalidateQueries({ queryKey: ['marcas'] })

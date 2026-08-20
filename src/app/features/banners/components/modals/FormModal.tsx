@@ -10,8 +10,10 @@ interface FormModalProps {
   isSubmitting: boolean
   formData: BannerFormData
   imagePreview: string | null
+  mobileImagePreview: string | null
   onInputChange: (field: keyof BannerFormData, value: string | boolean) => void
   onImageChange: (file: File | null) => void
+  onMobileImageChange: (file: File | null) => void
   onSubmit: () => void
 }
 
@@ -22,8 +24,10 @@ export default function FormModal({
   isSubmitting,
   formData,
   imagePreview,
+  mobileImagePreview,
   onInputChange,
   onImageChange,
+  onMobileImageChange,
   onSubmit,
 }: FormModalProps) {
   return (
@@ -65,8 +69,10 @@ export default function FormModal({
       <BannerForm
         formData={formData}
         imagePreview={imagePreview}
+        mobileImagePreview={mobileImagePreview}
         onInputChange={onInputChange}
         onImageChange={onImageChange}
+        onMobileImageChange={onMobileImageChange}
       />
     </CustomModalNextUI>
   )

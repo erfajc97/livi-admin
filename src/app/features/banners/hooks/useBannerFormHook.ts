@@ -43,6 +43,11 @@ export function useBannerFormHook({
   )
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  // Arte vertical opcional: si no se sube, el front reutiliza el de escritorio.
+  const [mobileImageFile, setMobileImageFile] = useState<File | null>(null)
+  const [mobileImagePreview, setMobileImagePreview] = useState<string | null>(
+    null,
+  )
 
   const createMutation = useCreateBannerMutation()
   const updateMutation = useUpdateBannerMutation()
@@ -55,6 +60,32 @@ export function useBannerFormHook({
     value: string | boolean,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  /** Valida tipo y peso. Devuelve false si el archivo no sirve. */
+  const isValidImage = (file: File) => {
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      addToast({
+        title: 'Formato no permitido. Usa JPG, PNG o WEBP.',
+        color: 'danger',
+      })
+      return false
+    }
+    if (file.size > MAX_IMAGE_SIZE) {
+      addToast({ title: 'La imagen no debe superar los 5 MB.', color: 'danger' })
+      return false
+    }
+    return true
+  }
+
+  const onMobileImageChange = (file: File | null) => {
+    if (file && !isValidImage(file)) return
+
+    setMobileImagePreview((prev) => {
+      if (prev && prev.startsWith('blob:')) URL.revokeObjectURL(prev)
+      return file ? URL.createObjectURL(file) : null
+    })
+    setMobileImageFile(file)
   }
 
   const onImageChange = (file: File | null) => {
@@ -97,12 +128,16 @@ export function useBannerFormHook({
     })
     setImagePreview(banner.imageUrl)
     setImageFile(null)
+    setMobileImagePreview(banner.mobileImageUrl ?? null)
+    setMobileImageFile(null)
   }
 
   const resetForm = () => {
     setFormData(buildEmptyForm(defaultType))
     setImageFile(null)
     setImagePreview(null)
+    setMobileImageFile(null)
+    setMobileImagePreview(null)
   }
 
   const handleSubmit = () => {
@@ -121,13 +156,22 @@ export function useBannerFormHook({
     if (isThereId && id) {
       const payload: UpdateBannerPayload = { title: formData.title, ...base }
       updateMutation.mutate(
-        { id, data: payload, file: imageFile ?? undefined },
+        {
+          id,
+          data: payload,
+          file: imageFile ?? undefined,
+          mobileFile: mobileImageFile ?? undefined,
+        },
         { onSuccess },
       )
     } else {
       const payload: CreateBannerPayload = { title: formData.title, ...base }
       createMutation.mutate(
-        { data: payload, file: imageFile ?? undefined },
+        {
+          data: payload,
+          file: imageFile ?? undefined,
+          mobileFile: mobileImageFile ?? undefined,
+        },
         { onSuccess },
       )
     }
@@ -136,10 +180,12 @@ export function useBannerFormHook({
   return {
     formData,
     imagePreview,
+    mobileImagePreview,
     isThereId,
     isSubmitting,
     onInputChange,
     onImageChange,
+    onMobileImageChange,
     handleToEditForm,
     resetForm,
     handleSubmit,

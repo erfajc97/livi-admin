@@ -16,6 +16,8 @@ const emptyForm: MarcaFormData = {
   bajoPedido: false,
   imageFile: null,
   imagePreview: null,
+  mobileImageFile: null,
+  mobileImagePreview: null,
 }
 
 export function useMarcaHook(categoryId: number | null) {
@@ -61,6 +63,15 @@ export function useMarcaHook(categoryId: number | null) {
     }))
   }
 
+  // Portada vertical opcional: si falta, el front usa la de escritorio.
+  const onMobileImageChange = (file: File | null) => {
+    setFormData((prev) => ({
+      ...prev,
+      mobileImageFile: file,
+      mobileImagePreview: file ? URL.createObjectURL(file) : null,
+    }))
+  }
+
   const handleCreateClick = () => {
     setEditId(null)
     setFormData(emptyForm)
@@ -76,6 +87,8 @@ export function useMarcaHook(categoryId: number | null) {
       bajoPedido: marca.bajoPedido ?? false,
       imageFile: null,
       imagePreview: marca.imageUrl ?? null,
+      mobileImageFile: null,
+      mobileImagePreview: marca.mobileImageUrl ?? null,
     })
     onFormOpen()
   }
@@ -87,6 +100,7 @@ export function useMarcaHook(categoryId: number | null) {
 
   const handleSubmit = () => {
     const file = formData.imageFile ?? undefined
+    const mobileFile = formData.mobileImageFile ?? undefined
     if (editId && categoryId) {
       updateMutation.mutate(
         {
@@ -98,6 +112,7 @@ export function useMarcaHook(categoryId: number | null) {
             bajoPedido: formData.bajoPedido,
           },
           file,
+          mobileFile,
         },
         { onSuccess: () => onFormOpenChange() },
       )
@@ -110,6 +125,7 @@ export function useMarcaHook(categoryId: number | null) {
           isActive: formData.isActive,
           bajoPedido: formData.bajoPedido,
           file,
+          mobileFile,
         },
         { onSuccess: () => onFormOpenChange() },
       )
@@ -144,6 +160,7 @@ export function useMarcaHook(categoryId: number | null) {
     deleteTarget,
     onInputChange,
     onImageChange,
+    onMobileImageChange,
     handleCreateClick,
     handleEditClick,
     handleDeleteClick,

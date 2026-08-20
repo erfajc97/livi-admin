@@ -108,8 +108,10 @@ export function Banners() {
         isSubmitting={formHook.isSubmitting}
         formData={formHook.formData}
         imagePreview={formHook.imagePreview}
+        mobileImagePreview={formHook.mobileImagePreview}
         onInputChange={formHook.onInputChange}
         onImageChange={formHook.onImageChange}
+        onMobileImageChange={formHook.onMobileImageChange}
         onSubmit={formHook.handleSubmit}
       />
       <DeleteModal

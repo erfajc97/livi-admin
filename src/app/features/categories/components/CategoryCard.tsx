@@ -134,6 +134,7 @@ export default function CategoryCard({
             formData={marcaHook.formData}
             onInputChange={marcaHook.onInputChange}
             onImageChange={marcaHook.onImageChange}
+            onMobileImageChange={marcaHook.onMobileImageChange}
             onSubmit={marcaHook.handleSubmit}
           />
 

@@ -29,6 +29,11 @@ export function useCategoryFormHook({
   const [formData, setFormData] = useState<CategoryFormData>(emptyForm)
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  // Portada vertical opcional: si falta, el front usa la de escritorio.
+  const [mobileImageFile, setMobileImageFile] = useState<File | null>(null)
+  const [mobileImagePreview, setMobileImagePreview] = useState<string | null>(
+    null,
+  )
 
   const createMutation = useCreateCategoryMutation()
   const updateMutation = useUpdateCategoryMutation()
@@ -52,6 +57,11 @@ export function useCategoryFormHook({
     }
   }
 
+  const onMobileImageChange = (file: File | null) => {
+    setMobileImageFile(file)
+    setMobileImagePreview(file ? URL.createObjectURL(file) : null)
+  }
+
   const handleToEditForm = (category: Category) => {
     setFormData({
       name: category.name,
@@ -61,12 +71,16 @@ export function useCategoryFormHook({
     })
     setImagePreview(category.imageUrl)
     setImageFile(null)
+    setMobileImagePreview(category.mobileImageUrl ?? null)
+    setMobileImageFile(null)
   }
 
   const resetForm = () => {
     setFormData(emptyForm)
     setImageFile(null)
     setImagePreview(null)
+    setMobileImageFile(null)
+    setMobileImagePreview(null)
   }
 
   const handleSubmit = () => {
@@ -78,7 +92,12 @@ export function useCategoryFormHook({
         bajoPedido: formData.bajoPedido,
       }
       updateMutation.mutate(
-        { id, data: payload, file: imageFile ?? undefined },
+        {
+          id,
+          data: payload,
+          file: imageFile ?? undefined,
+          mobileFile: mobileImageFile ?? undefined,
+        },
         { onSuccess },
       )
     } else {
@@ -89,7 +108,11 @@ export function useCategoryFormHook({
         bajoPedido: formData.bajoPedido,
       }
       createMutation.mutate(
-        { data: payload, file: imageFile ?? undefined },
+        {
+          data: payload,
+          file: imageFile ?? undefined,
+          mobileFile: mobileImageFile ?? undefined,
+        },
         { onSuccess },
       )
     }
@@ -98,10 +121,12 @@ export function useCategoryFormHook({
   return {
     formData,
     imagePreview,
+    mobileImagePreview,
     isThereId,
     isSubmitting,
     onInputChange,
     onImageChange,
+    onMobileImageChange,
     handleToEditForm,
     resetForm,
     handleSubmit,

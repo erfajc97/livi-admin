@@ -22,9 +22,14 @@ function unwrap<T>(data: T | CoreApiResponse<T>): T {
   return data
 }
 
+/**
+ * `image` es el arte de escritorio y `mobileImage` el vertical para teléfono.
+ * Los dos son opcionales: editar solo el texto no obliga a re-subir nada.
+ */
 function buildFormData(
   payload: Record<string, unknown>,
   file?: File,
+  mobileFile?: File,
 ): FormData {
   const fd = new FormData()
   for (const [key, value] of Object.entries(payload)) {
@@ -34,6 +39,9 @@ function buildFormData(
   }
   if (file) {
     fd.append('image', file)
+  }
+  if (mobileFile) {
+    fd.append('mobileImage', mobileFile)
   }
   return fd
 }
@@ -54,10 +62,12 @@ export const bannersService = {
   createBanner: async (
     payload: CreateBannerPayload,
     file?: File,
+    mobileFile?: File,
   ): Promise<Banner> => {
     const fd = buildFormData(
       payload as unknown as Record<string, unknown>,
       file,
+      mobileFile,
     )
     const { data } = await axiosInstance.post(API_ENDPOINTS.BANNERS, fd)
     return unwrap<Banner>(data)
@@ -67,8 +77,9 @@ export const bannersService = {
     id: string,
     payload: UpdateBannerPayload,
     file?: File,
+    mobileFile?: File,
   ): Promise<Banner> => {
-    if (!file) {
+    if (!file && !mobileFile) {
       const { data } = await axiosInstance.patch(
         `${API_ENDPOINTS.BANNERS}/${id}`,
         payload,
@@ -78,6 +89,7 @@ export const bannersService = {
     const fd = buildFormData(
       payload as unknown as Record<string, unknown>,
       file,
+      mobileFile,
     )
     const { data } = await axiosInstance.patch(
       `${API_ENDPOINTS.BANNERS}/${id}`,
