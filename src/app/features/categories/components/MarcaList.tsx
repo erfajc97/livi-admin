@@ -45,7 +45,9 @@ export default function MarcaList({
           No hay marcas creadas.
         </p>
       ) : (
-        <div className="flex flex-col gap-1">
+        // Con 20+ marcas la tarjeta se volvía interminable: la lista scrollea
+        // dentro de su propio alto y el resto del panel queda alcanzable.
+        <div className="flex max-h-[420px] flex-col gap-1 overflow-y-auto pr-1">
           {marcas.map((marca) => (
             <div
               key={marca.id}
