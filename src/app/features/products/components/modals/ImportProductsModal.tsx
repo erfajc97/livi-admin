@@ -146,20 +146,51 @@ interface ParsedRow {
   missing: string[]
 }
 
+type ImportPresentationType = 'decant' | 'sellada'
+
+/** "Sellada", "frasco", "original"… → 'sellada'; el resto → 'decant' */
+const PRESENTATION_ALIASES: Record<string, ImportPresentationType> = {
+  decant: 'decant',
+  decants: 'decant',
+  fraccionado: 'decant',
+  fraccion: 'decant',
+  sellada: 'sellada',
+  sellado: 'sellada',
+  original: 'sellada',
+  frasco: 'sellada',
+  botella: 'sellada',
+}
+
 /** Pares "variacion N" + "precio variacion N" → [{ mlSize, price, presentationType }] (pares incompletos se ignoran).
- *  Las variantes importadas siempre nacen como 'decant' (default histórico). */
+ *  El tipo se toma de "tipo variacion N" si viene; si no, se deduce de los ml. */
 const toVariants = (
   raw: Record<string, unknown>,
-): Array<{ mlSize: number; price: number; presentationType: 'decant' }> | undefined => {
-  const out: Array<{ mlSize: number; price: number; presentationType: 'decant' }> = []
+): Array<{ mlSize: number; price: number; presentationType: ImportPresentationType }> | undefined => {
+  const totalMl = toNumber(raw.total_ml)
+  const out: Array<{
+    mlSize: number
+    price: number
+    presentationType: ImportPresentationType
+  }> = []
   for (let n = 1; n <= 10; n++) {
     const ml = toNumber(pick(raw, `variacion_${n}`, `variante_${n}`, `variacion${n}`))
     const price = toNumber(
       pick(raw, `precio_variacion_${n}`, `precio_variante_${n}`, `precio_variacion${n}`),
     )
-    if (ml == null && price == null) continue
     if (ml == null || price == null) continue
-    out.push({ mlSize: ml, price, presentationType: 'decant' })
+
+    const declared = pick(raw, `tipo_variacion_${n}`, `tipo_variante_${n}`, `tipo_variacion${n}`)
+    const presentationType =
+      (declared != null
+        ? PRESENTATION_ALIASES[String(declared).trim().toLowerCase()]
+        : undefined) ??
+      // Un decant se sirve de la botella abierta, así que no puede medir la
+      // botella entera o más: eso es una presentación sellada. Importarlas como
+      // decant las dejaba "Sin stock" en la ficha aunque el producto tuviera
+      // frascos, porque el decant se topa por los ml disponibles.
+      (totalMl != null && ml >= totalMl ? 'sellada' : 'decant')
+
+    out.push({ mlSize: ml, price, presentationType })
   }
   return out.length > 0 ? out : undefined
 }

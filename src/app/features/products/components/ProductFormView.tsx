@@ -8,6 +8,7 @@ import {
   useUpdateProductMutation,
 } from '../mutations/useProductMutations'
 import { productsService } from '../services/productsService'
+import { findAutoFullBottleVariationId } from '../utils/variations'
 import ProductForm from './ProductForm'
 import type { Product } from '../types'
 
@@ -135,9 +136,11 @@ export default function ProductFormView({
     const originalVariations = formHook.fullProduct?.variations ?? []
 
     // Delete removed variations — never touch the auto-managed full-bottle
-    // variation (synced server-side from product.price / totalMl).
+    // variation (synced server-side from product.price / totalMl). El resto de
+    // las selladas sí son del admin: se editan y se borran como cualquier otra.
+    const autoBottleId = findAutoFullBottleVariationId(formHook.fullProduct)
     for (const orig of originalVariations) {
-      if (orig.isFullBottle) continue
+      if (String(orig.id) === autoBottleId) continue
       const stillExists = currentVariations.some((v) => v.id === orig.id)
       if (!stillExists) {
         try {

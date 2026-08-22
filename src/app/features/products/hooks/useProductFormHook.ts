@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from 'react'
 import { useProductByIdQuery } from '@/app/tanstack-queries/productsQuery'
 import { INITIAL_FORM_DATA } from '../data'
+import { findAutoFullBottleVariationId } from '../utils/variations'
 import type {
   ProductImage,
   ProductFormData,
@@ -88,11 +89,14 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
     setExistingImages(fullProduct.images ?? [])
     setImageFiles([])
     setImagePreviews([])
+    const autoBottleId = findAutoFullBottleVariationId(fullProduct)
     setVariations(
       (fullProduct.variations ?? [])
-        // Skip the auto-managed full-bottle variation (synced server-side
-        // from product.price / product.totalMl).
-        .filter((v) => !v.isFullBottle)
+        // Skip only the auto-managed full-bottle variation (synced server-side
+        // from product.price / product.totalMl). Las presentaciones selladas
+        // cargadas por el admin también traen `isFullBottle`, y filtrarlas por
+        // ese flag las dejaba invisibles en el panel.
+        .filter((v) => String(v.id) !== autoBottleId)
         .map((v) => ({
           id: v.id,
           name: v.name ?? '',
