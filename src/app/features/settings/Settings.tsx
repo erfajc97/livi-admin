@@ -12,6 +12,8 @@ import { settingsService } from './services/settingsService'
 import { useUpdateSettingMutation } from './mutations/useSettingsMutations'
 
 const DELIVERY_KEY = 'delivery_days_offset'
+const CUTOFF_KEY = 'dispatch_cutoff_hour'
+const CUTOFF_DEFAULT = '15'
 const ANNOUNCEMENT_KEY = 'announcement_bar'
 const ANNOUNCEMENT_DEFAULT = 'Envíos a todo el Ecuador · Servientrega 24–72h'
 const ANNOUNCEMENT_DESCRIPTION = 'Textos de la barra superior (JSON array)'
@@ -37,6 +39,7 @@ const parseAnnouncements = (raw: string): string[] => {
 
 export const Settings = () => {
   const [offset, setOffset] = useState('0')
+  const [cutoff, setCutoff] = useState(CUTOFF_DEFAULT)
   const [announcements, setAnnouncements] = useState<string[]>([
     ANNOUNCEMENT_DEFAULT,
   ])
@@ -54,6 +57,10 @@ export const Settings = () => {
       if (deliverySetting) {
         setOffset(deliverySetting.value)
       }
+      const cutoffSetting = settings.find((s) => s.key === CUTOFF_KEY)
+      if (cutoffSetting) {
+        setCutoff(cutoffSetting.value)
+      }
       const announcementSetting = settings.find(
         (s) => s.key === ANNOUNCEMENT_KEY,
       )
@@ -63,20 +70,33 @@ export const Settings = () => {
     }
   }, [settings])
 
-  const handleSave = () => {
-    updateMutation.mutate({
+  const handleSave = async () => {
+    const hour = Math.min(23, Math.max(0, Number(cutoff) || Number(CUTOFF_DEFAULT)))
+    setCutoff(String(hour))
+    await updateMutation.mutateAsync({
       key: DELIVERY_KEY,
       value: offset,
       description: 'Días adicionales para la entrega',
+    })
+    await updateMutation.mutateAsync({
+      key: CUTOFF_KEY,
+      value: String(hour),
+      description: 'Hora de corte de despacho (America/Guayaquil). Hasta esa hora sale hoy.',
     })
   }
 
   const handleRestore = () => {
     setOffset('0')
+    setCutoff(CUTOFF_DEFAULT)
     updateMutation.mutate({
       key: DELIVERY_KEY,
       value: '0',
       description: 'Días adicionales para la entrega',
+    })
+    updateMutation.mutate({
+      key: CUTOFF_KEY,
+      value: CUTOFF_DEFAULT,
+      description: 'Hora de corte de despacho (America/Guayaquil). Hasta esa hora sale hoy.',
     })
   }
 
@@ -125,6 +145,19 @@ export const Settings = () => {
           value={offset}
           onValueChange={setOffset}
           isDisabled={isLoading}
+          className="max-w-xs mb-5"
+        />
+
+        <Input
+          type="number"
+          label="Hora de corte de despacho (Ecuador)"
+          placeholder={CUTOFF_DEFAULT}
+          min={0}
+          max={23}
+          value={cutoff}
+          onValueChange={setCutoff}
+          isDisabled={isLoading}
+          description="Pedidos confirmados antes de esta hora salen hoy. Después, desde el día siguiente. Por defecto 15 (3:00 p.m.)."
           className="max-w-xs mb-5"
         />
 
