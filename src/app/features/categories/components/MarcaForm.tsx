@@ -55,6 +55,7 @@ export default function MarcaForm({
         onValueChange={(v) => onInputChange('description', v)}
         classNames={inputClasses}
         autoComplete="off"
+        description="Se muestra en la página de la marca en el catálogo."
       />
 
       <div>

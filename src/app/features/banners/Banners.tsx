@@ -10,12 +10,15 @@ import {
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useBannersPageHook } from './hooks/useBannersPageHook'
 import BannerCard from './components/BannerCard'
+import CatalogPageBannerSlots from './components/CatalogPageBannerSlots'
 import FormModal from './components/modals/FormModal'
 import DeleteModal from './components/modals/DeleteModal'
 
 export function Banners() {
   const {
     banners,
+    catalogPerfumes,
+    catalogBajoPedido,
     isLoading,
     formHook,
     deleteTarget,
@@ -24,6 +27,7 @@ export function Banners() {
     isDeleting,
     onDeleteOpenChange,
     handleCreateClick,
+    handleCreateCatalog,
     handleEditClick,
     handleDeleteClick,
     handleConfirmDelete,
@@ -44,8 +48,8 @@ export function Banners() {
             Banners
           </h1>
           <p className="mt-1 text-sm text-text-muted">
-            Gestiona los banners promocionales de la tienda. Arrastra para
-            reordenar.
+            Gestiona el carrusel de la home y las portadas de Perfumes y Bajo
+            pedido. Arrastra los de la home para reordenar.
           </p>
         </div>
         <Button
@@ -99,6 +103,13 @@ export function Banners() {
           </SortableContext>
         </DndContext>
       )}
+
+      <CatalogPageBannerSlots
+        perfumes={catalogPerfumes}
+        bajoPedido={catalogBajoPedido}
+        onEdit={handleEditClick}
+        onCreate={handleCreateCatalog}
+      />
 
       {/* Modals */}
       <FormModal

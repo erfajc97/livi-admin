@@ -1,4 +1,10 @@
-export type BannerType = 'hero' | 'category' | 'brand' | 'navbar'
+export type BannerType =
+  | 'hero'
+  | 'category'
+  | 'brand'
+  | 'navbar'
+  | 'catalog_perfumes'
+  | 'catalog_bajo_pedido'
 
 export interface Banner {
   id: string | number

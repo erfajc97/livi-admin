@@ -8,7 +8,9 @@ import {
   useDeleteBannerMutation,
   useReorderBannersMutation,
 } from '../mutations/useBannerMutations'
-import type { Banner } from '../types'
+import type { Banner, BannerType } from '../types'
+
+const isHero = (banner: Banner) => (banner.type ?? 'hero') === 'hero'
 
 export function useBannersPageHook() {
   const [id, setId] = useState<string | null>(null)
@@ -25,7 +27,11 @@ export function useBannersPageHook() {
   const deleteMutation = useDeleteBannerMutation()
   const reorderMutation = useReorderBannersMutation()
 
-  const displayBanners = localBanners ?? banners
+  const heroSource = localBanners ?? banners.filter(isHero)
+  const displayBanners = heroSource.filter(isHero)
+
+  const catalogPerfumes = banners.find((b) => b.type === 'catalog_perfumes') ?? null
+  const catalogBajoPedido = banners.find((b) => b.type === 'catalog_bajo_pedido') ?? null
 
   const { handleToEditForm, resetForm, ...formHook } = useBannerFormHook({
     id,
@@ -34,7 +40,15 @@ export function useBannersPageHook() {
 
   const handleCreateClick = () => {
     setId(null)
-    resetForm()
+    resetForm('hero')
+    onOpen()
+  }
+
+  const handleCreateCatalog = (
+    type: Extract<BannerType, 'catalog_perfumes' | 'catalog_bajo_pedido'>,
+  ) => {
+    setId(null)
+    resetForm(type)
     onOpen()
   }
 
@@ -63,7 +77,7 @@ export function useBannersPageHook() {
   const handleFormModalOpenChange = (open: boolean) => {
     if (!open) {
       setId(null)
-      resetForm()
+      resetForm('hero')
     }
     onOpenChange()
   }
@@ -88,6 +102,8 @@ export function useBannersPageHook() {
   return {
     id,
     banners: displayBanners,
+    catalogPerfumes,
+    catalogBajoPedido,
     isLoading,
     formHook,
     deleteTarget,
@@ -96,6 +112,7 @@ export function useBannersPageHook() {
     isDeleting: deleteMutation.isPending,
     onDeleteOpenChange,
     handleCreateClick,
+    handleCreateCatalog,
     handleEditClick,
     handleDeleteClick,
     handleConfirmDelete,

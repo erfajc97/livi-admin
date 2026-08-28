@@ -132,8 +132,8 @@ export function useBannerFormHook({
     setMobileImageFile(null)
   }
 
-  const resetForm = () => {
-    setFormData(buildEmptyForm(defaultType))
+  const resetForm = (type: BannerType = defaultType) => {
+    setFormData(buildEmptyForm(type))
     setImageFile(null)
     setImagePreview(null)
     setMobileImageFile(null)
