@@ -1,9 +1,8 @@
 import { Input } from '@heroui/react'
 import type { BannerFormData } from '../types'
+import BannerImageField from './BannerImageField'
 
 const inputClasses = { label: '!text-text' }
-const fileInputClasses =
-  'text-sm text-text-muted file:mr-4 file:rounded-lg file:border-0 file:bg-accent/10 file:px-4 file:py-2 file:text-sm file:font-medium file:text-accent hover:file:bg-accent/20'
 
 interface BannerFormProps {
   formData: BannerFormData
@@ -23,7 +22,7 @@ export default function BannerForm({
   onMobileImageChange,
 }: BannerFormProps) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex min-w-0 flex-col gap-4">
       <Input
         label="Título (opcional)"
         labelPlacement="outside"
@@ -43,51 +42,21 @@ export default function BannerForm({
         autoComplete="off"
       />
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label className="mb-2 block text-sm text-text">
-            Imagen escritorio
-          </label>
-          {imagePreview && (
-            <img
-              src={imagePreview}
-              alt="Preview escritorio"
-              className="mb-2 h-28 w-auto rounded-lg object-cover"
-            />
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => onImageChange(e.target.files?.[0] ?? null)}
-            className={fileInputClasses}
-          />
-          <p className="mt-1 text-xs text-text-muted">
-            Arte horizontal, para pantallas grandes.
-          </p>
-        </div>
-
-        <div>
-          <label className="mb-2 block text-sm text-text">
-            Imagen móvil (opcional)
-          </label>
-          {mobileImagePreview && (
-            <img
-              src={mobileImagePreview}
-              alt="Preview móvil"
-              className="mb-2 h-28 w-auto rounded-lg object-cover"
-            />
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => onMobileImageChange(e.target.files?.[0] ?? null)}
-            className={fileInputClasses}
-          />
-          <p className="mt-1 text-xs text-text-muted">
-            Arte vertical para teléfono. Si lo dejas vacío se usa el de
-            escritorio.
-          </p>
-        </div>
+      <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2">
+        <BannerImageField
+          label="Imagen escritorio"
+          hint="Arte horizontal, para pantallas grandes."
+          preview={imagePreview}
+          previewAlt="Preview escritorio"
+          onChange={onImageChange}
+        />
+        <BannerImageField
+          label="Imagen móvil (opcional)"
+          hint="Arte vertical para teléfono. Si lo dejas vacío se usa el de escritorio."
+          preview={mobileImagePreview}
+          previewAlt="Preview móvil"
+          onChange={onMobileImageChange}
+        />
       </div>
 
       <Input

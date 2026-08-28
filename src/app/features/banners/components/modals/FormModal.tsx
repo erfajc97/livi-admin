@@ -38,6 +38,10 @@ export default function FormModal({
       scrollBehavior="inside"
       isDismissable={!isSubmitting}
       hideCloseButton={isSubmitting}
+      classNames={{
+        base: 'overflow-hidden',
+        body: 'min-w-0 overflow-x-hidden',
+      }}
       headerContent={
         <h3 className="text-lg font-semibold text-text">
           {isThereId ? 'Editar' : 'Crear nuevo'} banner
@@ -67,6 +71,7 @@ export default function FormModal({
       }
     >
       <BannerForm
+        key={isThereId ? 'edit' : 'create'}
         formData={formData}
         imagePreview={imagePreview}
         mobileImagePreview={mobileImagePreview}
