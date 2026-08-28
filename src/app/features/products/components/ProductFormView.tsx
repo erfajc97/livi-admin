@@ -77,10 +77,11 @@ export default function ProductFormView({
         }
       }
 
-      // Guardar el orden de la galería: la posición en pantalla es la que vale.
+      // Guardar el orden de la galería: la posición en pantalla es la que vale
+      // (1 = principal, 2 = hover). Siempre se escribe para no dejar empates
+      // viejos de displayOrder en 0.
       for (let i = 0; i < formHook.existingImages.length; i++) {
         const img = formHook.existingImages[i]
-        if (Number(img.displayOrder) === i) continue
         try {
           await productsService.updateImageOrder(productId, img.id, i)
         } catch {

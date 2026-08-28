@@ -86,7 +86,13 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
       signatureImageUrl: fullProduct.signatureImageUrl ?? '',
       signatureImageFile: null,
     })
-    setExistingImages(fullProduct.images ?? [])
+    setExistingImages(
+      [...(fullProduct.images ?? [])].sort(
+        (a, b) =>
+          Number(a.displayOrder ?? 0) - Number(b.displayOrder ?? 0) ||
+          Number(a.id) - Number(b.id),
+      ),
+    )
     setImageFiles([])
     setImagePreviews([])
     const autoBottleId = findAutoFullBottleVariationId(fullProduct)
