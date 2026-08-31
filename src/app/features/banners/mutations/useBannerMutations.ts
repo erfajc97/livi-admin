@@ -3,6 +3,13 @@ import { addToast } from '@heroui/react'
 import { bannersService } from '../services/bannersService'
 import type { CreateBannerPayload, UpdateBannerPayload } from '../types'
 
+function apiErrorMessage(error: unknown, fallback: string): string {
+  const message = (error as { response?: { data?: { message?: string | string[] } } })
+    ?.response?.data?.message
+  if (Array.isArray(message)) return message.join(' · ')
+  return message || fallback
+}
+
 export const useCreateBannerMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
@@ -20,9 +27,9 @@ export const useCreateBannerMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       addToast({ title: 'Banner creado exitosamente', color: 'success' })
     },
-    onError: (error: Error) => {
+    onError: (error: unknown) => {
       addToast({
-        title: error.message ?? 'Error al crear el banner',
+        title: apiErrorMessage(error, 'Error al crear el banner'),
         color: 'danger',
       })
     },
@@ -48,9 +55,9 @@ export const useUpdateBannerMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       addToast({ title: 'Banner actualizado exitosamente', color: 'success' })
     },
-    onError: (error: Error) => {
+    onError: (error: unknown) => {
       addToast({
-        title: error.message ?? 'Error al actualizar el banner',
+        title: apiErrorMessage(error, 'Error al actualizar el banner'),
         color: 'danger',
       })
     },
