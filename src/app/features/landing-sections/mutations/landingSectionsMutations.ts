@@ -100,3 +100,25 @@ export function useRemoveProductMutation() {
     },
   })
 }
+
+export function useReorderSectionProductsMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({
+      sectionId,
+      productIds,
+    }: {
+      sectionId: number
+      productIds: number[]
+    }) => landingSectionsService.reorderProducts(sectionId, productIds),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [LANDING_SECTIONS_QUERY_KEY] })
+    },
+    onError: (error: any) => {
+      toast.error(
+        error?.response?.data?.message || 'Error al reordenar los productos',
+      )
+    },
+  })
+}

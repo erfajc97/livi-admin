@@ -78,6 +78,17 @@ export const landingSectionsService = {
     return data
   },
 
+  reorderProducts: async (
+    sectionId: number,
+    productIds: number[],
+  ): Promise<LandingSection> => {
+    const { data } = await axiosInstance.patch<LandingSection>(
+      `${API_ENDPOINTS.LANDING_SECTION_REORDER_PRODUCTS}/${sectionId}/products/reorder`,
+      { productIds },
+    )
+    return data
+  },
+
   // Helper para obtener productos disponibles
   getAvailableProducts: async (params?: {
     limit?: number

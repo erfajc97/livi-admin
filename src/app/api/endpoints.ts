@@ -47,6 +47,7 @@ export const API_ENDPOINTS = {
   LANDING_SECTION: '/landing-sections',
   LANDING_SECTION_ADD_PRODUCT: '/landing-sections',
   LANDING_SECTION_REMOVE_PRODUCT: '/landing-sections',
+  LANDING_SECTION_REORDER_PRODUCTS: '/landing-sections',
 
   // Combos
   COMBOS: '/combos',
