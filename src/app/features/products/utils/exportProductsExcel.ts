@@ -7,15 +7,18 @@ import type { Product } from '../types'
    - Trae todas las páginas, no solo la visible.
    - Incluye activos e inactivos (el endpoint filtra isActive=true por defecto,
      por eso se hacen dos pasadas).
-   - Las columnas principales usan los mismos nombres de la plantilla de
-     importación, así el backup también sirve para re-importar.               */
+   - Usa EXACTAMENTE las columnas de la plantilla de importación (incluidas
+     las de variantes color×talla y los campos editoriales), así el backup
+     se puede re-importar directo desde "Importar productos".              */
 
 interface AdminProductRow extends Product {
   cost?: number
   salesCount?: number
 }
 
-const HEADERS = [
+const MAX_VARIANTS = 6
+
+const BASE_HEADERS = [
   'id',
   'nombre',
   'precio',
@@ -27,25 +30,61 @@ const HEADERS = [
   'stock',
   'descripcion',
   'imagen_url',
-  'imagenes_urls',
   'activo',
   'descuento',
   'descripcion_detallada',
   'beneficios',
-  'variantes',
-  'ventas',
-  'creado',
-  'actualizado',
-] as const
+  'usos_comunes',
+  'tallas',
+  'combina_con',
+  'instagram',
+]
 
-/** benefits se guarda como JSON string '["a","b"]' → "a, b" */
-const parseBenefits = (b?: string) => {
-  if (!b) return ''
+const VARIANT_HEADERS = Array.from({ length: MAX_VARIANTS }, (_, i) => [
+  `variacion_${i + 1}`,
+  `color_hex_${i + 1}`,
+  `talla_${i + 1}`,
+  `precio_variacion_${i + 1}`,
+]).flat()
+
+const AUDIT_HEADERS = ['ventas', 'creado', 'actualizado']
+
+const HEADERS = [...BASE_HEADERS, ...VARIANT_HEADERS, ...AUDIT_HEADERS] as const
+
+/** Campo JSON '["a","b"]' → "a, b" (si no es JSON válido, se devuelve tal cual) */
+const jsonListToCsv = (raw?: string | null) => {
+  if (!raw) return ''
   try {
-    const arr: unknown = JSON.parse(b)
-    return Array.isArray(arr) ? arr.join(', ') : b
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.join(', ') : raw
   } catch {
-    return b
+    return raw
+  }
+}
+
+/** pairsWith '[3,5]' → "3, 5" */
+const jsonIdsToCsv = (raw?: string | null) => {
+  if (!raw) return ''
+  try {
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.map(Number).filter((n) => !Number.isNaN(n)).join(', ') : raw
+  } catch {
+    return raw
+  }
+}
+
+/** instagramPosts '[{url,image}]' → "url|image ; url2" */
+const jsonInstagramToCell = (raw?: string | null) => {
+  if (!raw) return ''
+  try {
+    const arr: unknown = JSON.parse(raw)
+    if (!Array.isArray(arr)) return raw
+    return arr
+      .map((p: any) => (p?.image ? `${p.url}|${p.image}` : p?.url))
+      .filter(Boolean)
+      .join(' ; ')
+  } catch {
+    return raw
   }
 }
 
@@ -90,14 +129,10 @@ export async function exportAllProductsToExcel(): Promise<number> {
   )
 
   const rows = products.map((p) => {
-    const imageUrls = (p.images ?? [])
-      .filter((img) => img?.url)
-      .sort((a, b) => Number(a.displayOrder ?? 0) - Number(b.displayOrder ?? 0))
-      .map((img) => img.url)
-      .join(' | ')
-    const variantes = (p.variations ?? [])
-      .map((v) => `${v.name ?? ''}=$${Number(v.price ?? 0)}`)
-      .join(' · ')
+    const variantCells = Array.from({ length: MAX_VARIANTS }, (_, i) => {
+      const v = (p.variations ?? [])[i]
+      return v ? [v.name ?? '', v.colorHex ?? '', v.size ?? '', Number(v.price ?? 0)] : ['', '', '', '']
+    }).flat()
 
     return [
       Number(p.id),
@@ -111,12 +146,15 @@ export async function exportAllProductsToExcel(): Promise<number> {
       Number(p.stock ?? 0),
       p.description ?? '',
       p.imageUrl ?? '',
-      imageUrls,
       siNo(p.isActive),
       p.discount ?? '',
       p.detailDescription ?? '',
-      parseBenefits(p.benefits),
-      variantes,
+      jsonListToCsv(p.benefits),
+      jsonListToCsv(p.commonUses),
+      jsonListToCsv(p.sizes),
+      jsonIdsToCsv(p.pairsWith),
+      jsonInstagramToCell(p.instagramPosts),
+      ...variantCells,
       Number(p.salesCount ?? 0),
       p.createdAt ?? '',
       p.updatedAt ?? '',

@@ -144,7 +144,6 @@ function VariationCard({
   const autoSku = variation.name
     ? `${productName.replace(/\s+/g, '-').toLowerCase()}-${variation.name.replace(/\s+/g, '-').toLowerCase()}${variation.size ? `-${variation.size.replace(/\s+/g, '-').toLowerCase()}` : ''}`
     : ''
-  const displaySku = variation.sku || autoSku
 
   return (
     <div className="rounded-lg border border-border/50 bg-bg p-4">
@@ -280,7 +279,7 @@ function VariationCard({
                   color="danger"
                   variant="solid"
                   className="absolute -right-1 -top-1 h-5 w-5 min-w-0 opacity-0 transition group-hover:opacity-100"
-                  onPress={() => onRemoveExistingImage(index, img.id)}
+                  onPress={() => onRemoveExistingImage(index, Number(img.id))}
                 >
                   <X size={10} />
                 </Button>
