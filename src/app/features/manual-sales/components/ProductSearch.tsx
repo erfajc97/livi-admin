@@ -54,10 +54,10 @@ export default function ProductSearch({
       if (variations.length > 0) {
         setSelectedProduct(fullProduct)
       } else {
-        // Sin formatos activos no hay nada que elegir: se agrega el producto
+        // Sin variantes activas no hay nada que elegir: se agrega el producto
         // base, pero avisando —si no, parece que el selector se saltó solo—.
         addToast({
-          title: `${fullProduct.name} no tiene formatos activos: se agrega el producto base`,
+          title: `${fullProduct.name} no tiene variantes activas: se agrega el producto base`,
           color: 'warning',
         })
         onAddItem({
@@ -71,11 +71,11 @@ export default function ProductSearch({
       }
     } catch (error: any) {
       // Antes se agregaba el producto sin variante en silencio y la venta salía
-      // con el formato equivocado sin que nadie lo notara.
+      // con la variante equivocada sin que nadie lo notara.
       addToast({
         title:
           error?.response?.data?.message ||
-          'No se pudieron cargar los formatos del producto. Intenta de nuevo.',
+          'No se pudieron cargar las variantes del producto. Intenta de nuevo.',
         color: 'danger',
       })
     } finally {
@@ -91,7 +91,7 @@ export default function ProductSearch({
       productId: selectedProduct.id,
       productVariationId: v.id,
       productName: selectedProduct.name,
-      variationLabel: `${v.mlSize}ml ${v.isFullBottle ? 'Botella' : 'Decant'}`,
+      variationLabel: v.name || 'Variante',
       imageUrl: selectedProduct.imageUrl,
       price: Number(v.price || selectedProduct.price),
     })
@@ -206,25 +206,15 @@ export default function ProductSearch({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {selectedProduct.variations
               ?.filter((v) => v.isActive)
-              .sort(
-                (a, b) =>
-                  Number(b.isFullBottle) - Number(a.isFullBottle) ||
-                  a.mlSize - b.mlSize,
-              )
               .map((v) => (
                 <button
                   key={v.id}
                   type="button"
                   onClick={() => handleSelectVariation(v.id)}
-                  className={`flex items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
-                    v.isFullBottle
-                      ? 'border-accent/50 bg-accent/10 hover:border-accent'
-                      : 'border-border bg-surface hover:border-accent hover:bg-accent/10'
-                  }`}
+                  className="flex items-center justify-between gap-2 rounded-lg border border-border bg-surface px-3 py-2.5 text-sm transition-colors hover:border-accent hover:bg-accent/10"
                 >
                   <span className="font-medium text-text">
-                    {v.mlSize}ml{' '}
-                    {v.isFullBottle ? '· Botella completa' : '· Decant'}
+                    {v.name || `Variante #${v.id}`}
                   </span>
                   <span className="text-accent text-xs font-semibold">
                     ${Number(v.price || selectedProduct.price).toFixed(2)}

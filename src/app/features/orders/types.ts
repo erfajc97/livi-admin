@@ -17,8 +17,7 @@ export interface OrderItem {
   subtotal: number
   productName?: string
   productImage?: string
-  mlSize?: number
-  isFullBottle?: boolean
+  variationName?: string
 }
 
 export interface Order {

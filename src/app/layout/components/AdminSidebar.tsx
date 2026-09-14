@@ -44,7 +44,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
         {/* Logo */}
         <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-5">
           <span className="font-heading text-xl font-bold uppercase tracking-widest text-accent">
-            NonDecants
+            LIVI
           </span>
           <button
             type="button"

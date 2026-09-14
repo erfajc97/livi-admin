@@ -3,7 +3,7 @@ import { API_ENDPOINTS } from '@/app/api/endpoints'
 import { useAuthStore } from '@/app/store/auth/authStore'
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:4001/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:4101/api',
   headers: {
     'Content-Type': 'application/json',
   },

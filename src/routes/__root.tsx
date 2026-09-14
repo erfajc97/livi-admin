@@ -31,7 +31,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootComponent() {
   return (
-    <HeroUIProvider className="dark text-text bg-bg min-h-screen flex flex-col">
+    <HeroUIProvider className="text-text bg-bg min-h-screen flex flex-col">
       <div className="flex-1 flex flex-col">
         <ToastProvider placement="top-right" />
         <Toaster position="top-right" />

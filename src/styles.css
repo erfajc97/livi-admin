@@ -1,51 +1,53 @@
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 @import 'tailwindcss';
 @plugin './hero.ts';
 @source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 @custom-variant dark (&:is(.dark *));
 @theme {
   /* ── Tipografía ─────────────────────────────────── */
-  --font-heading: 'Oswald', ui-sans-serif, system-ui, sans-serif;
-  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  /* Adelon no está en Google Fonts: stack serif de respaldo */
+  --font-heading: 'Adelon', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-body: 'Jost', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Jost', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
-  /* ── Colores de marca ───────────────────────────── */
-  --color-bg: #1b1919;
-  --color-surface: #252222;
-  --color-surface-raised: #2e2b2b;
-  --color-accent: #ccb377;
-  --color-accent-hover: #b89b5e;
-  --color-text: #ffffff;
-  --color-text-muted: #a09a9a;
-  --color-border: #3a3636;
-  --color-border-accent: #ccb377;
-  --color-error: #e05252;
-  --color-error-muted: #e0525233;
-  --color-success: #4caf50;
-  --color-success-muted: #4caf5033;
-  --color-warning: #e8a838;
-  --color-warning-muted: #e8a83833;
-  --color-info: #5b9bd5;
+  /* ── Colores de marca LIVI ──────────────────────── */
+  --color-bg: #e9e3d7;
+  --color-surface: #f5efc6;
+  --color-surface-raised: #fbf8ee;
+  --color-accent: #4d0e12;
+  --color-accent-hover: #6b151b;
+  --color-text: #231815;
+  --color-text-muted: #6b5e54;
+  --color-border: #d8cfbc;
+  --color-border-accent: #4d0e12;
+  --color-error: #b34040;
+  --color-error-muted: #b3404026;
+  --color-success: #5f7a52;
+  --color-success-muted: #5f7a5226;
+  --color-warning: #b07a2a;
+  --color-warning-muted: #b07a2a26;
+  --color-info: #6a8cae;
 
   /* ── Colores de charts ────────────────────────── */
-  --color-chart-1: #ccb377;
-  --color-chart-2: #5b9bd5;
-  --color-chart-3: #e05252;
-  --color-chart-4: #e8a838;
+  --color-chart-1: #4d0e12;
+  --color-chart-2: #a5bcd6;
+  --color-chart-3: #9eaa8f;
+  --color-chart-4: #b07a2a;
   --color-chart-5: #8b7ec8;
 
   /* ── Tokens semánticos de form/UI ──────────────── */
-  --color-form-bg: #252222;
-  --color-form-primary: #ccb377;
-  --color-form-foreground: #1b1919;
-  --color-form-muted: #a09a9a;
-  --color-form-border: #3a3636;
-  --color-form-accent: #ccb377;
+  --color-form-bg: #fbf8ee;
+  --color-form-primary: #4d0e12;
+  --color-form-foreground: #f5efc6;
+  --color-form-muted: #6b5e54;
+  --color-form-border: #d8cfbc;
+  --color-form-accent: #4d0e12;
 
   /* ── Tokens de tabla/contenido ─────────────────── */
-  --color-content: #252222;
-  --color-content-raised: #2e2b2b;
-  --color-table-header: #1b1919;
+  --color-content: #fbf8ee;
+  --color-content-raised: #f5efc6;
+  --color-table-header: #e9e3d7;
 }
 
 /* ── Reset base ─────────────────────────────────── */

@@ -21,7 +21,7 @@ export default function FormSectionGeneral({
       <div className="flex flex-col gap-4">
         <Input
           label="Nombre del producto"
-          placeholder="Ej: Sauvage Dior"
+          placeholder="Ej: Olivia Maxi Tote"
           value={formData.name}
           onValueChange={(v) => updateField('name', v)}
           classNames={{

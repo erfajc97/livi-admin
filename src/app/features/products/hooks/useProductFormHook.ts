@@ -1,16 +1,11 @@
 import { useState, useCallback, useRef } from 'react'
 import { useProductByIdQuery } from '@/app/tanstack-queries/productsQuery'
 import { INITIAL_FORM_DATA } from '../data'
-import { findAutoFullBottleVariationId } from '../utils/variations'
 import type {
   ProductImage,
   ProductFormData,
   CreateProductPayload,
   VariationRow,
-  Gender,
-  TimeOfDay,
-  Concentration,
-  Projection,
 } from '../types'
 
 interface UseProductFormHookParams {
@@ -50,15 +45,9 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
       price: String(fullProduct.price),
       description: fullProduct.description ?? '',
       stock: String(fullProduct.stock),
-      totalMl: fullProduct.totalMl ? String(fullProduct.totalMl) : '',
       categoryId: String(fullProduct.categoryId),
       marcaId: String(fullProduct.marcaId),
       isActive: fullProduct.isActive,
-      bajoPedido: fullProduct.bajoPedido ?? false,
-      gender: fullProduct.gender ?? '',
-      timeOfDay: fullProduct.timeOfDay ?? '',
-      concentration: fullProduct.concentration ?? '',
-      projection: fullProduct.projection ?? '',
       discount: fullProduct.discount ? String(fullProduct.discount) : '',
       detailDescription: fullProduct.detailDescription ?? '',
       benefits: fullProduct.benefits
@@ -70,21 +59,43 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
             }
           })()
         : '',
-      // ── PDP editorial ──
-      scentProfileTitle: fullProduct.scentProfileTitle ?? '',
-      scentSections: fullProduct.scentSections ?? [],
-      mood: fullProduct.mood ?? [],
-      occasion: fullProduct.occasion ?? [],
-      longevity:
-        fullProduct.longevity != null ? String(fullProduct.longevity) : '',
-      projectionScore:
-        fullProduct.projectionScore != null
-          ? String(fullProduct.projectionScore)
-          : '',
-      signatureTitle: fullProduct.signatureTitle ?? '',
-      signatureDescription: fullProduct.signatureDescription ?? '',
-      signatureImageUrl: fullProduct.signatureImageUrl ?? '',
-      signatureImageFile: null,
+      commonUses: fullProduct.commonUses
+        ? (() => {
+            try {
+              return (JSON.parse(fullProduct.commonUses) as string[]).join('\n')
+            } catch {
+              return fullProduct.commonUses
+            }
+          })()
+        : '',
+      pairsWith: (() => {
+        try {
+          const parsed = JSON.parse(fullProduct.pairsWith ?? '[]')
+          return Array.isArray(parsed) ? parsed.map(Number).filter((n) => !Number.isNaN(n)) : []
+        } catch {
+          return []
+        }
+      })(),
+      sizes: (() => {
+        try {
+          const parsed = JSON.parse(fullProduct.sizes ?? '[]')
+          return Array.isArray(parsed) ? parsed.join('\n') : ''
+        } catch {
+          return fullProduct.sizes ?? ''
+        }
+      })(),
+      instagramPosts: (() => {
+        try {
+          const parsed = JSON.parse(fullProduct.instagramPosts ?? '[]')
+          return Array.isArray(parsed)
+            ? parsed
+                .filter((p: any) => p && typeof p === 'object')
+                .map((p: any) => ({ url: String(p.url ?? ''), image: String(p.image ?? '') }))
+            : []
+        } catch {
+          return []
+        }
+      })(),
     })
     setExistingImages(
       [...(fullProduct.images ?? [])].sort(
@@ -95,23 +106,16 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
     )
     setImageFiles([])
     setImagePreviews([])
-    const autoBottleId = findAutoFullBottleVariationId(fullProduct)
     setVariations(
-      (fullProduct.variations ?? [])
-        // Skip only the auto-managed full-bottle variation (synced server-side
-        // from product.price / product.totalMl). Las presentaciones selladas
-        // cargadas por el admin también traen `isFullBottle`, y filtrarlas por
-        // ese flag las dejaba invisibles en el panel.
-        .filter((v) => String(v.id) !== autoBottleId)
-        .map((v) => ({
-          id: v.id,
-          name: v.name ?? '',
-          price: v.price ? String(v.price) : '',
-          mlSize: v.mlSize ? String(v.mlSize) : '',
-          sku: v.sku ?? '',
-          presentationType: v.presentationType ?? 'decant',
-          existingImages: v.images,
-        })),
+      (fullProduct.variations ?? []).map((v) => ({
+        id: v.id,
+        name: v.name ?? '',
+        price: v.price ? String(v.price) : '',
+        sku: v.sku ?? '',
+        colorHex: v.colorHex ?? '',
+        size: v.size ?? '',
+        existingImages: v.images,
+      })),
     )
   }
 
@@ -171,10 +175,7 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
   )
 
   const addVariation = useCallback(() => {
-    setVariations((prev) => [
-      ...prev,
-      { name: '', price: '', mlSize: '', sku: '', presentationType: 'decant' },
-    ])
+    setVariations((prev) => [...prev, { name: '', price: '', sku: '' }])
   }, [])
 
   const updateVariation = useCallback(
@@ -242,17 +243,9 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
       price: Number(formData.price),
       description: formData.description.trim() || undefined,
       stock: Number(formData.stock) || 0,
-      totalMl: Number(formData.totalMl),
       categoryId: Number(formData.categoryId),
       marcaId: Number(formData.marcaId),
       isActive: formData.isActive,
-      bajoPedido: formData.bajoPedido,
-      gender: (formData.gender || undefined) as Gender | undefined,
-      timeOfDay: (formData.timeOfDay || undefined) as TimeOfDay | undefined,
-      concentration: (formData.concentration || undefined) as
-        | Concentration
-        | undefined,
-      projection: (formData.projection || undefined) as Projection | undefined,
       discount: formData.discount ? Number(formData.discount) : undefined,
       detailDescription: formData.detailDescription.trim() || undefined,
       benefits: formData.benefits.trim()
@@ -264,20 +257,33 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
               .filter(Boolean),
           )
         : undefined,
-      // ── PDP editorial ── (arrays se envían siempre para permitir vaciarlos)
-      scentProfileTitle: formData.scentProfileTitle.trim() || undefined,
-      scentSections: formData.scentSections,
-      mood: formData.mood,
-      occasion: formData.occasion,
-      longevity:
-        formData.longevity !== '' ? Number(formData.longevity) : undefined,
-      projectionScore:
-        formData.projectionScore !== ''
-          ? Number(formData.projectionScore)
-          : undefined,
-      signatureTitle: formData.signatureTitle.trim() || undefined,
-      signatureDescription: formData.signatureDescription.trim() || undefined,
-      signatureImageUrl: formData.signatureImageUrl.trim() || undefined,
+      commonUses: formData.commonUses.trim()
+        ? JSON.stringify(
+            formData.commonUses
+              .trim()
+              .split('\n')
+              .map((l) => l.trim())
+              .filter(Boolean),
+          )
+        : undefined,
+      pairsWith: formData.pairsWith.length
+        ? JSON.stringify(formData.pairsWith)
+        : undefined,
+      sizes: formData.sizes.trim()
+        ? JSON.stringify(
+            formData.sizes
+              .split(/[\n,]+/)
+              .map((l) => l.trim())
+              .filter(Boolean),
+          )
+        : undefined,
+      instagramPosts: formData.instagramPosts.some((p) => p.url.trim())
+        ? JSON.stringify(
+            formData.instagramPosts
+              .filter((p) => p.url.trim())
+              .map((p) => ({ url: p.url.trim(), image: p.image.trim() })),
+          )
+        : undefined,
     }
 
     // Strip undefined keys so backend Object.assign never nukes stored values

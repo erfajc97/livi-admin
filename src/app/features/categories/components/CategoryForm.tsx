@@ -30,7 +30,7 @@ export default function CategoryForm({
       <Input
         label="Nombre"
         labelPlacement="outside"
-        placeholder="Ej: Perfumes Árabes"
+        placeholder="Ej: Pañaleras"
         value={formData.name}
         onValueChange={(v) => onInputChange('name', v)}
         classNames={inputClasses}
@@ -99,20 +99,6 @@ export default function CategoryForm({
           isSelected={formData.isActive}
           onValueChange={(v) => onInputChange('isActive', v)}
           color="success"
-        />
-      </div>
-
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-text">Bajo pedido</p>
-          <p className="text-xs text-text-muted">
-            Aparece en la sección Bajo Pedido
-          </p>
-        </div>
-        <Switch
-          isSelected={formData.bajoPedido}
-          onValueChange={(v) => onInputChange('bajoPedido', v)}
-          color="warning"
         />
       </div>
     </div>

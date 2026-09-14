@@ -62,7 +62,7 @@ export default function BannerForm({
       <Input
         label="Link / Acción"
         labelPlacement="outside"
-        placeholder="Ej: /catalogo"
+        placeholder="Ej: /tienda"
         value={formData.link}
         onValueChange={(v) => onInputChange('link', v)}
         classNames={inputClasses}

@@ -8,7 +8,6 @@ import {
   useUpdateProductMutation,
 } from '../mutations/useProductMutations'
 import { productsService } from '../services/productsService'
-import { findAutoFullBottleVariationId } from '../utils/variations'
 import ProductForm from './ProductForm'
 import type { Product } from '../types'
 
@@ -42,22 +41,6 @@ export default function ProductFormView({
       } catch (err: any) {
         addToast({
           title: err?.response?.data?.message || 'Error al subir imágenes',
-          color: 'danger',
-        })
-      }
-    }
-
-    // Imagen de "La firma" (PDP) — sube y setea signatureImageUrl en el server
-    if (formHook.formData.signatureImageFile) {
-      try {
-        await productsService.uploadSignatureImage(
-          productId,
-          formHook.formData.signatureImageFile,
-        )
-      } catch (err: any) {
-        addToast({
-          title:
-            err?.response?.data?.message || 'Error al subir imagen de la firma',
           color: 'danger',
         })
       }
@@ -136,12 +119,8 @@ export default function ProductFormView({
     const currentVariations = formHook.variations
     const originalVariations = formHook.fullProduct?.variations ?? []
 
-    // Delete removed variations — never touch the auto-managed full-bottle
-    // variation (synced server-side from product.price / totalMl). El resto de
-    // las selladas sí son del admin: se editan y se borran como cualquier otra.
-    const autoBottleId = findAutoFullBottleVariationId(formHook.fullProduct)
+    // Delete removed variations
     for (const orig of originalVariations) {
-      if (String(orig.id) === autoBottleId) continue
       const stillExists = currentVariations.some((v) => v.id === orig.id)
       if (!stillExists) {
         try {
@@ -156,14 +135,12 @@ export default function ProductFormView({
     const productName = formHook.formData.name || 'producto'
     for (let i = 0; i < currentVariations.length; i++) {
       const v = currentVariations[i]
-      const mlSize = Number(v.mlSize) || 0
-      if (mlSize <= 0) continue // skip empty rows
+      const name = v.name.trim()
+      if (!name) continue // skip empty rows
 
-      // Auto-generate name and SKU if not provided
-      const autoName = `${productName} - ${mlSize}ml`
-      const autoSku = `${productName.replace(/\s+/g, '-').toLowerCase()}-${mlSize}ml-${productId}`
-      const name = v.name || autoName
-      const sku = v.sku || autoSku
+      // Auto-generate SKU if not provided
+      const autoSku = `${productName.replace(/\s+/g, '-').toLowerCase()}-${name.replace(/\s+/g, '-').toLowerCase()}-${productId}`
+      const sku = v.sku.trim() || autoSku
 
       if (v.id) {
         // Update existing
@@ -171,11 +148,10 @@ export default function ProductFormView({
           await productsService.updateVariation(v.id, {
             name,
             price: v.price ? Number(v.price) : undefined,
-            mlSize,
-            // `isFullBottle` lo deriva el backend del tipo elegido: mandarlo en
-            // false convertía cualquier "sellada" en decant.
-            presentationType: v.presentationType,
             sku,
+            colorHex: v.colorHex?.trim() || undefined,
+            // '' limpia la talla guardada; undefined la dejaría intacta.
+            size: v.size?.trim() ?? '',
           })
         } catch {
           /* ignore */
@@ -187,11 +163,9 @@ export default function ProductFormView({
             productId,
             name,
             price: v.price ? Number(v.price) : undefined,
-            mlSize,
-            // `isFullBottle` lo deriva el backend del tipo elegido: mandarlo en
-            // false convertía cualquier "sellada" en decant.
-            presentationType: v.presentationType,
             sku,
+            colorHex: v.colorHex?.trim() || undefined,
+            size: v.size?.trim() || undefined,
           })
           // Update the local variation with the new id for image uploads
           formHook.variations[i] = { ...v, id: created.id }

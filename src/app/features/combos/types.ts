@@ -15,8 +15,6 @@ export interface ComboProduct {
   productVariation?: {
     id: number
     name?: string
-    mlSize: number
-    isFullBottle: boolean
     price?: number
   }
 }

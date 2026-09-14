@@ -63,11 +63,6 @@ export default function CategoryCard({
               >
                 {category.isActive ? 'Activa' : 'Inactiva'}
               </Chip>
-              {category.bajoPedido && (
-                <Chip size="sm" variant="flat" color="warning">
-                  Bajo Pedido
-                </Chip>
-              )}
             </div>
             {category.description && (
               <p className="mt-1 line-clamp-2 text-sm text-text-muted">

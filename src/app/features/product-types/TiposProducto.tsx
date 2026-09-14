@@ -31,7 +31,7 @@ export function TiposProducto() {
             Tipos de Producto
           </h1>
           <p className="mt-1 text-sm text-text-muted">
-            Gestiona los tipos de producto (Perfume, Decant, etc.).
+            Gestiona los tipos de producto (Pañalera, Mochila, etc.).
           </p>
         </div>
         <Button

@@ -70,15 +70,11 @@ export default function ComboCard({ combo, onEdit, onDelete }: ComboCardProps) {
         </span>
         <div className="flex flex-wrap gap-2">
           {combo.comboProducts.map((cp) => {
-            const isDecant =
-              cp.productVariation && !cp.productVariation.isFullBottle
             return (
               <Chip key={cp.id} size="sm" variant="bordered">
                 {cp.product?.name ?? `Producto #${cp.productId}`}
-                {isDecant &&
-                  cp.productVariation?.mlSize &&
-                  ` (${cp.productVariation.mlSize}ml)`}
-                {cp.productVariation?.isFullBottle && ' (Botella completa)'}
+                {cp.productVariation?.name &&
+                  ` (${cp.productVariation.name})`}
                 {cp.quantity > 1 && ` x${cp.quantity}`}
               </Chip>
             )

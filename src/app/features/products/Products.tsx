@@ -40,7 +40,7 @@ export function Products() {
     <div className="flex flex-col gap-6">
       <WelcomeBanner
         userName={userName}
-        subtitle="Gestión de productos NonDecants"
+        subtitle="Gestión de productos LIVI"
       />
 
       <ProductListView

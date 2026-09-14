@@ -457,3 +457,4 @@ Admin y Frontend **comparten**:
 - 🏗️ Arquitectura: `common-skills/skills/front/arquitectura-front/`
 - 🔌 API: `common-skills/skills/front/logica-negocio-back/`
 - 🎨 HeroUI: https://heroui.com/docs
+# livi-admin

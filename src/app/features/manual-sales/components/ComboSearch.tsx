@@ -9,14 +9,14 @@ interface ComboSearchProps {
   onAddCombo: (item: Omit<ManualSaleItem, 'quantity'>) => void
 }
 
-/** Descripción legible de lo que trae una versión: "Sauvage 5ml, Bleu 10ml". */
+/** Descripción legible de lo que trae una versión: "Noé Negro, Olivia Beige". */
 function describeProducts(combo: Combo): string {
   return (
     combo.comboProducts
       ?.map((cp) => {
         const name = cp.product?.name ?? 'Producto'
-        const ml = cp.productVariation?.mlSize
-        return ml ? `${name} ${ml}ml` : name
+        const variation = cp.productVariation?.name
+        return variation ? `${name} ${variation}` : name
       })
       .join(', ') ?? ''
   )

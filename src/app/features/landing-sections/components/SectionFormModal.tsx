@@ -57,7 +57,9 @@ export function SectionFormModal({
     } else {
       setTitle('')
       setOrder('1')
-      setPlacement(homeDisabled ? 'cart' : 'home')
+      // La publicidad del carrito está desactivada para LIVI: toda sección
+      // nueva es de home (el hueco se valida con homeDisabled).
+      setPlacement('home')
       setIsActive(true)
     }
   }, [section, homeDisabled])
@@ -120,9 +122,14 @@ export function SectionFormModal({
                   }}
                 >
                   <SelectItem key="home">Landing (home)</SelectItem>
-                  <SelectItem key="cart">
-                    Carrito — “No te pierdas estos productos”
-                  </SelectItem>
+                  {/* LIVI no usa la publicidad del carrito por ahora. La
+                      opción solo vuelve a aparecer al EDITAR una sección que
+                      ya era del carrito, para no romper su formulario. */}
+                  {section?.placement === 'cart' ? (
+                    <SelectItem key="cart">
+                      Carrito — “No te pierdas estos productos”
+                    </SelectItem>
+                  ) : null}
                 </Select>
 
                 {placement === 'home' ? (
@@ -182,7 +189,12 @@ export function SectionFormModal({
                 color="primary"
                 onPress={handleSubmit}
                 isLoading={isSubmitting}
-                isDisabled={!title.trim() || !order}
+                isDisabled={!title.trim() || !order || homeDisabled}
+                title={
+                  homeDisabled
+                    ? 'La landing ya tiene sus 2 secciones'
+                    : undefined
+                }
               >
                 {section ? 'Actualizar' : 'Crear'}
               </Button>

@@ -53,19 +53,6 @@ export default function FormSectionPricing({
             color="success"
           />
         </div>
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-text">Bajo pedido</p>
-            <p className="text-xs text-text-muted">
-              Aparece en la sección Bajo Pedido
-            </p>
-          </div>
-          <Switch
-            isSelected={formData.bajoPedido}
-            onValueChange={(v) => updateField('bajoPedido', v)}
-            color="warning"
-          />
-        </div>
       </div>
     </div>
   )

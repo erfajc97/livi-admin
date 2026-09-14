@@ -14,15 +14,18 @@ export function Login() {
       {/* Right — banner (solo desktop) */}
       <div className="relative hidden lg:block lg:w-[58%]">
         <img
-          src="/baner-login.png"
-          alt="NonDecants"
+          src="/baner-login.jpg"
+          alt="Taller LIVI — artesano trabajando el cuero"
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent" />
         <div className="absolute bottom-10 left-10">
           <span className="font-heading text-5xl font-bold uppercase tracking-widest text-white drop-shadow-lg">
-            NönDecants
+            LIVI
           </span>
+          <p className="mt-2 font-mono text-xs uppercase tracking-[0.3em] text-white/80">
+            For Modern Parenthood
+          </p>
         </div>
       </div>
     </div>

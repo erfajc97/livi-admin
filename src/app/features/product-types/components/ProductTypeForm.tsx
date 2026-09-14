@@ -20,7 +20,7 @@ export default function ProductTypeForm({
       <Input
         label="Nombre"
         labelPlacement="outside"
-        placeholder="Ej: Perfume, Decant"
+        placeholder="Ej: Pañalera, Mochila"
         value={formData.name}
         onValueChange={(v) => onInputChange('name', v)}
         classNames={inputClasses}

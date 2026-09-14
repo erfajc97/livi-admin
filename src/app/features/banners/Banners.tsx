@@ -17,8 +17,7 @@ import DeleteModal from './components/modals/DeleteModal'
 export function Banners() {
   const {
     banners,
-    catalogPerfumes,
-    catalogBajoPedido,
+    catalogTienda,
     isLoading,
     formHook,
     deleteTarget,
@@ -48,8 +47,8 @@ export function Banners() {
             Banners
           </h1>
           <p className="mt-1 text-sm text-text-muted">
-            Gestiona el carrusel de la home y las portadas de Perfumes y Bajo
-            pedido. Arrastra los de la home para reordenar.
+            Gestiona el carrusel de la home y la portada de la Tienda.
+            Arrastra los de la home para reordenar.
           </p>
         </div>
         <Button
@@ -105,8 +104,7 @@ export function Banners() {
       )}
 
       <CatalogPageBannerSlots
-        perfumes={catalogPerfumes}
-        bajoPedido={catalogBajoPedido}
+        tienda={catalogTienda}
         onEdit={handleEditClick}
         onCreate={handleCreateCatalog}
       />

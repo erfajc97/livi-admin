@@ -61,8 +61,7 @@ export default function LandingSectionsPage() {
             Secciones de Landing
           </h1>
           <p className="text-sm text-text-muted mt-1">
-            Gestiona las secciones de la página principal y la publicidad del
-            carrito
+            Gestiona las secciones de la página principal
           </p>
         </div>
         <Button color="primary" onPress={handleCreate}>

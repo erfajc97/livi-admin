@@ -119,10 +119,6 @@ export default function OrderDetailView({
             </h3>
             <div className="flex flex-col gap-3">
               {order.items.map((item) => {
-                const bajoPedidoQty = Number(
-                  (item as any).bajoPedidoQuantity ?? 0,
-                )
-                const fulfilledQty = item.quantity - bajoPedidoQty
                 return (
                   <div key={item.id} className="flex gap-3 items-start">
                     <div className="w-14 h-14 rounded-lg bg-bg overflow-hidden shrink-0">
@@ -143,24 +139,8 @@ export default function OrderDetailView({
                         {item.productName || `#${item.productId}`}
                       </p>
                       <p className="text-xs text-text-muted">
-                        {item.mlSize
-                          ? `${item.mlSize}ml ${item.isFullBottle ? 'Botella' : 'Decant'}`
-                          : ''}
+                        {item.variationName || ''}
                       </p>
-                      {bajoPedidoQty > 0 && (
-                        <div className="mt-1.5 flex items-start gap-1.5 rounded-md bg-amber-500/10 border border-amber-500/30 px-2 py-1">
-                          <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wide shrink-0">
-                            ⚠ Bajo pedido
-                          </span>
-                          <span className="text-[10px] text-amber-300/90 leading-tight">
-                            {bajoPedidoQty} de {item.quantity}{' '}
-                            {bajoPedidoQty === 1 ? 'unidad' : 'unidades'} por
-                            falta de stock
-                            {fulfilledQty > 0 &&
-                              ` · ${fulfilledQty} entregadas de stock`}
-                          </span>
-                        </div>
-                      )}
                     </div>
                     <div className="text-right shrink-0">
                       <p className="text-sm font-semibold text-text">

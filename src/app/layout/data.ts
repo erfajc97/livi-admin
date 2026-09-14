@@ -3,21 +3,13 @@ import {
   Home,
   LayoutDashboard,
   ClipboardList,
-  Gift,
-  Receipt,
-  Image,
-  Bell,
-  Headset,
   Settings,
   Users,
   Package,
-  Wallet,
   Layers,
-  Shapes,
   FileText,
-  LayoutGrid,
   Ticket,
-  Warehouse,
+  LayoutGrid,
   Megaphone,
 } from 'lucide-react'
 
@@ -33,17 +25,20 @@ export const NAV_ITEMS: Array<NavItem> = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
   { label: 'Ordenes', to: '/ordenes', icon: ClipboardList },
   { label: 'Productos', to: '/productos', icon: Package },
-  { label: 'Inventario', to: '/stock', icon: Warehouse },
   { label: 'Categorías', to: '/categorias', icon: Layers },
-  { label: 'Combos', to: '/combos', icon: Gift },
   { label: 'Cupones', to: '/cupones', icon: Ticket },
-  { label: 'Ventas Manuales', to: '/ventas-manuales', icon: Receipt },
-  { label: 'Finanzas', to: '/finanzas', icon: Wallet },
   { label: 'Usuarios', to: '/usuarios', icon: Users },
-  { label: 'Banners', to: '/banners', icon: Image },
-  { label: 'Publicidad navbar', to: '/publicidad-navbar', icon: Megaphone },
   { label: 'Blog', to: '/blog', icon: FileText },
+  // Secciones del home (Más vendidos, etc.): se pintan en la web desde aquí.
   { label: 'Landing Sections', to: '/secciones-landing', icon: LayoutGrid },
+  // Imagen destacada del mega menú del navbar (panel "Destacado").
+  { label: 'Publicidad navbar', to: '/publicidad-navbar', icon: Megaphone },
+  // Ocultas para LIVI (se conservan las rutas y el código):
+  // { label: 'Inventario', to: '/stock', icon: Warehouse },
+  // { label: 'Combos', to: '/combos', icon: Gift },
+  // { label: 'Ventas Manuales', to: '/ventas-manuales', icon: Receipt },
+  // { label: 'Banners', to: '/banners', icon: Image },
+  // { label: 'Finanzas', to: '/finanzas', icon: Wallet },
 ]
 
 export const NAV_ITEMS_BOTTOM: Array<NavItem> = [

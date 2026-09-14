@@ -94,7 +94,7 @@ export function CampaignEditor({
       <div className="flex flex-col gap-4 rounded-xl border border-border bg-surface p-6">
         <Input
           label="Asunto del email"
-          placeholder="Ej: Nuevas fragancias de temporada"
+          placeholder="Ej: Nueva colección de temporada"
           value={formData.subject}
           onValueChange={(v) => handleChange('subject', v)}
           isRequired
@@ -142,7 +142,7 @@ export function CampaignEditor({
           />
           <Input
             label="URL del botón (CTA)"
-            placeholder="https://nondecants.com/catalogo"
+            placeholder="https://livi.ec/tienda"
             value={formData.ctaUrl}
             onValueChange={(v) => handleChange('ctaUrl', v)}
             classNames={{

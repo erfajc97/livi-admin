@@ -41,7 +41,7 @@ export default function ComboVersionsEditor({
           </h3>
           <p className="text-xs text-text-muted/80">
             Mismo nombre, otros productos y otro precio (p. ej. una variante con
-            fragancias más caras). El cliente elige una u otra en la web.
+            productos más caros). El cliente elige una u otra en la web.
           </p>
         </div>
         <Button

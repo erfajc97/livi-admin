@@ -42,7 +42,7 @@ function mapProducts(rows: ComboProductRow[]) {
     .filter((r) => r.productId)
     .map((r) => ({
       productId: parseInt(r.productId, 10),
-      ...(r.productVariationId && r.productVariationId !== 'full-bottle'
+      ...(r.productVariationId && r.productVariationId !== 'any'
         ? { productVariationId: parseInt(r.productVariationId, 10) }
         : {}),
       quantity: 1,

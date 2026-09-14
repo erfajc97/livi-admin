@@ -14,7 +14,6 @@ const emptyForm: CategoryFormData = {
   name: '',
   description: '',
   isActive: true,
-  bajoPedido: false,
 }
 
 interface UseCategoryFormHookParams {
@@ -67,7 +66,6 @@ export function useCategoryFormHook({
       name: category.name,
       description: category.description ?? '',
       isActive: category.isActive,
-      bajoPedido: category.bajoPedido ?? false,
     })
     setImagePreview(category.imageUrl)
     setImageFile(null)
@@ -89,7 +87,6 @@ export function useCategoryFormHook({
         name: formData.name,
         description: formData.description || undefined,
         isActive: formData.isActive,
-        bajoPedido: formData.bajoPedido,
       }
       updateMutation.mutate(
         {
@@ -105,7 +102,6 @@ export function useCategoryFormHook({
         name: formData.name,
         description: formData.description || undefined,
         isActive: formData.isActive,
-        bajoPedido: formData.bajoPedido,
       }
       createMutation.mutate(
         {

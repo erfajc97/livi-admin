@@ -80,18 +80,6 @@ export default function ProductTable({
               {item.stock}
             </Chip>
           )
-        case 'totalMl':
-          return <span className="text-sm text-text">{item.totalMl} ml</span>
-        case 'availableMl':
-          return (
-            <Chip
-              size="sm"
-              variant="flat"
-              color={item.availableMl > 0 ? 'success' : 'danger'}
-            >
-              {item.availableMl} ml
-            </Chip>
-          )
         case 'category':
           return (
             <div>
@@ -111,16 +99,6 @@ export default function ProductTable({
               color={item.isActive ? 'success' : 'default'}
             >
               {item.isActive ? 'Activo' : 'Inactivo'}
-            </Chip>
-          )
-        case 'bajoPedido':
-          return (
-            <Chip
-              size="sm"
-              variant="flat"
-              color={item.bajoPedido ? 'warning' : 'default'}
-            >
-              {item.bajoPedido ? 'Sí' : 'No'}
             </Chip>
           )
         case 'actions':

@@ -8,7 +8,6 @@ import type {
   PaginatedProducts,
   ProductFilters,
   Category,
-  PresentationType,
 } from '../types'
 
 interface CoreApiResponse<T> {
@@ -91,18 +90,6 @@ export const productsService = {
     return data.data
   },
 
-  uploadSignatureImage: async (
-    productId: number,
-    file: File,
-  ): Promise<{ signatureImageUrl: string }> => {
-    const fd = new FormData()
-    fd.append('file', file)
-    const { data } = await axiosInstance.post<
-      CoreApiResponse<{ signatureImageUrl: string }>
-    >(`${API_ENDPOINTS.PRODUCTS}/${productId}/signature-image`, fd)
-    return data.data
-  },
-
   listImages: async (productId: number): Promise<ProductImage[]> => {
     const { data } = await axiosInstance.get<CoreApiResponse<ProductImage[]>>(
       `${API_ENDPOINTS.PRODUCTS}/${productId}/images`,
@@ -153,10 +140,10 @@ export const productsService = {
     productId: number
     name?: string
     price?: number
-    mlSize: number
-    isFullBottle?: boolean
-    presentationType?: PresentationType
+    cost?: number
     sku?: string
+    colorHex?: string
+    size?: string
   }): Promise<{ id: number }> => {
     const { data } = await axiosInstance.post<CoreApiResponse<{ id: number }>>(
       '/product-variations',
@@ -170,10 +157,10 @@ export const productsService = {
     payload: {
       name?: string
       price?: number
-      mlSize?: number
-      isFullBottle?: boolean
-      presentationType?: PresentationType
+      cost?: number
       sku?: string
+      colorHex?: string
+      size?: string
     },
   ): Promise<void> => {
     await axiosInstance.patch(`/product-variations/${id}`, payload)
@@ -184,28 +171,6 @@ export const productsService = {
   },
 
   // ── Inventory / Stock ─────────────────────────────
-
-  openBottle: async (
-    productId: number,
-    payload?: { mlRemaining?: number; note?: string },
-  ): Promise<Product> => {
-    const { data } = await axiosInstance.post<CoreApiResponse<Product>>(
-      `${API_ENDPOINTS.PRODUCTS}/${productId}/open-bottle`,
-      payload ?? {},
-    )
-    return data.data
-  },
-
-  adjustMl: async (
-    productId: number,
-    payload: { newOpenMl: number; note?: string },
-  ): Promise<Product> => {
-    const { data } = await axiosInstance.patch<CoreApiResponse<Product>>(
-      `${API_ENDPOINTS.PRODUCTS}/${productId}/adjust-ml`,
-      payload,
-    )
-    return data.data
-  },
 
   getInventory: async (productId: number): Promise<any> => {
     const { data } = await axiosInstance.get<CoreApiResponse<any>>(

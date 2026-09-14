@@ -30,8 +30,7 @@ export function useBannersPageHook() {
   const heroSource = localBanners ?? banners.filter(isHero)
   const displayBanners = heroSource.filter(isHero)
 
-  const catalogPerfumes = banners.find((b) => b.type === 'catalog_perfumes') ?? null
-  const catalogBajoPedido = banners.find((b) => b.type === 'catalog_bajo_pedido') ?? null
+  const catalogTienda = banners.find((b) => b.type === 'catalog_perfumes') ?? null
 
   const { handleToEditForm, resetForm, ...formHook } = useBannerFormHook({
     id,
@@ -45,7 +44,7 @@ export function useBannersPageHook() {
   }
 
   const handleCreateCatalog = (
-    type: Extract<BannerType, 'catalog_perfumes' | 'catalog_bajo_pedido'>,
+    type: Extract<BannerType, 'catalog_perfumes'>,
   ) => {
     setId(null)
     resetForm(type)
@@ -102,8 +101,7 @@ export function useBannersPageHook() {
   return {
     id,
     banners: displayBanners,
-    catalogPerfumes,
-    catalogBajoPedido,
+    catalogTienda,
     isLoading,
     formHook,
     deleteTarget,

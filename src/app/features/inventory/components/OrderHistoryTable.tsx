@@ -20,10 +20,10 @@ export default function OrderHistoryTable({ orders }: OrderHistoryTableProps) {
     return (
       <div className="rounded-xl border border-border bg-surface p-6">
         <h3 className="font-heading text-sm font-bold text-text uppercase tracking-wider mb-3">
-          Historial de ordenes
+          Historial de órdenes
         </h3>
         <p className="text-sm text-text-muted text-center py-6">
-          No hay ordenes registradas para este producto.
+          No hay órdenes registradas para este producto.
         </p>
       </div>
     )
@@ -32,7 +32,7 @@ export default function OrderHistoryTable({ orders }: OrderHistoryTableProps) {
   return (
     <div className="rounded-xl border border-border bg-surface p-6">
       <h3 className="font-heading text-sm font-bold text-text uppercase tracking-wider mb-4">
-        Historial de ordenes
+        Historial de órdenes
       </h3>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
@@ -45,13 +45,10 @@ export default function OrderHistoryTable({ orders }: OrderHistoryTableProps) {
                 Estado
               </th>
               <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase">
-                Tipo
+                Variante
               </th>
               <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase text-right">
                 Cant.
-              </th>
-              <th className="py-2 pr-3 text-xs text-text-muted font-bold uppercase text-right">
-                Stock afectado
               </th>
               <th className="py-2 text-xs text-text-muted font-bold uppercase">
                 Fecha
@@ -65,13 +62,6 @@ export default function OrderHistoryTable({ orders }: OrderHistoryTableProps) {
                 class: 'bg-gray-100 text-gray-600',
               }
               const date = new Date(item.orderCreatedAt)
-
-              // Coherent stock summary: full bottle = N botellas, decant = N×ml = total ml
-              const stockSummary = item.isFullBottle
-                ? `${item.quantity} ${item.quantity === 1 ? 'botella' : 'botellas'}`
-                : item.mlDeducted > 0
-                  ? `${item.mlDeducted}ml${item.bottlesOpened > 0 ? ` · abrió ${item.bottlesOpened}` : ''}`
-                  : '—'
 
               return (
                 <tr
@@ -89,15 +79,10 @@ export default function OrderHistoryTable({ orders }: OrderHistoryTableProps) {
                     </span>
                   </td>
                   <td className="py-3 pr-3 text-text-muted">
-                    {item.isFullBottle
-                      ? `Botella completa${item.mlSize ? ` (${item.mlSize}ml)` : ''}`
-                      : `Decant ${item.mlSize}ml${item.variationName ? ` · ${item.variationName}` : ''}`}
+                    {item.variationName || '—'}
                   </td>
                   <td className="py-3 pr-3 text-right text-text font-bold">
                     {item.quantity}
-                  </td>
-                  <td className="py-3 pr-3 text-right text-text-muted">
-                    {stockSummary}
                   </td>
                   <td className="py-3 text-text-muted text-xs">
                     {date.toLocaleDateString('es-EC', {

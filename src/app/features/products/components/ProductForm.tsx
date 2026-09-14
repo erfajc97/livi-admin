@@ -1,13 +1,14 @@
 import { Button, Spinner } from '@heroui/react'
 import { AlertCircle, ArrowLeft, Save } from 'lucide-react'
 import FormSectionGeneral from './FormSectionGeneral'
+import FormSectionDetail from './FormSectionDetail'
 import FormSectionMedia from './FormSectionMedia'
 import FormSectionCategory from './FormSectionCategory'
 import FormSectionPricing from './FormSectionPricing'
 import FormSectionInventory from './FormSectionInventory'
-import FormSectionFragrance from './FormSectionFragrance'
-import FormSectionEditorial from './FormSectionEditorial'
 import FormSectionVariations from './FormSectionVariations'
+import FormSectionPairsWith from './FormSectionPairsWith'
+import FormSectionInstagram from './FormSectionInstagram'
 import type {
   Product,
   ProductFormData,
@@ -103,6 +104,7 @@ export default function ProductForm({
         {/* Left column — main form */}
         <div className="flex flex-col gap-6">
           <FormSectionGeneral formData={formData} updateField={updateField} />
+          <FormSectionDetail formData={formData} updateField={updateField} />
           <FormSectionMedia
             imagePreviews={imagePreviews}
             existingImages={existingImages}
@@ -111,11 +113,11 @@ export default function ProductForm({
             onRemoveExisting={removeExistingImage}
             onMoveExisting={moveExistingImage}
           />
-          <FormSectionEditorial formData={formData} updateField={updateField} />
           <FormSectionVariations
             variations={variations}
-            totalMl={Number(formData.totalMl) || 0}
             productName={formData.name}
+            formData={formData}
+            updateField={updateField}
             onAdd={addVariation}
             onUpdate={updateVariation}
             onRemove={removeVariation}
@@ -123,13 +125,18 @@ export default function ProductForm({
             onRemoveNewImage={removeVariationNewImage}
             onRemoveExistingImage={removeVariationExistingImage}
           />
+          <FormSectionPairsWith
+            formData={formData}
+            updateField={updateField}
+            currentProductId={fullProduct?.id ?? null}
+          />
+          <FormSectionInstagram formData={formData} updateField={updateField} />
         </div>
 
         {/* Right column — sidebar */}
         <div className="flex flex-col gap-6">
           <FormSectionCategory formData={formData} updateField={updateField} />
           <FormSectionPricing formData={formData} updateField={updateField} />
-          <FormSectionFragrance formData={formData} updateField={updateField} />
           <FormSectionInventory
             formData={formData}
             updateField={updateField}

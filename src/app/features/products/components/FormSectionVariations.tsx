@@ -1,13 +1,17 @@
 import { useRef } from 'react'
-import { Button, Input, Select, SelectItem } from '@heroui/react'
-import { Plus, Trash2, ImageIcon, X, AlertTriangle } from 'lucide-react'
-import { PRESENTATION_TYPES } from '../data'
-import type { PresentationType, VariationRow } from '../types'
+import { Button, Input } from '@heroui/react'
+import { Plus, Trash2, ImageIcon, X } from 'lucide-react'
+import type { ProductFormData, VariationRow } from '../types'
 
 interface FormSectionVariationsProps {
   variations: VariationRow[]
-  totalMl: number
   productName: string
+  /** Form data — para el campo de tallas que aplica a todas las variantes. */
+  formData: ProductFormData
+  updateField: <K extends keyof ProductFormData>(
+    key: K,
+    value: ProductFormData[K],
+  ) => void
   onAdd: () => void
   onUpdate: (
     index: number,
@@ -28,8 +32,9 @@ const inputClasses = {
 
 export default function FormSectionVariations({
   variations,
-  totalMl,
   productName,
+  formData,
+  updateField,
   onAdd,
   onUpdate,
   onRemove,
@@ -37,20 +42,18 @@ export default function FormSectionVariations({
   onRemoveNewImage,
   onRemoveExistingImage,
 }: FormSectionVariationsProps) {
-  // Solo los decants consumen ml de la botella abierta; sellada/original
-  // se manejan por unidades (stock), no por ml.
-  const totalVariationMl = variations.reduce(
-    (sum, v) =>
-      v.presentationType === 'decant' ? sum + (Number(v.mlSize) || 0) : sum,
-    0,
-  )
-  const mlExceeded = totalMl > 0 && totalVariationMl > totalMl
+  // Catálogo de tallas del producto: alimenta las sugerencias del campo
+  // "Talla" de cada variante (variante = color × talla).
+  const productSizes = formData.sizes
+    .split(/[\n,]+/)
+    .map((s) => s.trim())
+    .filter(Boolean)
 
   return (
     <div className="rounded-xl border border-border bg-surface p-5">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-lg font-semibold text-text">
-          Variantes / Presentaciones
+          Variantes (color × talla)
         </h3>
         <Button
           size="sm"
@@ -63,41 +66,24 @@ export default function FormSectionVariations({
         </Button>
       </div>
 
-      {/* ML usage bar */}
-      {variations.length > 0 && totalMl > 0 && (
-        <div className="mb-4">
-          <div className="flex items-center justify-between text-xs mb-1.5">
-            <span className="text-text-muted">ML usados en decants</span>
-            <span
-              className={mlExceeded ? 'text-red-400 font-bold' : 'text-text'}
-            >
-              {totalVariationMl} / {totalMl} ml
-            </span>
-          </div>
-          <div className="h-2 w-full rounded-full bg-background overflow-hidden">
-            <div
-              className={`h-full rounded-full transition-all ${mlExceeded ? 'bg-red-500' : 'bg-accent'}`}
-              style={{
-                width: `${Math.min((totalVariationMl / totalMl) * 100, 100)}%`,
-              }}
-            />
-          </div>
-          {mlExceeded && (
-            <div className="mt-2 flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/30 px-3 py-2">
-              <AlertTriangle size={14} className="text-red-400 shrink-0" />
-              <p className="text-xs text-red-400">
-                Los decants suman <strong>{totalVariationMl}ml</strong> pero
-                la botella es de <strong>{totalMl}ml</strong>. Reduce los ML de
-                los decants para no exceder la capacidad de la botella.
-              </p>
-            </div>
-          )}
-        </div>
-      )}
+      {/* Catálogo de tallas: NO crea variantes solo — es la lista de donde se
+          sugiere la talla al crear cada combinación color × talla. */}
+      <div className="mb-4 rounded-lg border border-border/50 bg-bg p-4">
+        <Input
+          label="Catálogo de tallas del producto (separadas por coma — opcional)"
+          placeholder="Midi, Maxi"
+          description="Define aquí las tallas del producto; luego, en cada variante, escoges su talla (una variante = color + talla, ej. Negro · Midi). Si el producto es de talla única, deja todo vacío."
+          size="sm"
+          value={formData.sizes}
+          onValueChange={(v) => updateField('sizes', v)}
+          classNames={inputClasses}
+        />
+      </div>
 
       {variations.length === 0 ? (
         <p className="text-sm text-text-muted">
-          No hay variantes configuradas.
+          No hay variantes configuradas. Agrega una por cada combinación de
+          color y talla que vendas (ej. Negro · Midi, Negro · Maxi).
         </p>
       ) : (
         <div className="flex flex-col gap-4">
@@ -107,6 +93,7 @@ export default function FormSectionVariations({
               variation={v}
               index={i}
               productName={productName}
+              productSizes={productSizes}
               onUpdate={onUpdate}
               onRemove={onRemove}
               onAddImages={onAddImages}
@@ -124,6 +111,8 @@ interface VariationCardProps {
   variation: VariationRow
   index: number
   productName: string
+  /** Catálogo de tallas del producto (sugerencias del input Talla). */
+  productSizes: string[]
   onUpdate: (
     index: number,
     field: keyof VariationRow,
@@ -139,6 +128,7 @@ function VariationCard({
   variation,
   index,
   productName,
+  productSizes,
   onUpdate,
   onRemove,
   onAddImages,
@@ -149,16 +139,11 @@ function VariationCard({
   const newImagePreviews = (variation.imageFiles ?? []).map((f) =>
     URL.createObjectURL(f),
   )
-  const mlSize = variation.mlSize || ''
 
-  // Auto-generate name and SKU from product name + ml
-  const autoName = mlSize ? `${productName} - ${mlSize}ml` : ''
-  const autoSku = mlSize
-    ? `${productName.replace(/\s+/g, '-').toLowerCase()}-${mlSize}ml`
+  // SKU auto-generado: producto + color (+ talla si la variante la tiene)
+  const autoSku = variation.name
+    ? `${productName.replace(/\s+/g, '-').toLowerCase()}-${variation.name.replace(/\s+/g, '-').toLowerCase()}${variation.size ? `-${variation.size.replace(/\s+/g, '-').toLowerCase()}` : ''}`
     : ''
-
-  // If user hasn't manually typed a name/sku, show the auto-generated one as placeholder
-  const displayName = variation.name || autoName
   const displaySku = variation.sku || autoSku
 
   return (
@@ -178,44 +163,56 @@ function VariationCard({
         </Button>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Select
-          label="Tipo de presentación"
-          size="sm"
-          // 'original' es legado: se muestra como sellada, que es lo que es
-          selectedKeys={[
-            variation.presentationType === 'decant' ? 'decant' : 'sellada',
-          ]}
-          disallowEmptySelection
-          onSelectionChange={(keys) => {
-            const val =
-              (Array.from(keys)[0] as PresentationType) ?? 'decant'
-            onUpdate(index, 'presentationType', val)
-          }}
-          classNames={{
-            label: '!text-text',
-            value: '!text-text',
-            trigger: 'bg-background border-border',
-          }}
-        >
-          {PRESENTATION_TYPES.map((t) => (
-            <SelectItem key={t.value}>{t.label}</SelectItem>
-          ))}
-        </Select>
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
         <Input
-          label={
-            variation.presentationType === 'decant'
-              ? 'ML del decant'
-              : 'ML de la presentación'
-          }
-          placeholder="10"
+          label="Color (ej. Negro, Espresso)"
+          placeholder="Negro"
           size="sm"
-          type="number"
-          value={variation.mlSize}
-          onValueChange={(val) => onUpdate(index, 'mlSize', val)}
+          value={variation.name}
+          onValueChange={(val) => onUpdate(index, 'name', val)}
           classNames={inputClasses}
           isRequired
         />
+        {/* Talla de la variante — una variante = color + talla. Si el producto
+            no tiene tallas, déjalo vacío ("Talla única"). Las sugerencias salen
+            del catálogo de tallas de arriba. */}
+        <div>
+          <Input
+            label={productSizes.length ? 'Talla' : 'Talla (opcional — vacío = talla única)'}
+            placeholder={productSizes[0] ?? 'Midi'}
+            size="sm"
+            value={variation.size ?? ''}
+            onValueChange={(val) => onUpdate(index, 'size', val)}
+            classNames={inputClasses}
+            list={`sizes-datalist-${index}`}
+          />
+          <datalist id={`sizes-datalist-${index}`}>
+            {productSizes.map((s) => (
+              <option key={s} value={s} />
+            ))}
+          </datalist>
+        </div>
+        {/* Color del swatch — picker nativo + campo hex. Este valor es el
+            que pinta el círculo de color en la tienda. */}
+        <div className="flex flex-col gap-1.5">
+          <span className="text-xs text-text">Color del swatch</span>
+          <div className="flex items-center gap-2">
+            <input
+              type="color"
+              aria-label="Elegir color"
+              value={/^#[0-9A-Fa-f]{6}$/.test(variation.colorHex ?? '') ? variation.colorHex! : '#231815'}
+              onChange={(e) => onUpdate(index, 'colorHex', e.target.value)}
+              className="h-9 w-11 cursor-pointer rounded-md border border-border bg-background p-1"
+            />
+            <Input
+              placeholder="#12100E"
+              size="sm"
+              value={variation.colorHex ?? ''}
+              onValueChange={(val) => onUpdate(index, 'colorHex', val)}
+              classNames={inputClasses}
+            />
+          </div>
+        </div>
         <Input
           label="Precio"
           placeholder="0.00"
@@ -228,22 +225,17 @@ function VariationCard({
           isRequired
         />
         <Input
-          label="Nombre"
-          placeholder={autoName || 'Nombre variante'}
+          label="SKU (opcional)"
+          placeholder={autoSku || 'SKU'}
           size="sm"
-          value={variation.name}
-          onValueChange={(val) => onUpdate(index, 'name', val)}
+          value={variation.sku}
+          onValueChange={(val) => onUpdate(index, 'sku', val)}
           classNames={inputClasses}
           description={
-            !variation.name && autoName ? `Auto: ${autoName}` : undefined
+            !variation.sku && autoSku ? `Auto: ${autoSku}` : undefined
           }
         />
       </div>
-
-      {/* SKU auto-generated — hidden from user, shown as read-only info */}
-      <p className="mt-2 text-xs text-text-muted">
-        SKU: <span className="font-mono text-text">{displaySku || '—'}</span>
-      </p>
 
       {/* Variation images */}
       <div className="mt-3">

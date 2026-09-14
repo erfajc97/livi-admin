@@ -1,13 +1,7 @@
-import { useState } from 'react'
 import { Button, Spinner } from '@heroui/react'
-import { useQueryClient } from '@tanstack/react-query'
-import { ArrowLeft, Pencil, Scissors } from 'lucide-react'
-import { useOpenBottleMutation } from '@/app/features/products/mutations/useProductMutations'
+import { ArrowLeft } from 'lucide-react'
 import InventoryStockCards from './InventoryStockCards'
-import BottleEventsTimeline from './BottleEventsTimeline'
 import OrderHistoryTable from './OrderHistoryTable'
-import OpenBottleModal from '@/app/features/products/components/modals/OpenBottleModal'
-import AdjustOpenMlModal from './AdjustOpenMlModal'
 import type { InventoryDetail } from '../types'
 
 interface InventoryDetailViewProps {
@@ -21,11 +15,6 @@ export default function InventoryDetailView({
   isLoading,
   onBack,
 }: InventoryDetailViewProps) {
-  const [openBottleModal, setOpenBottleModal] = useState(false)
-  const [adjustModal, setAdjustModal] = useState(false)
-  const openBottleMutation = useOpenBottleMutation()
-  const queryClient = useQueryClient()
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -34,18 +23,8 @@ export default function InventoryDetailView({
     )
   }
 
-  const { product, inventory, variations, bottleEvents, orderHistory } = detail
-  const hasOpenBottle = inventory.openBottleMlRemaining > 0
-  const canOpenBottle = inventory.stock >= 1 && !hasOpenBottle
-
-  // Get unique decant ml sizes from configured variations (skip the auto-managed full bottle)
-  const variationMlSizes = [
-    ...new Set(
-      (variations ?? [])
-        .filter((v) => v.isActive && !v.isFullBottle && v.mlSize > 0)
-        .map((v) => v.mlSize),
-    ),
-  ].sort((a, b) => a - b)
+  const { product, inventory, variations, orderHistory } = detail
+  const activeVariations = (variations ?? []).filter((v) => v.isActive)
 
   return (
     <div className="flex flex-col gap-6">
@@ -71,85 +50,35 @@ export default function InventoryDetailView({
             </p>
           </div>
         </div>
-        <div className="self-start sm:self-auto sm:shrink-0">
-          {hasOpenBottle ? (
-            /* Editable: si se rompe o se derrama, el conteo tiene que poder
-               corregirse sin tocar la base a mano. */
-            <div className="flex items-center gap-2">
-              <p className="text-xs text-blue-400 px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                Botella abierta: {inventory.openBottleMlRemaining}ml restantes
-              </p>
-              <Button
-                size="sm"
-                variant="flat"
-                startContent={<Pencil size={14} />}
-                onPress={() => setAdjustModal(true)}
-                className="h-10"
-              >
-                Ajustar
-              </Button>
-            </div>
-          ) : (
-            <Button
-              size="sm"
-              color="warning"
-              variant="flat"
-              startContent={<Scissors size={14} />}
-              onPress={() => setOpenBottleModal(true)}
-              isDisabled={!canOpenBottle}
-              className="h-10"
-            >
-              Abrir botella
-            </Button>
-          )}
-        </div>
       </div>
 
       {/* Stock cards */}
       <InventoryStockCards
         stock={inventory.stock}
-        openMl={inventory.openBottleMlRemaining}
-        totalMl={inventory.totalMl}
-        availableMl={inventory.availableMl}
+        variationsCount={activeVariations.length}
       />
 
-      {/* Two column: timeline + orders */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <BottleEventsTimeline events={bottleEvents} />
-        <OrderHistoryTable orders={orderHistory} />
-      </div>
-
-      {/* Modal */}
-      <OpenBottleModal
-        isOpen={openBottleModal}
-        onOpenChange={setOpenBottleModal}
-        productName={product.name}
-        totalMl={inventory.totalMl}
-        currentStock={inventory.stock}
-        variationMlSizes={variationMlSizes}
-        isLoading={openBottleMutation.isPending}
-        onConfirm={(mlRemaining, note) => {
-          openBottleMutation.mutate(
-            { productId: product.id, mlRemaining, note },
-            { onSuccess: () => setOpenBottleModal(false) },
-          )
-        }}
-      />
-
-      {adjustModal && (
-        <AdjustOpenMlModal
-          isOpen={adjustModal}
-          productId={product.id}
-          productName={product.name}
-          currentMl={Number(inventory.openBottleMlRemaining)}
-          totalMl={Number(inventory.totalMl)}
-          onClose={() => setAdjustModal(false)}
-          onAdjusted={() => {
-            queryClient.invalidateQueries({ queryKey: ['inventory'] })
-            queryClient.invalidateQueries({ queryKey: ['products'] })
-          }}
-        />
+      {/* Variations */}
+      {activeVariations.length > 0 && (
+        <div className="rounded-xl border border-border bg-surface p-6">
+          <h3 className="font-heading text-sm font-bold text-text uppercase tracking-wider mb-4">
+            Variantes de color
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {activeVariations.map((v) => (
+              <span
+                key={v.id}
+                className="rounded-full border border-border bg-surface-raised px-3 py-1 text-xs font-medium text-text"
+              >
+                {v.name} · ${Number(v.price).toFixed(2)}
+              </span>
+            ))}
+          </div>
+        </div>
       )}
+
+      {/* Orders */}
+      <OrderHistoryTable orders={orderHistory} />
     </div>
   )
 }

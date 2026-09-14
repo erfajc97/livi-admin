@@ -3,37 +3,29 @@ import { Image as ImageIcon, PencilIcon } from 'lucide-react'
 import type { Banner, BannerType } from '../types'
 
 interface SlotDef {
-  type: Extract<BannerType, 'catalog_perfumes' | 'catalog_bajo_pedido'>
+  type: Extract<BannerType, 'catalog_perfumes'>
   title: string
   hint: string
   banner: Banner | null
 }
 
 interface CatalogPageBannerSlotsProps {
-  perfumes: Banner | null
-  bajoPedido: Banner | null
+  tienda: Banner | null
   onEdit: (banner: Banner) => void
-  onCreate: (type: Extract<BannerType, 'catalog_perfumes' | 'catalog_bajo_pedido'>) => void
+  onCreate: (type: Extract<BannerType, 'catalog_perfumes'>) => void
 }
 
 export default function CatalogPageBannerSlots({
-  perfumes,
-  bajoPedido,
+  tienda,
   onEdit,
   onCreate,
 }: CatalogPageBannerSlotsProps) {
   const slots: SlotDef[] = [
     {
       type: 'catalog_perfumes',
-      title: 'Perfumes',
-      hint: 'Página /catalogo/perfumes — escritorio y móvil.',
-      banner: perfumes,
-    },
-    {
-      type: 'catalog_bajo_pedido',
-      title: 'Bajo pedido',
-      hint: 'Página /bajo-pedido — escritorio y móvil.',
-      banner: bajoPedido,
+      title: 'Tienda',
+      hint: 'Página /tienda — escritorio y móvil.',
+      banner: tienda,
     },
   ]
 
@@ -44,9 +36,9 @@ export default function CatalogPageBannerSlots({
           Banners de catálogo
         </h2>
         <p className="mt-1 text-sm text-text-muted">
-          Imagen de portada de Perfumes y Bajo pedido. Mismo criterio que el
-          banner principal: arte de escritorio y, si quieres, uno vertical para
-          el teléfono.
+          Imagen de portada de la página Tienda. Mismo criterio que el banner
+          principal: arte de escritorio y, si quieres, uno vertical para el
+          teléfono.
         </p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">

@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx'
 import { productsService } from '../services/productsService'
 import { categoriesService } from '@/app/features/categories/services/categoriesService'
-import type { Product, ScentSection } from '../types'
+import type { Product } from '../types'
 
 /* ── Exportar TODOS los productos a Excel (backup) ─────────────────────────
    - Trae todas las páginas, no solo la visible.
@@ -13,20 +13,12 @@ import type { Product, ScentSection } from '../types'
 interface AdminProductRow extends Product {
   cost?: number
   salesCount?: number
-  formats?: {
-    id: number
-    ml: number
-    price: number
-    isFullBottle: boolean
-    imageUrl?: string
-  }[]
 }
 
 const HEADERS = [
   'id',
   'nombre',
   'precio',
-  'total_ml',
   'categoria',
   'marca',
   'categoria_id',
@@ -37,49 +29,14 @@ const HEADERS = [
   'imagen_url',
   'imagenes_urls',
   'activo',
-  'bajo_pedido',
   'descuento',
-  'genero',
-  'hora_del_dia',
-  'concentracion',
-  'proyeccion',
   'descripcion_detallada',
   'beneficios',
-  'caracter',
-  'ocasion',
-  'longevidad',
-  'score_proyeccion',
-  'titulo_perfil',
-  'notas_salida',
-  'descripcion_notas_salida',
-  'notas_corazon',
-  'descripcion_notas_corazon',
-  'notas_fondo',
-  'descripcion_notas_fondo',
-  'firma',
-  'descripcion_firma',
-  'imagen_firma_url',
-  'formatos',
+  'variantes',
   'ventas',
-  'ml_botella_abierta',
   'creado',
   'actualizado',
 ] as const
-
-const norm = (s: string) =>
-  s
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-
-const findSection = (sections: ScentSection[] | undefined, key: string) =>
-  sections?.find((s) => norm(s.title ?? '').includes(key))
-
-const joinNotes = (s?: ScentSection) =>
-  s?.notes
-    ?.map((n) => n.name)
-    .filter(Boolean)
-    .join(' • ') ?? ''
 
 /** benefits se guarda como JSON string '["a","b"]' → "a, b" */
 const parseBenefits = (b?: string) => {
@@ -133,25 +90,19 @@ export async function exportAllProductsToExcel(): Promise<number> {
   )
 
   const rows = products.map((p) => {
-    const salida = findSection(p.scentSections, 'salida')
-    const corazon = findSection(p.scentSections, 'coraz')
-    const fondo = findSection(p.scentSections, 'fondo')
     const imageUrls = (p.images ?? [])
       .filter((img) => img?.url)
       .sort((a, b) => Number(a.displayOrder ?? 0) - Number(b.displayOrder ?? 0))
       .map((img) => img.url)
       .join(' | ')
-    const formatos = (p.formats ?? [])
-      .map(
-        (f) => `${f.ml}ml=$${f.price}${f.isFullBottle ? ' (botella)' : ''}`,
-      )
+    const variantes = (p.variations ?? [])
+      .map((v) => `${v.name ?? ''}=$${Number(v.price ?? 0)}`)
       .join(' · ')
 
     return [
       Number(p.id),
       p.name ?? '',
       Number(p.price ?? 0),
-      Number(p.totalMl ?? 0),
       catName.get(Number(p.categoryId)) ?? '',
       marcaName.get(Number(p.marcaId)) ?? '',
       Number(p.categoryId),
@@ -162,31 +113,11 @@ export async function exportAllProductsToExcel(): Promise<number> {
       p.imageUrl ?? '',
       imageUrls,
       siNo(p.isActive),
-      siNo(p.bajoPedido),
       p.discount ?? '',
-      p.gender ?? '',
-      p.timeOfDay ?? '',
-      p.concentration ?? '',
-      p.projection ?? '',
       p.detailDescription ?? '',
       parseBenefits(p.benefits),
-      (p.mood ?? []).join(', '),
-      (p.occasion ?? []).join(', '),
-      p.longevity ?? '',
-      p.projectionScore ?? '',
-      p.scentProfileTitle ?? '',
-      joinNotes(salida),
-      salida?.description ?? '',
-      joinNotes(corazon),
-      corazon?.description ?? '',
-      joinNotes(fondo),
-      fondo?.description ?? '',
-      p.signatureTitle ?? '',
-      p.signatureDescription ?? '',
-      p.signatureImageUrl ?? '',
-      formatos,
+      variantes,
       Number(p.salesCount ?? 0),
-      Number(p.openBottleMlRemaining ?? 0),
       p.createdAt ?? '',
       p.updatedAt ?? '',
     ]

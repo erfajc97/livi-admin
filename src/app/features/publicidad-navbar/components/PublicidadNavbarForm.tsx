@@ -36,7 +36,7 @@ export default function PublicidadNavbarForm({
       <Textarea
         label="Descripción"
         labelPlacement="outside"
-        placeholder="Ej: La corte de Luis XV, embotellada."
+        placeholder="Ej: Envío gratis en pedidos sobre $99"
         value={formData.subtitle}
         onValueChange={(v) => onInputChange('subtitle', v)}
         classNames={inputClasses}
@@ -68,7 +68,7 @@ export default function PublicidadNavbarForm({
       <Input
         label="Link / Ruta de direccionamiento"
         labelPlacement="outside"
-        placeholder="Ej: /catalogo/perfumes?category=2"
+        placeholder="Ej: /tienda?categoria=2"
         value={formData.link}
         onValueChange={(v) => onInputChange('link', v)}
         classNames={inputClasses}

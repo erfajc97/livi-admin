@@ -16,30 +16,7 @@ import { API_ENDPOINTS } from '@/app/api/endpoints'
 import { Download, FileSpreadsheet, Upload } from 'lucide-react'
 
 /* ── Columnas de la plantilla → campos del DTO ─────────────────────────── */
-const REQUIRED = ['nombre', 'precio', 'total_ml', 'categoria_id', 'marca_id'] as const
-
-const CONCENTRATION_ALIASES: Record<string, string> = {
-  EDP: 'EAU_DE_PARFUM',
-  EDT: 'EAU_DE_TOILETTE',
-  EDT_INTENSE: 'EAU_DE_TOILETTE_INTENSE',
-  INTENSE: 'EAU_DE_TOILETTE_INTENSE',
-  EDC: 'EAU_DE_COLOGNE',
-  ELIXIR: 'ELIXIR',
-  PARFUM: 'PARFUM',
-  EXTRAIT: 'EXTRAIT_DE_PARFUM',
-  EAU_DE_PARFUM: 'EAU_DE_PARFUM',
-  EAU_DE_TOILETTE: 'EAU_DE_TOILETTE',
-  EAU_DE_TOILETTE_INTENSE: 'EAU_DE_TOILETTE_INTENSE',
-  EAU_DE_COLOGNE: 'EAU_DE_COLOGNE',
-  BODY_MIST: 'BODY_MIST',
-  EXTRAIT_DE_PARFUM: 'EXTRAIT_DE_PARFUM',
-  // Compatibilidad con plantillas anteriores
-  ELIXIR_DE_PARFUM: 'ELIXIR',
-  PARFUM_EXTRAIT: 'EXTRAIT_DE_PARFUM',
-}
-const GENDERS = ['HOMBRE', 'MUJER', 'UNISEX']
-const TIMES = ['DIA', 'NOCHE']
-const PROJECTIONS = ['DISCRETA', 'MODERADA', 'ALTA']
+const REQUIRED = ['nombre', 'precio', 'categoria_id', 'marca_id'] as const
 
 /** "Categoría ID" / "categoria id" / "CATEGORIA_ID" → "categoria_id" */
 const normalizeHeader = (h: unknown): string =>
@@ -73,10 +50,22 @@ const toList = (v: unknown): string[] | undefined => {
     .filter(Boolean)
 }
 
-const toEnum = (v: unknown, allowed: string[]): string | undefined => {
-  if (v == null) return undefined
-  const s = String(v).trim().toUpperCase().replace(/\s+/g, '_')
-  return allowed.includes(s) ? s : undefined
+/** Pares "variacion N" (nombre del color) + "precio variacion N" → [{ name, price }]
+ *  (pares incompletos se ignoran). */
+const toVariants = (
+  raw: Record<string, unknown>,
+): Array<{ name: string; price: number }> | undefined => {
+  const out: Array<{ name: string; price: number }> = []
+  for (let n = 1; n <= 10; n++) {
+    const nameRaw = pick(raw, `variacion_${n}`, `variante_${n}`, `variacion${n}`)
+    const price = toNumber(
+      pick(raw, `precio_variacion_${n}`, `precio_variante_${n}`, `precio_variacion${n}`),
+    )
+    const name = nameRaw != null ? String(nameRaw).trim() : ''
+    if (!name || price == null) continue
+    out.push({ name, price })
+  }
+  return out.length > 0 ? out : undefined
 }
 
 /** Primer valor no vacío entre varias cabeceras equivalentes */
@@ -88,111 +77,11 @@ const pick = (raw: Record<string, unknown>, ...keys: string[]): unknown => {
   return undefined
 }
 
-// Colores asignados en ciclo a las notas importadas (mismo preset del formulario)
-const NOTE_COLORS = ['#E8D8C0', '#C9A87A', '#8A6B4A', '#6F5238', '#4A3B2C']
-
-/** "Bergamota • Pimienta, Lavanda; Vainilla" → [{name,color},…] */
-const toNotes = (v: unknown): Array<{ name: string; color: string }> | undefined => {
-  if (v == null || String(v).trim() === '') return undefined
-  const names = String(v)
-    .split(/[•,;|]/)
-    .map((s) => s.trim())
-    .filter(Boolean)
-  if (names.length === 0) return undefined
-  return names.map((name, i) => ({ name, color: NOTE_COLORS[i % NOTE_COLORS.length] }))
-}
-
-interface ScentSectionDraft {
-  title: string
-  notes?: Array<{ name: string; color: string }>
-  description?: string
-}
-
-/** Arma las 3 secciones del perfil olfativo si alguna trae notas o descripción */
-const buildScentSections = (
-  raw: Record<string, unknown>,
-): ScentSectionDraft[] | undefined => {
-  const defs = [
-    {
-      title: 'Notas de salida',
-      notes: pick(raw, 'notas_salida', 'notas_de_salida'),
-      desc: pick(raw, 'descripcion_notas_salida', 'descripcion_de_notas_de_salida'),
-    },
-    {
-      title: 'Notas de corazón',
-      notes: pick(raw, 'notas_corazon', 'notas_de_corazon'),
-      desc: pick(raw, 'descripcion_notas_corazon', 'descripcion_de_notas_de_corazon'),
-    },
-    {
-      title: 'Notas de fondo',
-      notes: pick(raw, 'notas_fondo', 'notas_de_fondo'),
-      desc: pick(raw, 'descripcion_notas_fondo', 'descripcion_de_notas_de_fondo'),
-    },
-  ]
-  const sections = defs
-    .map((d) => ({
-      title: d.title,
-      notes: toNotes(d.notes) ?? [],
-      description: d.desc != null ? String(d.desc).trim() : '',
-    }))
-    .filter((s) => s.notes.length > 0 || s.description !== '')
-  return sections.length > 0 ? sections : undefined
-}
-
 interface ParsedRow {
   rowNumber: number
   raw: Record<string, unknown>
   product: Record<string, unknown>
   missing: string[]
-}
-
-type ImportPresentationType = 'decant' | 'sellada'
-
-/** "Sellada", "frasco", "original"… → 'sellada'; el resto → 'decant' */
-const PRESENTATION_ALIASES: Record<string, ImportPresentationType> = {
-  decant: 'decant',
-  decants: 'decant',
-  fraccionado: 'decant',
-  fraccion: 'decant',
-  sellada: 'sellada',
-  sellado: 'sellada',
-  original: 'sellada',
-  frasco: 'sellada',
-  botella: 'sellada',
-}
-
-/** Pares "variacion N" + "precio variacion N" → [{ mlSize, price, presentationType }] (pares incompletos se ignoran).
- *  El tipo se toma de "tipo variacion N" si viene; si no, se deduce de los ml. */
-const toVariants = (
-  raw: Record<string, unknown>,
-): Array<{ mlSize: number; price: number; presentationType: ImportPresentationType }> | undefined => {
-  const totalMl = toNumber(raw.total_ml)
-  const out: Array<{
-    mlSize: number
-    price: number
-    presentationType: ImportPresentationType
-  }> = []
-  for (let n = 1; n <= 10; n++) {
-    const ml = toNumber(pick(raw, `variacion_${n}`, `variante_${n}`, `variacion${n}`))
-    const price = toNumber(
-      pick(raw, `precio_variacion_${n}`, `precio_variante_${n}`, `precio_variacion${n}`),
-    )
-    if (ml == null || price == null) continue
-
-    const declared = pick(raw, `tipo_variacion_${n}`, `tipo_variante_${n}`, `tipo_variacion${n}`)
-    const presentationType =
-      (declared != null
-        ? PRESENTATION_ALIASES[String(declared).trim().toLowerCase()]
-        : undefined) ??
-      // Un decant se sirve de la botella abierta, así que no puede medir la
-      // botella entera o más: eso es una presentación sellada. Importarlas como
-      // decant las dejaba "Sin stock" en la ficha aunque el producto tuviera
-      // frascos, porque el decant se topa por los ml disponibles.
-      (totalMl != null && ml >= totalMl ? 'sellada' : 'decant')
-
-    out.push({ mlSize: ml, price, presentationType })
-  }
-  return out.length > 0 ? out : undefined
 }
 
 interface ImportResult {
@@ -241,7 +130,6 @@ function parseWorkbook(data: ArrayBuffer): ParsedRow[] {
       const product: Record<string, unknown> = {
         name: String(raw.nombre ?? '').trim(),
         price: toNumber(raw.precio),
-        totalMl: toNumber(raw.total_ml),
         categoryId: categoryIdNum,
         marcaId: marcaIdNum,
         category: categoryName,
@@ -251,33 +139,12 @@ function parseWorkbook(data: ArrayBuffer): ParsedRow[] {
         description: raw.descripcion ? String(raw.descripcion) : undefined,
         imageUrl: raw.imagen_url ? String(raw.imagen_url) : undefined,
         isActive: toBool(raw.activo),
-        bajoPedido: toBool(raw.bajo_pedido),
         discount: toNumber(raw.descuento),
-        gender: toEnum(raw.genero, GENDERS),
-        timeOfDay: toEnum(raw.hora_del_dia, TIMES),
-        concentration: raw.concentracion
-          ? CONCENTRATION_ALIASES[
-              String(raw.concentracion).trim().toUpperCase().replace(/\s+/g, '_')
-            ]
-          : undefined,
-        projection: toEnum(raw.proyeccion, PROJECTIONS),
         detailDescription: raw.descripcion_detallada ? String(raw.descripcion_detallada) : undefined,
         benefits: (() => {
           const list = toList(raw.beneficios)
           return list ? JSON.stringify(list) : undefined
         })(),
-        mood: toList(raw.caracter),
-        occasion: toList(raw.ocasion),
-        longevity: toNumber(raw.longevidad),
-        projectionScore: toNumber(raw.score_proyeccion),
-        scentProfileTitle: raw.titulo_perfil ? String(raw.titulo_perfil).trim() : undefined,
-        scentSections: buildScentSections(raw),
-        signatureTitle: pick(raw, 'firma', 'la_firma', 'titulo_firma')
-          ? String(pick(raw, 'firma', 'la_firma', 'titulo_firma')).trim()
-          : undefined,
-        signatureDescription: pick(raw, 'descripcion_firma', 'descripcion_de_la_firma')
-          ? String(pick(raw, 'descripcion_firma', 'descripcion_de_la_firma')).trim()
-          : undefined,
         variants: toVariants(raw),
       }
 
@@ -288,10 +155,7 @@ function parseWorkbook(data: ArrayBuffer): ParsedRow[] {
         if (key === 'nombre') return !product.name
         if (key === 'categoria_id') return product.categoryId == null && !product.category
         if (key === 'marca_id') return product.marcaId == null && !product.marca
-        const dtoKey =
-          key === 'precio' ? 'price'
-          : 'totalMl'
-        return product[dtoKey] == null
+        return product.price == null
       })
 
       return { rowNumber: excelRow, raw, product, missing }
@@ -386,7 +250,7 @@ export default function ImportProductsModal({ isOpen, onOpenChange }: ImportProd
                   <div>
                     <p className="text-sm font-medium text-text">1 · Descarga la plantilla</p>
                     <p className="text-xs text-text-muted">
-                      Incluye la hoja “IDs_y_Valores” con categorías, marcas y valores válidos.
+                      Incluye la hoja “IDs_y_Valores” con categorías y marcas.
                       Los IDs también se ven junto al nombre en la página de Categorías.
                     </p>
                   </div>
@@ -409,7 +273,7 @@ export default function ImportProductsModal({ isOpen, onOpenChange }: ImportProd
                     size="sm"
                     variant="light"
                     startContent={<Download size={15} />}
-                    title="3 filas de muestra ya llenas para probar la importación"
+                    title="2 filas de muestra ya llenas para probar la importación"
                   >
                     ejemplo lleno
                   </Button>
@@ -475,11 +339,10 @@ export default function ImportProductsModal({ isOpen, onOpenChange }: ImportProd
                           <th className="px-3 py-2">Fila</th>
                           <th className="px-3 py-2">Nombre</th>
                           <th className="px-3 py-2">Precio</th>
-                          <th className="px-3 py-2">ml</th>
                           <th className="px-3 py-2">Cat.</th>
                           <th className="px-3 py-2">Marca</th>
                           <th className="px-3 py-2">Stock</th>
-                          <th className="px-3 py-2">Decants</th>
+                          <th className="px-3 py-2">Variantes</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border">
@@ -488,14 +351,13 @@ export default function ImportProductsModal({ isOpen, onOpenChange }: ImportProd
                             <td className="px-3 py-1.5 text-text-muted">{r.rowNumber}</td>
                             <td className="px-3 py-1.5 text-text">{String(r.product.name)}</td>
                             <td className="px-3 py-1.5 text-text">{String(r.product.price)}</td>
-                            <td className="px-3 py-1.5 text-text">{String(r.product.totalMl)}</td>
                             <td className="px-3 py-1.5 text-text">{String(r.product.categoryId ?? r.product.category ?? '—')}</td>
                             <td className="px-3 py-1.5 text-text">{String(r.product.marcaId ?? r.product.marca ?? '—')}</td>
                             <td className="px-3 py-1.5 text-text">{String(r.product.stock ?? 0)}</td>
                             <td className="px-3 py-1.5 text-text">
                               {Array.isArray(r.product.variants) && r.product.variants.length > 0
-                                ? (r.product.variants as Array<{ mlSize: number }>)
-                                    .map((v) => `${v.mlSize}ml`)
+                                ? (r.product.variants as Array<{ name: string }>)
+                                    .map((v) => v.name)
                                     .join(' · ')
                                 : '—'}
                             </td>

@@ -1,4 +1,4 @@
-import { Select, SelectItem, Chip } from '@heroui/react'
+import { Select, SelectItem } from '@heroui/react'
 import type { ProductVariation, Product } from '@/app/features/products/types'
 
 interface ComboVariationSelectorProps {
@@ -9,7 +9,8 @@ interface ComboVariationSelectorProps {
   isLoading?: boolean
 }
 
-const FULL_BOTTLE_KEY = 'full-bottle'
+/** Sentinela: el ítem del combo referencia el producto sin una variante fija. */
+const NO_VARIATION_KEY = 'any'
 
 export default function ComboVariationSelector({
   variations,
@@ -19,14 +20,14 @@ export default function ComboVariationSelector({
   isLoading = false,
 }: ComboVariationSelectorProps) {
   const activeVariations = variations.filter((v) => v.isActive)
-  const hasFullBottle = product && product.price && product.totalMl
+  const hasBaseProduct = product && product.price
 
-  if (activeVariations.length === 0 && !hasFullBottle && !isLoading) {
+  if (activeVariations.length === 0 && !hasBaseProduct && !isLoading) {
     return (
       <Select
-        label="Variación"
+        label="Variante"
         isDisabled
-        placeholder="Sin variaciones"
+        placeholder="Sin variantes"
         classNames={{ label: '!text-text', value: '!text-text-muted' }}
         className="min-w-48"
       >
@@ -37,13 +38,13 @@ export default function ComboVariationSelector({
 
   return (
     <Select
-      label="Variación"
+      label="Variante"
       selectedKeys={value ? [value] : []}
       onSelectionChange={(keys) => {
         const selected = Array.from(keys)[0]
         onChange(selected ? String(selected) : '')
       }}
-      placeholder="Seleccionar variación"
+      placeholder="Seleccionar variante"
       isLoading={isLoading}
       classNames={{ label: '!text-text', value: '!text-text' }}
       listboxProps={{
@@ -57,12 +58,12 @@ export default function ComboVariationSelector({
       className="min-w-48"
     >
       {[
-        // Full bottle option first
-        ...(hasFullBottle
+        // Producto base primero (sin color fijo)
+        ...(hasBaseProduct
           ? [
               <SelectItem
-                key={FULL_BOTTLE_KEY}
-                textValue={`Botella completa — ${product.totalMl}ml`}
+                key={NO_VARIATION_KEY}
+                textValue="Producto base (cualquier color)"
                 classNames={{
                   base: 'text-text data-[hover=true]:bg-bg',
                   title: '!text-text',
@@ -70,24 +71,16 @@ export default function ComboVariationSelector({
               >
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-text font-semibold">
-                    Botella completa — {product.totalMl}ml
+                    Producto base (cualquier color)
                   </span>
                   <span className="text-xs text-text-muted">
                     ${product.price}
                   </span>
-                  <Chip
-                    size="sm"
-                    variant="flat"
-                    color="warning"
-                    className="text-xs"
-                  >
-                    Sellada
-                  </Chip>
                 </div>
               </SelectItem>,
             ]
           : []),
-        // Decant variations
+        // Variantes de color
         ...activeVariations.map((v) => (
           <SelectItem
             key={String(v.id)}
@@ -113,8 +106,7 @@ export default function ComboVariationSelector({
 }
 
 function buildVariationLabel(v: ProductVariation): string {
-  if (v.name) return `${v.name} — ${v.mlSize}ml`
-  return `${v.mlSize}ml Decant`
+  return v.name || `Variante #${v.id}`
 }
 
-export { FULL_BOTTLE_KEY }
+export { NO_VARIATION_KEY }

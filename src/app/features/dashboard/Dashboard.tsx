@@ -12,7 +12,7 @@ export function Dashboard() {
     <div className="flex flex-col gap-6 p-6">
       <WelcomeBanner
         userName={userName}
-        subtitle="Panel de administración NonDecants"
+        subtitle="Panel de administración LIVI"
         useBgImage
       />
 
