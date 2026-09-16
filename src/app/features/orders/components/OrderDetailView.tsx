@@ -139,7 +139,9 @@ export default function OrderDetailView({
                         {item.productName || `#${item.productId}`}
                       </p>
                       <p className="text-xs text-text-muted">
-                        {item.variationName || ''}
+                        {[item.variationName, item.variationSize ? `Talla ${item.variationSize}` : '']
+                          .filter(Boolean)
+                          .join(' · ')}
                       </p>
                     </div>
                     <div className="text-right shrink-0">

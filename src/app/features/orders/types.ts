@@ -18,6 +18,8 @@ export interface OrderItem {
   productName?: string
   productImage?: string
   variationName?: string
+  variationSize?: string
+  variationColorHex?: string
 }
 
 export interface Order {
