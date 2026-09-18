@@ -47,7 +47,7 @@ export default function CatalogPageBannerSlots({
             key={slot.type}
             className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row"
           >
-            <div className="flex h-24 w-full shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface-raised sm:h-24 sm:w-32">
+            <div className="flex h-24 w-full shrink-0 items-center justify-center overflow-hidden rounded-lg bg-bg-alt sm:h-24 sm:w-32">
               {slot.banner?.imageUrl ? (
                 <img
                   src={slot.banner.imageUrl}

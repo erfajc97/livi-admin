@@ -47,10 +47,11 @@ export default function OtherIncomeForm() {
     )
   }
 
+  // Verde crudo de Tailwind → token `success` de la paleta LIVI
   return (
-    <div className="rounded-xl border border-green-500/30 bg-surface p-4 sm:p-5">
+    <div className="rounded-xl border border-success/30 bg-surface p-4 sm:p-5">
       <div className="mb-4 flex items-center gap-2">
-        <DollarSign size={16} className="text-green-500" />
+        <DollarSign size={16} className="text-success" />
         <h3 className="text-sm font-heading font-bold uppercase tracking-wide text-text">
           Registrar otro ingreso
         </h3>
@@ -68,7 +69,7 @@ export default function OtherIncomeForm() {
           classNames={{
             label: '!text-text',
             input: '!text-text',
-            inputWrapper: 'bg-bg border-border',
+            inputWrapper: 'bg-bg-alt border-border',
           }}
         />
 
@@ -77,7 +78,7 @@ export default function OtherIncomeForm() {
           onChange={(e) =>
             setCategory(e.target.value as (typeof INCOME_CATEGORIES)[number])
           }
-          className="rounded-medium border border-border bg-bg px-3 py-2 text-sm text-text"
+          className="rounded-medium border border-border bg-bg-alt px-3 py-2 text-sm text-text"
         >
           {INCOME_CATEGORIES.map((c) => (
             <option key={c} value={c}>
@@ -89,7 +90,7 @@ export default function OtherIncomeForm() {
         <select
           value={paymentMethod}
           onChange={(e) => setPaymentMethod(e.target.value)}
-          className="rounded-medium border border-border bg-bg px-3 py-2 text-sm text-text"
+          className="rounded-medium border border-border bg-bg-alt px-3 py-2 text-sm text-text"
         >
           {paymentMethods
             .filter((pm) => pm.isActive)
@@ -110,7 +111,7 @@ export default function OtherIncomeForm() {
           classNames={{
             label: '!text-text',
             input: '!text-text',
-            inputWrapper: 'bg-bg border-border',
+            inputWrapper: 'bg-bg-alt border-border',
           }}
         />
 
@@ -123,7 +124,7 @@ export default function OtherIncomeForm() {
           classNames={{
             label: '!text-text',
             input: '!text-text',
-            inputWrapper: 'bg-bg border-border',
+            inputWrapper: 'bg-bg-alt border-border',
           }}
           className="sm:col-span-2 lg:col-span-1"
         />

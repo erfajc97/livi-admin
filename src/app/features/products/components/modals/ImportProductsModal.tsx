@@ -105,7 +105,7 @@ export default function ImportProductsModal({ isOpen, onOpenChange }: ImportProd
 
             <ModalBody className="gap-5 pb-6">
               {/* Paso 1 — plantilla */}
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-surface-raised p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-bg-alt p-4">
                 <div className="flex items-center gap-3">
                   <FileSpreadsheet size={20} className="text-accent" />
                   <div>
@@ -142,7 +142,7 @@ export default function ImportProductsModal({ isOpen, onOpenChange }: ImportProd
               </div>
 
               {/* Paso 2 — subir archivo */}
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-surface-raised p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-bg-alt p-4">
                 <div className="flex items-center gap-3">
                   <Upload size={20} className="text-accent" />
                   <div>
@@ -195,7 +195,7 @@ export default function ImportProductsModal({ isOpen, onOpenChange }: ImportProd
 
                   <div className="max-h-56 overflow-y-auto rounded-lg border border-border">
                     <table className="w-full text-left text-xs">
-                      <thead className="sticky top-0 bg-surface-raised text-text-muted">
+                      <thead className="sticky top-0 bg-bg-alt text-text-muted">
                         <tr>
                           <th className="px-3 py-2">Fila</th>
                           <th className="px-3 py-2">Nombre</th>
@@ -239,7 +239,7 @@ export default function ImportProductsModal({ isOpen, onOpenChange }: ImportProd
               {results !== null && (
                 <div className="max-h-64 overflow-y-auto rounded-lg border border-border">
                   <table className="w-full text-left text-xs">
-                    <thead className="sticky top-0 bg-surface-raised text-text-muted">
+                    <thead className="sticky top-0 bg-bg-alt text-text-muted">
                       <tr>
                         <th className="px-3 py-2">Fila</th>
                         <th className="px-3 py-2">Producto</th>

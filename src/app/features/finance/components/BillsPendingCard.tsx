@@ -15,7 +15,8 @@ export default function BillsPendingCard({
         <span className="text-sm font-medium text-text-muted">
           Cuentas por Pagar
         </span>
-        <Clock size={20} className="text-yellow-500" />
+        {/* Token de marca en lugar del amarillo crudo de Tailwind */}
+        <Clock size={20} className="text-warning" />
       </div>
       <p className="mt-2 text-2xl font-bold text-text">
         $ {pendingTotal.toLocaleString('es-EC', { minimumFractionDigits: 2 })}

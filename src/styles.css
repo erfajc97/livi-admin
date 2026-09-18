@@ -12,42 +12,56 @@
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
   /* ── Colores de marca LIVI ──────────────────────── */
-  --color-bg: #e9e3d7;
-  --color-surface: #f5efc6;
-  --color-surface-raised: #fbf8ee;
+  /* Paleta alineada 1:1 con la tienda (livi-web/src/styles/global.css).
+     Motivo del cambio: el panel tenía `--color-bg: #e9e3d7` (beige) y
+     `--color-surface: #f5efc6` (butter), así que TODA la pantalla se veía
+     amarilla. Igual que en la tienda, el blanco pasa a ser la base y el
+     butter queda solo como acento puntual (badges, resaltados), nunca como
+     fondo de página ni de tarjeta. */
+  --color-bg: #ffffff; /* blanco — base del panel */
+  --color-bg-alt: #f4f1ec; /* marfil-gris — zonas alternas y bloques anidados */
+  --color-surface: #ffffff; /* tarjetas / paneles */
+  --color-surface-raised: #fcfbf8; /* surface elevada (diferencia muy sutil) */
+  --color-butter: #f5efc6; /* butter — solo acento puntual */
   --color-accent: #4d0e12;
-  --color-accent-hover: #6b151b;
+  --color-accent-hover: #6b1a20;
   --color-text: #231815;
-  --color-text-muted: #6b5e54;
-  --color-border: #d8cfbc;
+  --color-text-soft: #4a3f38; /* cuerpo */
+  --color-text-muted: #7a6e64; /* metadata */
+  --color-border: #e5e0d7; /* hairlines — separan tarjeta blanca de fondo blanco */
+  --color-border-soft: #ede9e0;
   --color-border-accent: #4d0e12;
-  --color-error: #b34040;
-  --color-error-muted: #b3404026;
-  --color-success: #5f7a52;
-  --color-success-muted: #5f7a5226;
-  --color-warning: #b07a2a;
-  --color-warning-muted: #b07a2a26;
-  --color-info: #6a8cae;
+  --color-error: #b23b3b;
+  --color-error-muted: #b23b3b22;
+  --color-success: #65754f;
+  --color-success-muted: #9eaa8f44;
+  --color-warning: #b07a1e;
+  --color-warning-muted: #b07a1e22;
+  --color-info: #5f7e9e;
 
   /* ── Colores de charts ────────────────────────── */
   --color-chart-1: #4d0e12;
   --color-chart-2: #a5bcd6;
   --color-chart-3: #9eaa8f;
-  --color-chart-4: #b07a2a;
+  --color-chart-4: #b07a1e;
   --color-chart-5: #8b7ec8;
 
   /* ── Tokens semánticos de form/UI ──────────────── */
-  --color-form-bg: #fbf8ee;
+  /* Antes form-bg era crema (#fbf8ee); ahora blanco para no reintroducir
+     el tinte amarillo en los formularios. */
+  --color-form-bg: #ffffff;
   --color-form-primary: #4d0e12;
-  --color-form-foreground: #f5efc6;
-  --color-form-muted: #6b5e54;
-  --color-form-border: #d8cfbc;
+  --color-form-foreground: #f5efc6; /* butter sobre burgundy — acento intencional */
+  --color-form-muted: #7a6e64;
+  --color-form-border: #e5e0d7;
   --color-form-accent: #4d0e12;
 
   /* ── Tokens de tabla/contenido ─────────────────── */
-  --color-content: #fbf8ee;
-  --color-content-raised: #f5efc6;
-  --color-table-header: #e9e3d7;
+  /* `--color-content` lo consume `.table-report` más abajo: era crema y
+     pintaba de amarillo el cuerpo de todas las tablas. */
+  --color-content: #ffffff;
+  --color-content-raised: #fcfbf8;
+  --color-table-header: #f4f1ec; /* banda de cabecera — zona alterna, no butter */
 }
 
 /* ── Reset base ─────────────────────────────────── */
@@ -85,6 +99,9 @@ h6 {
 }
 
 /* ── Tabla personalizada ────────────────────────── */
+/* Ojo: esta regla vive fuera de @layer, así que gana a la utilidad
+   `bg-surface` del wrapper. Con `--color-content` en blanco el cuerpo de la
+   tabla queda blanco como el resto del panel. */
 .table-report {
   background-color: var(--color-content);
 }

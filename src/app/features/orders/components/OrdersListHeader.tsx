@@ -83,7 +83,7 @@ export default function OrdersListHeader({
             startContent={<Search size={16} className="text-text-muted" />}
             classNames={{
               base: 'max-w-xs',
-              inputWrapper: 'bg-surface-raised border border-border',
+              inputWrapper: 'bg-bg-alt border border-border',
               input: 'text-text placeholder:text-text-muted',
             }}
           />

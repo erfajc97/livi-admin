@@ -28,7 +28,7 @@ export default function CategoryCard({
     <div className="rounded-xl border border-border bg-surface transition hover:border-accent/30">
       <div className="flex flex-col gap-3 p-4 sm:flex-row sm:gap-4">
         {/* Image thumbnail */}
-        <div className="flex h-20 w-28 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface-raised sm:h-24 sm:w-32">
+        <div className="flex h-20 w-28 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-bg-alt sm:h-24 sm:w-32">
           {category.imageUrl ? (
             <img
               src={category.imageUrl}

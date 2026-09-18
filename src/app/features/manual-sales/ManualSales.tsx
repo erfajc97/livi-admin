@@ -114,7 +114,7 @@ export function ManualSales() {
               color="warning"
               variant="solid"
               classNames={{
-                tabList: 'bg-bg',
+                tabList: 'bg-bg-alt',
                 tab: 'data-[selected=true]:bg-accent data-[selected=true]:text-bg',
                 tabContent: 'text-text',
               }}

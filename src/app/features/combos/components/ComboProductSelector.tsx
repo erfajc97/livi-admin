@@ -63,7 +63,7 @@ export default function ComboProductSelector({
           key={String(product.id)}
           textValue={product.name}
           classNames={{
-            base: 'text-text data-[hover=true]:bg-bg',
+            base: 'text-text data-[hover=true]:bg-bg-alt',
             title: '!text-text',
           }}
         >

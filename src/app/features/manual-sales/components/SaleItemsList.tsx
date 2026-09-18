@@ -25,7 +25,8 @@ export default function SaleItemsList({
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border bg-surface/50 p-8 text-center">
+      // Estado vacío: en base blanca `bg-surface/50` era blanco sobre blanco.
+      <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border bg-bg-alt/50 p-8 text-center">
         <ShoppingCart size={32} className="text-text-muted" />
         <div>
           <p className="text-sm font-medium text-text">Carrito vacío</p>
@@ -60,7 +61,7 @@ export default function SaleItemsList({
               className={`flex flex-col gap-3 rounded-lg p-3 border ${
                 isCombo
                   ? 'border-accent/30 bg-accent/5'
-                  : 'border-border/50 bg-bg'
+                  : 'border-border/50 bg-bg-alt'
               }`}
             >
               <div className="flex items-start gap-3">
@@ -71,7 +72,7 @@ export default function SaleItemsList({
                     className="h-12 w-12 rounded-lg object-cover shrink-0"
                   />
                 ) : (
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-surface text-text-muted">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-bg-alt text-text-muted">
                     {isCombo ? <Gift size={20} /> : <Package size={20} />}
                   </div>
                 )}

@@ -86,7 +86,7 @@ export default function ResetOrdersModal({
           isDisabled={isPending}
           autoComplete="off"
           classNames={{
-            inputWrapper: 'bg-surface-raised border border-border',
+            inputWrapper: 'bg-bg-alt border border-border',
             input: 'text-text',
           }}
         />

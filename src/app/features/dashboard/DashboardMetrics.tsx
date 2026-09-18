@@ -121,7 +121,8 @@ export function DashboardMetrics() {
             icon={Clock}
             count={stats.orders.byStatus.pending}
             label="Pendiente de pago"
-            color="bg-yellow-600"
+            /* amarillo crudo → token de advertencia de la paleta LIVI */
+            color="bg-warning"
           />
           <StatusCard
             icon={CreditCard}

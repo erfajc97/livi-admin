@@ -108,7 +108,7 @@ export default function ComboSearch({ onAddCombo }: ComboSearchProps) {
         size="sm"
         classNames={{
           input: '!text-text',
-          inputWrapper: 'bg-bg border border-border',
+          inputWrapper: 'bg-bg-alt border border-border',
         }}
       />
 
@@ -136,7 +136,7 @@ export default function ComboSearch({ onAddCombo }: ComboSearchProps) {
                   type="button"
                   onClick={() => handleRowClick(combo)}
                   aria-expanded={hasVersions ? isOpen : undefined}
-                  className={`group flex items-center gap-3 border border-border bg-bg p-3 text-left hover:border-accent hover:bg-accent/5 transition-colors ${
+                  className={`group flex items-center gap-3 border border-border bg-bg-alt p-3 text-left hover:border-accent hover:bg-accent/5 transition-colors ${
                     isOpen ? 'rounded-t-lg border-b-0' : 'rounded-lg'
                   }`}
                 >
@@ -200,7 +200,7 @@ export default function ComboSearch({ onAddCombo }: ComboSearchProps) {
                         key={variant.id}
                         type="button"
                         onClick={() => handleAddCombo(variant, combo, i)}
-                        className="group flex items-center gap-3 rounded-lg border border-border bg-bg p-2.5 text-left hover:border-accent hover:bg-accent/5 transition-colors"
+                        className="group flex items-center gap-3 rounded-lg border border-border bg-bg-alt p-2.5 text-left hover:border-accent hover:bg-accent/5 transition-colors"
                       >
                         <div className="flex flex-col min-w-0 flex-1">
                           <span className="text-xs font-medium text-text">

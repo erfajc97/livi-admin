@@ -39,7 +39,7 @@ export default function TransactionForm({
               if (val) onUpdateField('category', val)
             }}
             classNames={{
-              trigger: 'bg-surface-raised border border-border',
+              trigger: 'bg-bg-alt border border-border',
               value: 'text-text',
               label: 'text-text-muted',
               listboxWrapper: 'bg-surface',
@@ -50,7 +50,7 @@ export default function TransactionForm({
               <SelectItem
                 key={cat}
                 classNames={{
-                  base: 'text-text data-[hover=true]:bg-bg',
+                  base: 'text-text data-[hover=true]:bg-bg-alt',
                   title: '!text-text',
                 }}
               >
@@ -65,7 +65,7 @@ export default function TransactionForm({
             value={formData.amount}
             onValueChange={(val) => onUpdateField('amount', val)}
             classNames={{
-              inputWrapper: 'bg-surface-raised border border-border',
+              inputWrapper: 'bg-bg-alt border border-border',
               input: 'text-text',
               label: 'text-text-muted',
             }}
@@ -77,7 +77,7 @@ export default function TransactionForm({
             value={formData.date}
             onValueChange={(val) => onUpdateField('date', val)}
             classNames={{
-              inputWrapper: 'bg-surface-raised border border-border',
+              inputWrapper: 'bg-bg-alt border border-border',
               input: 'text-text',
               label: 'text-text-muted',
             }}
@@ -91,7 +91,7 @@ export default function TransactionForm({
           value={formData.description}
           onValueChange={(val) => onUpdateField('description', val)}
           classNames={{
-            inputWrapper: 'bg-surface-raised border border-border',
+            inputWrapper: 'bg-bg-alt border border-border',
             input: 'text-text placeholder:text-text-muted',
             label: 'text-text-muted',
           }}
@@ -107,7 +107,7 @@ export default function TransactionForm({
               if (val) onUpdateField('paymentMethod', val)
             }}
             classNames={{
-              trigger: 'bg-surface-raised border border-border',
+              trigger: 'bg-bg-alt border border-border',
               value: 'text-text',
               label: 'text-text-muted',
               listboxWrapper: 'bg-surface',
@@ -118,7 +118,7 @@ export default function TransactionForm({
               <SelectItem
                 key={method}
                 classNames={{
-                  base: 'text-text data-[hover=true]:bg-bg',
+                  base: 'text-text data-[hover=true]:bg-bg-alt',
                   title: '!text-text',
                 }}
               >
@@ -133,7 +133,7 @@ export default function TransactionForm({
             value={formData.accountName}
             onValueChange={(val) => onUpdateField('accountName', val)}
             classNames={{
-              inputWrapper: 'bg-surface-raised border border-border',
+              inputWrapper: 'bg-bg-alt border border-border',
               input: 'text-text placeholder:text-text-muted',
               label: 'text-text-muted',
             }}
@@ -147,7 +147,7 @@ export default function TransactionForm({
           value={formData.notes}
           onValueChange={(val) => onUpdateField('notes', val)}
           classNames={{
-            inputWrapper: 'bg-surface-raised border border-border',
+            inputWrapper: 'bg-bg-alt border border-border',
             input: 'text-text placeholder:text-text-muted',
             label: 'text-text-muted',
           }}
@@ -160,7 +160,7 @@ export default function TransactionForm({
           onPress={onSubmit}
           isLoading={isSubmitting}
           isDisabled={!formData.amount || parseFloat(formData.amount) <= 0}
-          className="bg-bg font-semibold text-text"
+          className="bg-bg-alt font-semibold text-text"
         >
           Registrar {label}
         </Button>

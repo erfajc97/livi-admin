@@ -99,7 +99,7 @@ export function CampaignEditor({
           onValueChange={(v) => handleChange('subject', v)}
           isRequired
           classNames={{
-            inputWrapper: 'bg-surface-raised border border-border',
+            inputWrapper: 'bg-bg-alt border border-border',
             label: 'text-text-muted',
           }}
         />
@@ -111,7 +111,7 @@ export function CampaignEditor({
           onValueChange={(v) => handleChange('heading', v)}
           isRequired
           classNames={{
-            inputWrapper: 'bg-surface-raised border border-border',
+            inputWrapper: 'bg-bg-alt border border-border',
             label: 'text-text-muted',
           }}
         />
@@ -124,7 +124,7 @@ export function CampaignEditor({
           minRows={6}
           isRequired
           classNames={{
-            inputWrapper: 'bg-surface-raised border border-border',
+            inputWrapper: 'bg-bg-alt border border-border',
             label: 'text-text-muted',
           }}
         />
@@ -136,7 +136,7 @@ export function CampaignEditor({
             value={formData.ctaText}
             onValueChange={(v) => handleChange('ctaText', v)}
             classNames={{
-              inputWrapper: 'bg-surface-raised border border-border',
+              inputWrapper: 'bg-bg-alt border border-border',
               label: 'text-text-muted',
             }}
           />
@@ -146,7 +146,7 @@ export function CampaignEditor({
             value={formData.ctaUrl}
             onValueChange={(v) => handleChange('ctaUrl', v)}
             classNames={{
-              inputWrapper: 'bg-surface-raised border border-border',
+              inputWrapper: 'bg-bg-alt border border-border',
               label: 'text-text-muted',
             }}
           />
@@ -158,7 +158,7 @@ export function CampaignEditor({
           value={formData.imageUrl}
           onValueChange={(v) => handleChange('imageUrl', v)}
           classNames={{
-            inputWrapper: 'bg-surface-raised border border-border',
+            inputWrapper: 'bg-bg-alt border border-border',
             label: 'text-text-muted',
           }}
         />

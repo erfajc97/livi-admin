@@ -65,7 +65,7 @@ export default function ComboVariationSelector({
                 key={NO_VARIATION_KEY}
                 textValue="Producto base (cualquier color)"
                 classNames={{
-                  base: 'text-text data-[hover=true]:bg-bg',
+                  base: 'text-text data-[hover=true]:bg-bg-alt',
                   title: '!text-text',
                 }}
               >
@@ -86,7 +86,7 @@ export default function ComboVariationSelector({
             key={String(v.id)}
             textValue={buildVariationLabel(v)}
             classNames={{
-              base: 'text-text data-[hover=true]:bg-bg',
+              base: 'text-text data-[hover=true]:bg-bg-alt',
               title: '!text-text',
             }}
           >

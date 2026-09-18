@@ -68,7 +68,7 @@ export default function FormSectionVariations({
 
       {/* Catálogo de tallas: NO crea variantes solo — es la lista de donde se
           sugiere la talla al crear cada combinación color × talla. */}
-      <div className="mb-4 rounded-lg border border-border/50 bg-bg p-4">
+      <div className="mb-4 rounded-lg border border-border/50 bg-bg-alt p-4">
         <Input
           label="Catálogo de tallas del producto (separadas por coma — opcional)"
           placeholder="Midi, Maxi"
@@ -146,7 +146,7 @@ function VariationCard({
     : ''
 
   return (
-    <div className="rounded-lg border border-border/50 bg-bg p-4">
+    <div className="rounded-lg border border-border/50 bg-bg-alt p-4">
       <div className="mb-3 flex items-center justify-between">
         <span className="text-sm font-medium text-text">
           Variante {index + 1}

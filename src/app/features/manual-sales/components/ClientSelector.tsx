@@ -57,7 +57,7 @@ export default function ClientSelector({
         variant="solid"
         size="sm"
         classNames={{
-          tabList: 'bg-bg',
+          tabList: 'bg-bg-alt',
           tab: 'data-[selected=true]:bg-accent data-[selected=true]:text-bg',
           tabContent: 'text-text',
         }}
@@ -136,7 +136,7 @@ export default function ClientSelector({
         <Tab key="existing" title="Cliente registrado">
           <div className="pt-4">
             {selectedClient ? (
-              <div className="flex items-center gap-3 rounded-lg bg-bg p-3">
+              <div className="flex items-center gap-3 rounded-lg bg-bg-alt p-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-bg font-bold shrink-0">
                   {selectedClient.firstName[0]}
                 </div>
@@ -188,7 +188,7 @@ export default function ClientSelector({
                     key={String(user.id)}
                     textValue={`${user.firstName} ${user.lastName}`}
                     classNames={{
-                      base: 'text-text data-[hover=true]:bg-bg',
+                      base: 'text-text data-[hover=true]:bg-bg-alt',
                       title: '!text-text',
                     }}
                   >

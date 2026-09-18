@@ -88,7 +88,7 @@ export default function MarcaForm({
           type="file"
           accept="image/*"
           onChange={handleFileSelect}
-          className="block w-full text-sm text-text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-surface file:text-accent hover:file:bg-surface/80 file:cursor-pointer cursor-pointer"
+          className="block w-full text-sm text-text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-bg-alt file:text-accent hover:file:bg-bg-alt/70 file:cursor-pointer cursor-pointer"
         />
       </div>
 
@@ -125,7 +125,7 @@ export default function MarcaForm({
           type="file"
           accept="image/*"
           onChange={(e) => onMobileImageChange(e.target.files?.[0] ?? null)}
-          className="block w-full text-sm text-text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-surface file:text-accent hover:file:bg-surface/80 file:cursor-pointer cursor-pointer"
+          className="block w-full text-sm text-text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-bg-alt file:text-accent hover:file:bg-bg-alt/70 file:cursor-pointer cursor-pointer"
         />
       </div>
 

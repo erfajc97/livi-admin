@@ -54,7 +54,7 @@ export function SectionCard({
               {section.products.slice(0, 3).map((product) => (
                 <div
                   key={product.id}
-                  className="flex items-center gap-2 bg-surface-raised rounded-md px-2 py-1"
+                  className="flex items-center gap-2 bg-bg-alt rounded-md px-2 py-1"
                 >
                   {product.imageUrl && (
                     <img

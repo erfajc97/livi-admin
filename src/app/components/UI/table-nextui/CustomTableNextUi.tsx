@@ -52,7 +52,9 @@ export function CustomTableNextUi<T extends { id: string | number }>({
 }: CustomTableProps<T>) {
   return (
     <div
-      className={`flex h-full flex-col gap-4 rounded-xl bg-surface p-3 sm:rounded-2xl sm:p-6 ${externalClassNames?.base ?? ''}`}
+      // Con la base en blanco la tarjeta necesita hairline para despegarse
+      // del fondo (antes contrastaba por el butter).
+      className={`flex h-full flex-col gap-4 rounded-xl border border-border bg-surface p-3 sm:rounded-2xl sm:p-6 ${externalClassNames?.base ?? ''}`}
     >
       {topContent && (
         <div className={externalClassNames?.topContent ?? ''}>{topContent}</div>
@@ -68,9 +70,11 @@ export function CustomTableNextUi<T extends { id: string | number }>({
           onSortChange={onSortChange}
           classNames={{
             wrapper: `table-report h-full min-w-[640px] rounded-none p-0 shadow-none bg-surface ${externalClassNames?.tableWrapper ?? ''}`,
-            th: 'h-9 bg-surface-raised text-text-muted text-xs uppercase tracking-wider',
+            // Sobre base blanca, `surface-raised` (#FCFBF8) era invisible:
+            // la cabecera y el zebra pasan a la zona alterna `bg-alt`.
+            th: 'h-9 bg-bg-alt text-text-muted text-xs uppercase tracking-wider',
             tbody: 'text-text',
-            tr: '!rounded-full data-[odd=true]:bg-surface-raised',
+            tr: '!rounded-full data-[odd=true]:bg-bg-alt/60',
             td: 'py-[.18rem] text-text',
           }}
         >

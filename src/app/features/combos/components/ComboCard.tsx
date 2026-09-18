@@ -22,7 +22,7 @@ export default function ComboCard({ combo, onEdit, onDelete }: ComboCardProps) {
               className="h-20 w-20 rounded-lg object-cover"
             />
           ) : (
-            <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-bg text-text-muted text-xs">
+            <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-bg-alt text-text-muted text-xs">
               Sin imagen
             </div>
           )}

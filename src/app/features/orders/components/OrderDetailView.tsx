@@ -121,7 +121,7 @@ export default function OrderDetailView({
               {order.items.map((item) => {
                 return (
                   <div key={item.id} className="flex gap-3 items-start">
-                    <div className="w-14 h-14 rounded-lg bg-bg overflow-hidden shrink-0">
+                    <div className="w-14 h-14 rounded-lg bg-bg-alt overflow-hidden shrink-0">
                       {item.productImage ? (
                         <img
                           src={item.productImage}

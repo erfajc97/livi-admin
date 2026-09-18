@@ -48,7 +48,7 @@ function BillCards({
             className={`flex items-center justify-between rounded-lg border p-4 ${
               isOverdue
                 ? 'border-red-500/30 bg-red-500/5'
-                : 'border-border bg-surface-raised'
+                : 'border-border bg-bg-alt'
             }`}
           >
             <div className="flex-1">

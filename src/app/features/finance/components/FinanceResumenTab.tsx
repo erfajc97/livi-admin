@@ -42,7 +42,7 @@ export default function FinanceResumenTab({
           classNames={{
             base: 'w-full sm:max-w-40',
             input: '!text-text',
-            inputWrapper: 'bg-surface-raised border-border',
+            inputWrapper: 'bg-bg-alt border-border',
           }}
           size="sm"
         />
@@ -104,7 +104,7 @@ export default function FinanceResumenTab({
           Desglose de Ingresos
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="flex min-w-0 items-center gap-3 p-3 rounded-lg bg-bg">
+          <div className="flex min-w-0 items-center gap-3 p-3 rounded-lg bg-bg-alt">
             <ShoppingCart size={18} className="shrink-0 text-blue-400" />
             <div className="min-w-0">
               <p className="text-sm font-bold text-text">
@@ -115,7 +115,7 @@ export default function FinanceResumenTab({
               </p>
             </div>
           </div>
-          <div className="flex min-w-0 items-center gap-3 p-3 rounded-lg bg-bg">
+          <div className="flex min-w-0 items-center gap-3 p-3 rounded-lg bg-bg-alt">
             <Store size={18} className="shrink-0 text-purple-400" />
             <div className="min-w-0">
               <p className="text-sm font-bold text-text">
@@ -126,7 +126,7 @@ export default function FinanceResumenTab({
               </p>
             </div>
           </div>
-          <div className="flex min-w-0 items-center gap-3 p-3 rounded-lg bg-bg">
+          <div className="flex min-w-0 items-center gap-3 p-3 rounded-lg bg-bg-alt">
             <DollarSign size={18} className="shrink-0 text-green-400" />
             <div className="min-w-0">
               <p className="text-sm font-bold text-text">

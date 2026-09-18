@@ -213,7 +213,7 @@ function StatsCard({
   return (
     <div className="flex items-center gap-4 rounded-xl border border-border bg-surface p-4">
       <div
-        className={`rounded-lg p-2 ${accent ? 'bg-accent/10 text-accent' : 'bg-surface-raised text-text-muted'}`}
+        className={`rounded-lg p-2 ${accent ? 'bg-accent/10 text-accent' : 'bg-bg-alt text-text-muted'}`}
       >
         {icon}
       </div>

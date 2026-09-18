@@ -131,7 +131,7 @@ export default function ProductSearch({
             key={String(product.id)}
             textValue={product.name}
             classNames={{
-              base: 'text-text data-[hover=true]:bg-bg',
+              base: 'text-text data-[hover=true]:bg-bg-alt',
               title: '!text-text',
             }}
           >
@@ -143,7 +143,7 @@ export default function ProductSearch({
                   className="h-8 w-8 rounded object-cover"
                 />
               ) : (
-                <div className="flex h-8 w-8 items-center justify-center rounded bg-bg text-text-muted text-xs">
+                <div className="flex h-8 w-8 items-center justify-center rounded bg-bg-alt text-text-muted text-xs">
                   N/A
                 </div>
               )}

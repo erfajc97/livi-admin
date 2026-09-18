@@ -46,7 +46,7 @@ function SingleSeriesChart({
         </span>
       </div>
       {total === 0 || data.length === 0 ? (
-        <div className="flex h-40 items-center justify-center rounded-lg border border-dashed border-border bg-bg">
+        <div className="flex h-40 items-center justify-center rounded-lg border border-dashed border-border bg-bg-alt">
           <p className="text-xs text-text-muted">{emptyLabel}</p>
         </div>
       ) : (

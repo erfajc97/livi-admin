@@ -95,7 +95,7 @@ export default function FormSectionInstagram({
           {posts.map((post, i) => (
             <div
               key={i}
-              className="flex items-start gap-3 rounded-lg border border-border/50 bg-bg p-3"
+              className="flex items-start gap-3 rounded-lg border border-border/50 bg-bg-alt p-3"
             >
               {/* Miniatura = botón de subida (explorador de archivos) */}
               <button

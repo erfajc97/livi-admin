@@ -78,7 +78,7 @@ export default function FinanceManagementView({
           variant={activeTab === 'transaction' ? 'solid' : 'bordered'}
           color="default"
           onPress={() => onSetActiveTab('transaction')}
-          className={`rounded-r-none font-semibold ${activeTab === 'transaction' ? 'bg-bg text-text' : ''}`}
+          className={`rounded-r-none font-semibold ${activeTab === 'transaction' ? 'bg-bg-alt text-text' : ''}`}
         >
           Nuevo Egreso
         </Button>
@@ -86,7 +86,7 @@ export default function FinanceManagementView({
           variant={activeTab === 'bills' ? 'solid' : 'bordered'}
           color="default"
           onPress={() => onSetActiveTab('bills')}
-          className={`rounded-l-none font-semibold ${activeTab === 'bills' ? 'bg-bg text-text' : ''}`}
+          className={`rounded-l-none font-semibold ${activeTab === 'bills' ? 'bg-bg-alt text-text' : ''}`}
         >
           Cuentas por Pagar
         </Button>

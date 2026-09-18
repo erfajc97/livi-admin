@@ -64,7 +64,7 @@ export default function ComboVersionsEditor({
           {versions.map((v, vIndex) => (
             <div
               key={v.id ?? `new-${vIndex}`}
-              className="rounded-lg border border-border bg-bg p-4"
+              className="rounded-lg border border-border bg-bg-alt p-4"
             >
               <div className="mb-3 flex items-center justify-between">
                 <Chip size="sm" variant="flat">

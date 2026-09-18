@@ -25,7 +25,7 @@ function PublicidadCard({
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 transition hover:border-accent/30 sm:flex-row sm:gap-4">
       {/* Imagen */}
-      <div className="flex h-24 w-32 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface-raised">
+      <div className="flex h-24 w-32 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-bg-alt">
         {banner.imageUrl ? (
           <img
             src={banner.imageUrl}

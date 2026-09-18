@@ -386,7 +386,7 @@ export default function FinanceCuentasTab({
               return (
                 <div
                   key={bill.id}
-                  className="flex flex-col gap-2 py-3 px-1 cursor-pointer hover:bg-bg/50 rounded sm:flex-row sm:items-center sm:justify-between sm:gap-3"
+                  className="flex flex-col gap-2 py-3 px-1 cursor-pointer hover:bg-bg-alt/50 rounded sm:flex-row sm:items-center sm:justify-between sm:gap-3"
                   onClick={() => setSelectedBillId(Number(bill.id))}
                 >
                   <div className="flex-1 min-w-0">
@@ -453,7 +453,7 @@ export default function FinanceCuentasTab({
             {paidBills.slice(0, 10).map((bill) => (
               <div
                 key={bill.id}
-                className="flex items-center justify-between gap-3 py-3 px-1 cursor-pointer hover:bg-bg/50 rounded"
+                className="flex items-center justify-between gap-3 py-3 px-1 cursor-pointer hover:bg-bg-alt/50 rounded"
                 onClick={() => setSelectedBillId(Number(bill.id))}
               >
                 <div className="flex-1 min-w-0">

@@ -86,7 +86,7 @@ export default function ComboForm({
               />
             )}
             <div className="flex items-center gap-2">
-              <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-border bg-bg px-4 py-2 text-sm text-text hover:bg-surface">
+              <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-border bg-bg-alt px-4 py-2 text-sm text-text hover:bg-surface">
                 <Upload size={16} />
                 <span>
                   {formData.imageFile || formData.imageUrl

@@ -128,7 +128,7 @@ export const Settings = () => {
         </h1>
       </div>
 
-      <div className="bg-content1 rounded-xl p-6 shadow-sm max-w-xl">
+      <div className="bg-surface border border-border rounded-xl p-6 shadow-sm max-w-xl">
         <h2 className="font-heading text-lg font-semibold uppercase tracking-wide text-text mb-1">
           Días de entrega
         </h2>
@@ -181,7 +181,7 @@ export const Settings = () => {
         </div>
       </div>
 
-      <div className="bg-content1 rounded-xl p-6 shadow-sm max-w-xl">
+      <div className="bg-surface border border-border rounded-xl p-6 shadow-sm max-w-xl">
         <h2 className="font-heading text-lg font-semibold uppercase tracking-wide text-text mb-1">
           Barra superior (promociones)
         </h2>

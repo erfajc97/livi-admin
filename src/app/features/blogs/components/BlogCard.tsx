@@ -45,7 +45,7 @@ export default function BlogCard({ blog, onEdit, onDelete }: BlogCardProps) {
         </div>
 
         {/* Image thumbnail */}
-        <div className="flex h-20 w-28 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface-raised sm:h-24 sm:w-32">
+        <div className="flex h-20 w-28 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-bg-alt sm:h-24 sm:w-32">
           {blog.imageUrl ? (
             <img
               src={blog.imageUrl}

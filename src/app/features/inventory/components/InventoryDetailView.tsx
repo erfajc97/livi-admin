@@ -68,7 +68,7 @@ export default function InventoryDetailView({
             {activeVariations.map((v) => (
               <span
                 key={v.id}
-                className="rounded-full border border-border bg-surface-raised px-3 py-1 text-xs font-medium text-text"
+                className="rounded-full border border-border bg-bg-alt px-3 py-1 text-xs font-medium text-text"
               >
                 {v.name} · ${Number(v.price).toFixed(2)}
               </span>

@@ -79,7 +79,7 @@ export function LoginForm({ handleLogin, isLoading }: LoginFormProps) {
           fullWidth
           isLoading={isLoading}
           radius="sm"
-          className="mt-2 h-12 bg-bg font-heading text-sm font-semibold uppercase tracking-widest text-text"
+          className="mt-2 h-12 bg-bg-alt font-heading text-sm font-semibold uppercase tracking-widest text-text"
         >
           Iniciar Sesión
         </Button>

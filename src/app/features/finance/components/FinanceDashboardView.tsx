@@ -81,7 +81,7 @@ export default function FinanceDashboardView({
 
         {/* Mini resumen horizontal */}
         <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <div className="flex min-w-0 items-center gap-3 rounded-lg border border-border bg-bg p-3">
+          <div className="flex min-w-0 items-center gap-3 rounded-lg border border-border bg-bg-alt p-3">
             <Clock size={18} className="shrink-0 text-warning" />
             <div className="min-w-0">
               <p className="text-xs text-text-muted">Total pendiente</p>
@@ -160,7 +160,7 @@ export default function FinanceDashboardView({
                     <span className="w-20 shrink-0 truncate text-xs text-text-muted sm:w-28">
                       {method}
                     </span>
-                    <div className="h-5 min-w-0 flex-1 overflow-hidden rounded-sm bg-surface-raised">
+                    <div className="h-5 min-w-0 flex-1 overflow-hidden rounded-sm bg-bg-alt">
                       <div
                         className="h-full rounded-sm bg-success"
                         style={{ width: `${pct}%` }}

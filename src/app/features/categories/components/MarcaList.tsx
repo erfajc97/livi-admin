@@ -51,7 +51,7 @@ export default function MarcaList({
           {marcas.map((marca) => (
             <div
               key={marca.id}
-              className="flex items-center justify-between gap-2 rounded-lg border border-border/50 bg-bg px-3 py-2"
+              className="flex items-center justify-between gap-2 rounded-lg border border-border/50 bg-bg-alt px-3 py-2"
             >
               <div className="flex min-w-0 flex-wrap items-center gap-2">
                 <span className="truncate text-sm text-text">{marca.name}</span>

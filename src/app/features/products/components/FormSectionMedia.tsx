@@ -56,7 +56,7 @@ export default function FormSectionMedia({
               <img
                 src={img.url}
                 alt={img.alt ?? 'Imagen del producto'}
-                className="h-28 w-full rounded-lg object-cover bg-bg"
+                className="h-28 w-full rounded-lg object-cover bg-bg-alt"
                 onError={(e) => {
                   ;(e.target as HTMLImageElement).src =
                     'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23333" width="100" height="100"/><text x="50" y="55" text-anchor="middle" fill="%23666" font-size="12">Sin imagen</text></svg>'
@@ -133,7 +133,7 @@ export default function FormSectionMedia({
 
       {/* Drop zone */}
       <div
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-bg p-6 transition hover:border-accent/50"
+        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-bg-alt p-6 transition hover:border-accent/50"
         onClick={() => fileInputRef.current?.click()}
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}

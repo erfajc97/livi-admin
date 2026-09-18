@@ -84,7 +84,7 @@ export default function MovimientosTable({
           startContent={<Search size={16} className="text-text-muted" />}
           classNames={{
             base: 'w-full sm:max-w-xs',
-            inputWrapper: 'bg-surface-raised border border-border',
+            inputWrapper: 'bg-bg-alt border border-border',
             input: 'text-text placeholder:text-text-muted',
           }}
         />

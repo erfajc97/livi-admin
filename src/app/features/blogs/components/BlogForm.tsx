@@ -64,7 +64,7 @@ export default function BlogForm({
               </button>
             </div>
           )}
-          <label className="flex h-32 w-48 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-border bg-surface-raised transition hover:border-accent">
+          <label className="flex h-32 w-48 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-border bg-bg-alt transition hover:border-accent">
             <Upload size={24} className="text-text-muted" />
             <span className="mt-2 text-xs text-text-muted">Subir imagen</span>
             <input

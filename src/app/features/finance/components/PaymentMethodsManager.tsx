@@ -96,7 +96,7 @@ export default function PaymentMethodsManager() {
       </div>
 
       {/* Create form */}
-      <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-2 mb-4 p-3 rounded-lg bg-bg border border-border/50">
+      <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-2 mb-4 p-3 rounded-lg bg-bg-alt border border-border/50">
         <Input
           placeholder="Nombre (ej: Tarjeta Pichincha)"
           value={newName}
@@ -141,7 +141,7 @@ export default function PaymentMethodsManager() {
           {methods.map((m) => (
             <div
               key={m.id}
-              className={`rounded-lg border p-3 ${m.isActive ? 'border-border bg-bg' : 'border-border/30 bg-bg/50 opacity-60'}`}
+              className={`rounded-lg border p-3 ${m.isActive ? 'border-border bg-bg-alt' : 'border-border/30 bg-bg-alt/50 opacity-60'}`}
             >
               {editId === m.id ? (
                 <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
