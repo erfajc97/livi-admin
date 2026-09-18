@@ -1,3 +1,4 @@
+import { prepareImageUpload } from '@/app/helpers/prepareImageUpload'
 import { API_ENDPOINTS } from '@/app/api/endpoints'
 import axiosInstance from '@/app/config/axiosConfig'
 import type {
@@ -35,22 +36,23 @@ const UPLOAD_TIMEOUT_MS = 120_000
  * `image` es la portada de escritorio y `mobileImage` la vertical de teléfono.
  * Ambas opcionales: renombrar una categoría no obliga a re-subir nada.
  */
-function buildFormData(
+async function buildFormData(
   payload: Record<string, unknown>,
   file?: File,
   mobileFile?: File,
-): FormData {
+): Promise<FormData> {
   const fd = new FormData()
   for (const [key, value] of Object.entries(payload)) {
     if (value !== undefined && value !== null) {
       fd.append(key, String(value))
     }
   }
+  // Cloudinary free corta en 10 MB: se recomprime antes de enviar.
   if (file) {
-    fd.append('image', file)
+    fd.append('image', await prepareImageUpload(file))
   }
   if (mobileFile) {
-    fd.append('mobileImage', mobileFile)
+    fd.append('mobileImage', await prepareImageUpload(mobileFile))
   }
   return fd
 }
@@ -79,7 +81,7 @@ export const categoriesService = {
     mobileFile?: File,
   ): Promise<Category> => {
     if (file || mobileFile) {
-      const fd = buildFormData(
+      const fd = await buildFormData(
         payload as unknown as Record<string, unknown>,
         file,
         mobileFile,
@@ -106,7 +108,7 @@ export const categoriesService = {
       )
       return unwrap<Category>(data)
     }
-    const fd = buildFormData(
+    const fd = await buildFormData(
       payload as unknown as Record<string, unknown>,
       file,
       mobileFile,
@@ -145,7 +147,7 @@ export const marcasService = {
     mobileFile?: File,
   ): Promise<Marca> => {
     if (file || mobileFile) {
-      const fd = buildFormData(
+      const fd = await buildFormData(
         payload as unknown as Record<string, unknown>,
         file,
         mobileFile,
@@ -166,7 +168,7 @@ export const marcasService = {
     mobileFile?: File,
   ): Promise<Marca> => {
     if (file || mobileFile) {
-      const fd = buildFormData(
+      const fd = await buildFormData(
         payload as unknown as Record<string, unknown>,
         file,
         mobileFile,

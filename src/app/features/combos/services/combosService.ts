@@ -1,3 +1,4 @@
+import { prepareImageUpload } from '@/app/helpers/prepareImageUpload'
 import axiosInstance from '@/app/config/axiosConfig'
 import { API_ENDPOINTS } from '@/app/api/endpoints'
 import type { Combo, CreateComboPayload, UpdateComboPayload } from '../types'
@@ -27,9 +28,9 @@ interface UpdateComboPayloadWithFile extends Omit<
   imageFile?: File | null
 }
 
-function buildFormData(
+async function buildFormData(
   payload: CreateComboPayloadWithFile | UpdateComboPayloadWithFile,
-): FormData {
+): Promise<FormData> {
   const formData = new FormData()
   formData.append('name', payload.name ?? '')
   if (payload.description) formData.append('description', payload.description)
@@ -41,7 +42,8 @@ function buildFormData(
     formData.append('isActive', String(payload.isActive))
   if (payload.parentComboId !== undefined)
     formData.append('parentComboId', String(payload.parentComboId))
-  if (payload.imageFile) formData.append('image', payload.imageFile)
+  if (payload.imageFile)
+    formData.append('image', await prepareImageUpload(payload.imageFile))
   if (payload.products) {
     formData.append('products', JSON.stringify(payload.products))
   }
@@ -65,7 +67,7 @@ export const combosService = {
 
   createCombo: async (payload: CreateComboPayloadWithFile): Promise<Combo> => {
     if (payload.imageFile) {
-      const formData = buildFormData(payload)
+      const formData = await buildFormData(payload)
       const { data } = await axiosInstance.post<CoreApiResponse<Combo>>(
         API_ENDPOINTS.COMBOS,
         formData,
@@ -88,7 +90,7 @@ export const combosService = {
     payload: UpdateComboPayloadWithFile,
   ): Promise<Combo> => {
     if (payload.imageFile) {
-      const formData = buildFormData(payload)
+      const formData = await buildFormData(payload)
       const { data } = await axiosInstance.patch<CoreApiResponse<Combo>>(
         `${API_ENDPOINTS.COMBOS}/${id}`,
         formData,

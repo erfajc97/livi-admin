@@ -1,3 +1,4 @@
+import { prepareImageUpload } from '@/app/helpers/prepareImageUpload'
 import { useRef, useState } from 'react'
 import { Button, Input, addToast } from '@heroui/react'
 import { Plus, Trash2, ImagePlus } from 'lucide-react'
@@ -42,7 +43,8 @@ export default function FormSectionInstagram({
     setUploadingIndex(index)
     try {
       const body = new FormData()
-      body.append('file', file)
+      // Cloudinary free corta en 10 MB: se recomprime antes de enviar.
+      body.append('file', await prepareImageUpload(file))
       const { data } = await axiosInstance.post('/uploads/image', body, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })

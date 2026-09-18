@@ -1,3 +1,4 @@
+import { prepareImageUploads } from '@/app/helpers/prepareImageUpload'
 import axiosInstance from '@/app/config/axiosConfig'
 import { API_ENDPOINTS } from '@/app/api/endpoints'
 import type {
@@ -82,7 +83,9 @@ export const productsService = {
     files: File[],
   ): Promise<ProductImage[]> => {
     const fd = new FormData()
-    files.forEach((file) => fd.append('files', file))
+    // Cloudinary free corta en 10 MB: se recomprime antes de enviar.
+    const prepared = await prepareImageUploads(files)
+    prepared.forEach((file) => fd.append('files', file))
     const { data } = await axiosInstance.post<CoreApiResponse<ProductImage[]>>(
       `${API_ENDPOINTS.PRODUCTS}/${productId}/images`,
       fd,
@@ -123,7 +126,8 @@ export const productsService = {
     files: File[],
   ): Promise<void> => {
     const fd = new FormData()
-    files.forEach((file) => fd.append('files', file))
+    const prepared = await prepareImageUploads(files)
+    prepared.forEach((file) => fd.append('files', file))
     await axiosInstance.post(`/product-variations/${variationId}/images`, fd)
   },
 

@@ -1,3 +1,4 @@
+import { prepareImageUpload } from '@/app/helpers/prepareImageUpload'
 import { useState } from 'react'
 import type { BlogPost } from '../types'
 import {
@@ -65,14 +66,15 @@ export function useBlogFormHook({ id, onSuccess }: UseBlogFormHookParams) {
     setImagePreview(null)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formDataToSend = new FormData()
     formDataToSend.append('title', formData.title)
     formDataToSend.append('content', formData.content)
     formDataToSend.append('isPublished', String(formData.isPublished))
 
     if (imageFile) {
-      formDataToSend.append('image', imageFile)
+      // Cloudinary free corta en 10 MB: se recomprime antes de enviar.
+      formDataToSend.append('image', await prepareImageUpload(imageFile))
     }
 
     if (isThereId && id) {

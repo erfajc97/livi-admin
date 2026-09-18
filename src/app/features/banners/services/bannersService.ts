@@ -1,3 +1,4 @@
+import { prepareImageUpload } from '@/app/helpers/prepareImageUpload'
 import { API_ENDPOINTS } from '@/app/api/endpoints'
 import axiosInstance from '@/app/config/axiosConfig'
 import type { Banner, CreateBannerPayload, UpdateBannerPayload } from '../types'
@@ -26,22 +27,23 @@ function unwrap<T>(data: T | CoreApiResponse<T>): T {
  * `image` es el arte de escritorio y `mobileImage` el vertical para teléfono.
  * Los dos son opcionales: editar solo el texto no obliga a re-subir nada.
  */
-function buildFormData(
+async function buildFormData(
   payload: Record<string, unknown>,
   file?: File,
   mobileFile?: File,
-): FormData {
+): Promise<FormData> {
   const fd = new FormData()
   for (const [key, value] of Object.entries(payload)) {
     if (value !== undefined && value !== null) {
       fd.append(key, String(value))
     }
   }
+  // Cloudinary free corta en 10 MB: se recomprime antes de enviar.
   if (file) {
-    fd.append('image', file)
+    fd.append('image', await prepareImageUpload(file))
   }
   if (mobileFile) {
-    fd.append('mobileImage', mobileFile)
+    fd.append('mobileImage', await prepareImageUpload(mobileFile))
   }
   return fd
 }
@@ -64,7 +66,7 @@ export const bannersService = {
     file?: File,
     mobileFile?: File,
   ): Promise<Banner> => {
-    const fd = buildFormData(
+    const fd = await buildFormData(
       payload as unknown as Record<string, unknown>,
       file,
       mobileFile,
@@ -86,7 +88,7 @@ export const bannersService = {
       )
       return unwrap<Banner>(data)
     }
-    const fd = buildFormData(
+    const fd = await buildFormData(
       payload as unknown as Record<string, unknown>,
       file,
       mobileFile,
