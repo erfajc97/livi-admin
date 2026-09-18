@@ -269,12 +269,18 @@ export function useProductFormHook({ productId }: UseProductFormHookParams) {
       pairsWith: formData.pairsWith.length
         ? JSON.stringify(formData.pairsWith)
         : undefined,
+      // Sin dedupe, "X, x" pintaba dos botones de talla idénticos en la ficha.
       sizes: formData.sizes.trim()
         ? JSON.stringify(
-            formData.sizes
-              .split(/[\n,]+/)
-              .map((l) => l.trim())
-              .filter(Boolean),
+            Array.from(
+              new Map(
+                formData.sizes
+                  .split(/[\n,]+/)
+                  .map((l) => l.replace(/\s+/g, ' ').trim())
+                  .filter(Boolean)
+                  .map((l) => [l.toLocaleLowerCase(), l] as const),
+              ).values(),
+            ),
           )
         : undefined,
       instagramPosts: formData.instagramPosts.some((p) => p.url.trim())

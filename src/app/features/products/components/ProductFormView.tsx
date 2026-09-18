@@ -138,8 +138,12 @@ export default function ProductFormView({
       const name = v.name.trim()
       if (!name) continue // skip empty rows
 
-      // Auto-generate SKU if not provided
-      const autoSku = `${productName.replace(/\s+/g, '-').toLowerCase()}-${name.replace(/\s+/g, '-').toLowerCase()}-${productId}`
+      // El SKU es único en la base: sin la talla, "Negro·Midi" y "Negro·Maxi"
+      // generaban el mismo código y la segunda variante fallaba en silencio.
+      const slug = (value: string) =>
+        value.replace(/\s+/g, '-').toLowerCase()
+      const sizePart = v.size?.trim() ? `-${slug(v.size.trim())}` : ''
+      const autoSku = `${slug(productName)}-${slug(name)}${sizePart}-${productId}`
       const sku = v.sku.trim() || autoSku
 
       if (v.id) {
